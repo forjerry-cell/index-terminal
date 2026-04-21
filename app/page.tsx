@@ -59,7 +59,7 @@ export default function Home() {
             <p className="animate-fade" style={{ animationDelay: '0.1s' }}>掌握 High Beta 策略的每日動態與歷史表現。</p>
           </div>
           <div className="flex gap-4">
-            <button className="btn">下傳全成分股 CSV</button>
+            <button className="btn">上傳全成分股 CSV</button>
           </div>
         </header>
 
