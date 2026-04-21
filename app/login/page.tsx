@@ -74,15 +74,35 @@ export default function LoginPage() {
 
           {error && <p style={{ color: 'var(--error)', fontSize: '0.875rem' }}>{error}</p>}
 
-          <button type="submit" className="btn" disabled={loading} style={{ marginTop: '1rem' }}>
-            {loading ? (
-              <span className="flex items-center justify-center gap-4">
-                <Loader2 className="animate-spin" size={18} /> 登入中...
-              </span>
-            ) : (
-              '立即進入終端'
-            )}
-          </button>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? (
+                <Loader2 className="animate-spin" size={18} />
+              ) : (
+                '立即進入終端'
+              )}
+            </button>
+            <button 
+              type="button" 
+              className="btn" 
+              style={{ border: '1px solid var(--accent)' }}
+              disabled={loading}
+              onClick={async () => {
+                setLoading(true);
+                const { error } = await supabase.auth.signUp({ email, password });
+                if (error) {
+                  alert('申請失敗: ' + error.message);
+                } else {
+                  // 自動執行開通權限 API
+                  await fetch('/api/setup-admin');
+                  alert('帳號申請成功並已開通管理員權限！請直接點擊登入。');
+                }
+                setLoading(false);
+              }}
+            >
+              申請帳號
+            </button>
+          </div>
         </form>
       </div>
 
