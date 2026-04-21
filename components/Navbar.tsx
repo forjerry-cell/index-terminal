@@ -36,9 +36,24 @@ export default function Navbar() {
             <span style={{ fontWeight: 400, marginLeft: '4px' }}>TERMINAL</span>
           </div>
           <div className="flex gap-4 nav-links">
-            <a href="#" className="active">市場概覽</a>
-            <a href="#">台股 High Beta</a>
-            <a href="#">那指 High Beta</a>
+            <a 
+              href="/" 
+              className={typeof window !== 'undefined' && window.location.pathname === '/' && !window.location.search ? 'active' : ''}
+            >
+              市場概覽
+            </a>
+            <a 
+              href="/?index=taiwan_high_beta"
+              className={typeof window !== 'undefined' && window.location.search.includes('taiwan') ? 'active' : ''}
+            >
+              台股 High Beta
+            </a>
+            <a 
+              href="/?index=nasdaq_high_beta"
+              className={typeof window !== 'undefined' && window.location.search.includes('nasdaq') ? 'active' : ''}
+            >
+              那指 High Beta
+            </a>
           </div>
         </div>
 

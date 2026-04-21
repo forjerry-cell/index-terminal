@@ -4,9 +4,13 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import PerformanceChart from '@/components/PerformanceChart';
+import { useSearchParams } from 'next/navigation';
 import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2 } from 'lucide-react';
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const currentIndex = searchParams.get('index') || 'taiwan_high_beta';
+  
   const [loading, setLoading] = useState(true);
   const [performanceData, setPerformanceData] = useState<any[]>([]);
   const [constituents, setConstituents] = useState<any[]>([]);
@@ -14,37 +18,50 @@ export default function Home() {
 
   useEffect(() => {
     async function loadDashboardData() {
-      // 1. 抓取圖表趨勢數據 (限最近 30 筆)
+      setLoading(true);
+      // 1. 抓取圖表趨勢數據 (根據當前 INDEX)
       const { data: perf } = await supabase
         .from('index_performance')
         .select('*')
+        .eq('index_id', currentIndex)
         .order('date', { ascending: true })
         .limit(30);
       
       if (perf) setPerformanceData(perf);
 
-      // 2. 抓取最新成分股 (Top 5)
+      // 2. 抓取最新成分股 (根據當前 INDEX)
       const { data: consts } = await supabase
         .from('index_constituents')
         .select('*')
+        .eq('index_id', currentIndex)
         .order('date', { ascending: false })
         .order('weight', { ascending: false })
         .limit(5);
       
       if (consts) setConstituents(consts);
 
-      // 3. 計算摘要數據 (抓取最後一筆)
+      // 3. 計算摘要數據
       if (perf && perf.length > 0) {
         const latest = perf[perf.length - 1];
         setSummary([
-          { id: 'tw', name: '台股 High Beta', value: latest.value, change: latest.change_percent, trend: latest.change_percent >= 0 ? 'up' : 'down' }
+          { 
+            id: currentIndex, 
+            name: currentIndex.includes('taiwan') ? '台股 High Beta' : '那指 High Beta', 
+            value: latest.value, 
+            change: latest.change_percent, 
+            trend: latest.change_percent >= 0 ? 'up' : 'down' 
+          }
         ]);
+      } else {
+        setSummary([]);
+        setPerformanceData([]);
+        setConstituents([]);
       }
       
       setLoading(false);
     }
     loadDashboardData();
-  }, []);
+  }, [currentIndex]);
 
   if (loading) return <div className="auth-container"><Loader2 className="animate-spin" /></div>;
 
