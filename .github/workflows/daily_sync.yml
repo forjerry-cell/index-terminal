@@ -1,0 +1,29 @@
+name: Daily Index Sync
+
+on:
+  schedule:
+    - cron: '30 8 * * *'  # 台北時間 16:30 (台股)
+    - cron: '30 21 * * *' # 台北時間 05:30 (那指)
+  workflow_dispatch:      # 允許手動觸發
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install yfinance pandas numpy supabase
+
+      - name: Run sync script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python scripts/sync_to_supabase.py
