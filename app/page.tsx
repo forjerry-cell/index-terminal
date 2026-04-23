@@ -25,7 +25,7 @@ export default function Home() {
         .select('*')
         .eq('index_id', currentIndex)
         .order('date', { ascending: true })
-        .limit(30);
+        .limit(10000);
       
       if (perf) setPerformanceData(perf);
 
