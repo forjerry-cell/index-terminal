@@ -5,76 +5,124 @@ import { NextResponse } from 'next/server';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
-  // 1. 驗證權限 (可以檢查 Admin Session 或 Cron Token)
-  const { secret } = await req.json();
-  if (secret !== process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 10)) {
+  // 1. 驗證權限（由 GitHub Actions Cron 帶 secret 觸發）
+  const body = await req.json().catch(() => ({ secret: '' }));
+  if (body.secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    // 2. 抓取今日數據
-    const today = new Date().toISOString().split('T')[0];
+    // 2. 抓取最新數據（最後一個交易日，兩個指數）
     const { data: performance } = await supabase
       .from('index_performance')
       .select('*')
-      .eq('date', today);
+      .in('index_id', ['taiwan_high_beta', 'nasdaq_high_beta'])
+      .order('date', { ascending: false })
+      .limit(4);
+
+    const latestDate = performance?.[0]?.date || new Date().toISOString().split('T')[0];
+
+    // 每個 index_id 只取最新一筆
+    const latestPerf = ['taiwan_high_beta', 'nasdaq_high_beta'].map(id =>
+      performance?.find(p => p.index_id === id)
+    ).filter(Boolean);
 
     const { data: constituents } = await supabase
       .from('index_constituents')
       .select('*')
-      .eq('date', today)
-      .order('weight', { ascending: false });
+      .order('date', { ascending: false })
+      .order('weight', { ascending: false })
+      .limit(20);
 
-    // 3. 抓取訂閱名單
+    // 3. 抓取訂閱名單（有填 notify_email 且開啟通知的用戶）
     const { data: subscribers } = await supabase
       .from('profiles')
-      .select('id, full_name')
-      .eq('email_subscription', true);
+      .select('full_name, notify_email')
+      .eq('email_subscription', true)
+      .not('notify_email', 'is', null);
 
-    // 4. 取得用戶 Email (從 Auth Table) - 這裡簡化邏輯
-    // 實際上在生產環境會串接 profiles 的 email 欄位或 auth.admin api
+    if (!subscribers || subscribers.length === 0) {
+      return NextResponse.json({ success: true, message: '目前沒有訂閱者', count: 0 });
+    }
 
-    // 5. 生成 HTML (範例)
-    const emailHtml = `
-      <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px;">
-        <h2 style="color: #3b82f6;">High Beta 指數收盤報表 (${today})</h2>
-        <p>親愛的會員，這是今日的市場表現摘要。</p>
-        <hr/>
-        <div style="margin-bottom: 30px;">
-          <h3>指數表現</h3>
-          ${performance?.map(p => `
-            <div style="display: flex; justify-content: space-between; padding: 10px; background: #f8fafc;">
-              <span><b>${p.index_id.toUpperCase()}</b></span>
-              <span style="color: ${p.change_percent >= 0 ? '#10b981' : '#ef4444'}">
-                ${p.value} (${p.change_percent >= 0 ? '+' : ''}${p.change_percent}%)
-              </span>
+    // 4. 生成漂亮的 HTML 報告
+    const buildHtml = (name: string) => `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: auto; background: #0d0f14; color: #e2e8f0; border: 1px solid #1f2228; border-radius: 12px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0d0f14 100%); padding: 32px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.75rem; font-weight: 900; color: white;">BETA</span>
+            <span style="color: #93c5fd; font-size: 1rem;">TERMINAL</span>
+          </div>
+          <p style="color: #93c5fd; margin: 8px 0 0; font-size: 0.875rem;">${latestDate} 每日收盤報告</p>
+        </div>
+        <div style="padding: 32px;">
+          <p style="margin-top: 0;">親愛的 <strong>${name || '會員'}</strong>，</p>
+          <p style="color: #94a3b8; font-size: 0.875rem;">以下是今日 High Beta 指數的最新表現。</p>
+
+          <h2 style="color: #60a5fa; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 24px;">📈 指數表現</h2>
+          ${latestPerf.map((p: any) => `
+            <div style="background: #1a1d24; border-radius: 8px; padding: 16px; margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; font-size: 0.9rem;">${p.index_id.includes('taiwan') ? '🇹🇼 台股 High Beta' : '🇺🇸 那指 High Beta'}</span>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.25rem; font-weight: 800;">${p.value?.toFixed(2)}</div>
+                  <div style="color: ${(p.change_percent || 0) >= 0 ? '#10b981' : '#ef4444'}; font-size: 0.8rem;">
+                    ${(p.change_percent || 0) >= 0 ? '▲' : '▼'} ${Math.abs(p.change_percent || 0).toFixed(2)}%
+                  </div>
+                </div>
+              </div>
             </div>
           `).join('')}
-        </div>
-        <div>
-          <h3>成分股權重 (Top 10)</h3>
-          <table style="width: 100%; border-collapse: collapse;">
-            <thead><tr style="text-align: left; background: #eee;"><th>名稱</th><th>代號</th><th>權重</th></tr></thead>
+
+          <h2 style="color: #60a5fa; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 24px;">⚖️ 成分股 Top 10</h2>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+            <thead>
+              <tr style="background: #1a1d24; color: #94a3b8;">
+                <th style="padding: 10px 12px; text-align: left;">名稱</th>
+                <th style="padding: 10px 12px; text-align: left;">代號</th>
+                <th style="padding: 10px 12px; text-align: right;">權重</th>
+              </tr>
+            </thead>
             <tbody>
-              ${constituents?.slice(0, 10).map(c => `
-                <tr><td style="padding: 8px; border-bottom: 1px solid #eee;">${c.name}</td><td>${c.symbol}</td><td>${c.weight}%</td></tr>
+              ${constituents?.slice(0, 10).map((c: any) => `
+                <tr style="border-bottom: 1px solid #1f2228;">
+                  <td style="padding: 10px 12px;">${c.name}</td>
+                  <td style="padding: 10px 12px; color: #60a5fa;">${c.symbol}</td>
+                  <td style="padding: 10px 12px; text-align: right; font-weight: bold;">${(c.weight * 100).toFixed(2)}%</td>
+                </tr>
               `).join('')}
             </tbody>
           </table>
+
+          <div style="margin-top: 32px; text-align: center;">
+            <a href="https://index-terminal.vercel.app" style="background: #3b82f6; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+              🔗 前往平台查看完整圖表
+            </a>
+          </div>
+
+          <p style="font-size: 11px; color: #4b5563; margin-top: 32px; text-align: center;">
+            此郵件由 BETA Terminal 自動發送 · 如需取消訂閱，請至個人設定頁關閉通知開關
+          </p>
         </div>
-        <p style="font-size: 12px; color: #666; margin-top: 40px;">此郵件由自動系統發出，請勿直接回覆。</p>
       </div>
     `;
 
-    // 6. 批次發送 (Resend)
-    await resend.emails.send({
-      from: 'Index Terminal <onboarding@resend.dev>', // 正式上線需綁定您的網域
-      to: 'forjerry.cell@gmail.com', // 測試用，正式時改為 subscribers 遍歷
-      subject: `今日指數報表 - ${today}`,
-      html: emailHtml,
-    });
+    // 5. 批次發送給所有訂閱者
+    const results = await Promise.allSettled(
+      subscribers.map((sub: any) =>
+        resend.emails.send({
+          from: 'BETA Terminal <onboarding@resend.dev>',
+          to: sub.notify_email,
+          subject: `📊 High Beta 指數日報 · ${latestDate}`,
+          html: buildHtml(sub.full_name || ''),
+        })
+      )
+    );
 
-    return NextResponse.json({ success: true, count: subscribers?.length });
+    const sent = results.filter(r => r.status === 'fulfilled').length;
+    const failed = results.filter(r => r.status === 'rejected').length;
+
+    return NextResponse.json({ success: true, sent, failed, date: latestDate });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
