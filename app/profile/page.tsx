@@ -157,10 +157,27 @@ export default function ProfilePage() {
               </div>
 
               <div className="flex items-center gap-4" style={{ marginTop: '1.5rem' }}>
-                <button type="submit" className="btn" disabled={updating}>
-                  {updating ? '更新中...' : '儲存所有變更'}
-                </button>
-                {message && <span style={{ color: 'var(--accent-secondary)', fontSize: '0.875rem', fontWeight: 600 }} className="flex items-center gap-2"><Check size={16} /> {message}</span>}
+                {!formData.email && formData.email !== undefined ? (
+                   <button type="button" className="btn" onClick={() => window.location.href = '/login'}>
+                     前往登入 / 註冊以啟用此功能
+                   </button>
+                ) : (
+                  <button type="submit" className="btn" disabled={updating}>
+                    {updating ? '更新中...' : '儲存所有變更'}
+                  </button>
+                )}
+                {message && (
+                  <span style={{ 
+                    color: message.includes('失敗') || message.includes('錯誤') ? 'var(--error)' : 'var(--accent-secondary)', 
+                    fontSize: '0.875rem', 
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}>
+                    <Check size={16} /> {message}
+                  </span>
+                )}
               </div>
             </form>
           </section>
