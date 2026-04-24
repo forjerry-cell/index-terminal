@@ -44,22 +44,30 @@ export default function ProfilePage() {
     setMessage('');
     
     const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setMessage('錯誤：找不到登入資訊，請重新整理頁面。');
+      setUpdating(false);
+      return;
+    }
+
+    // 改用 upsert：有記錄就更新，沒有就新增
     const { error } = await supabase
       .from('profiles')
-      .update({
+      .upsert({
+        id: user.id,
         full_name: formData.full_name,
         notify_email: formData.notify_email,
         email_subscription: formData.email_subscription,
         updated_at: new Date().toISOString()
-      })
-      .eq('id', user?.id);
+      }, { onConflict: 'id' });
 
     setUpdating(false);
     if (!error) {
       setMessage('個人資料已成功更新！');
       setTimeout(() => setMessage(''), 3000);
     } else {
-      setMessage('更新失敗，請稍後再試。');
+      console.error('Profile update error:', error);
+      setMessage(`更新失敗：${error.message}`);
     }
   };
 
