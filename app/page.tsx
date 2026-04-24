@@ -29,8 +29,27 @@ function DashboardContent() {
         .neq('date', '1900-01-01'); // 加上這行強制避開快取
       
       if (perf) {
-        // 將資料反轉回來，讓圖表能正常從左往右畫
+        // perf 為倒序（最新→最舊），取 perf[0] 為最新一筆
+        const latest = perf[0];
+        // 反轉成正序供圖表使用（最舊→最新）
         setPerformanceData([...perf].reverse());
+
+        if (latest) {
+          setSummary([
+            {
+              id: currentIndex,
+              name: currentIndex.includes('taiwan') ? '台股 High Beta' : '那指 High Beta',
+              value: latest.value,
+              change: latest.change_percent,
+              trend: latest.change_percent >= 0 ? 'up' : 'down',
+              latestDate: latest.date,
+            }
+          ]);
+        }
+      } else {
+        setSummary([]);
+        setPerformanceData([]);
+        setConstituents([]);
       }
 
       // 2. 抓取最新成分股 (根據當前 INDEX)
@@ -43,24 +62,6 @@ function DashboardContent() {
         .limit(5);
       
       if (consts) setConstituents(consts);
-
-      // 3. 計算摘要數據
-      if (perf && perf.length > 0) {
-        const latest = perf[perf.length - 1];
-        setSummary([
-          { 
-            id: currentIndex, 
-            name: currentIndex.includes('taiwan') ? '台股 High Beta' : '那指 High Beta', 
-            value: latest.value, 
-            change: latest.change_percent, 
-            trend: latest.change_percent >= 0 ? 'up' : 'down' 
-          }
-        ]);
-      } else {
-        setSummary([]);
-        setPerformanceData([]);
-        setConstituents([]);
-      }
       
       setLoading(false);
     }
