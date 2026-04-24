@@ -12,6 +12,7 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
+    notify_email: '',
     email_subscription: false
   });
 
@@ -28,6 +29,7 @@ export default function ProfilePage() {
         setFormData({
           full_name: data?.full_name || '',
           email: user.email || '',
+          notify_email: data?.notify_email || user.email || '',
           email_subscription: data?.email_subscription || false
         });
       }
@@ -46,8 +48,9 @@ export default function ProfilePage() {
       .from('profiles')
       .update({
         full_name: formData.full_name,
+        notify_email: formData.notify_email,
         email_subscription: formData.email_subscription,
-        updated_at: new Error().stack // 觸發更新時間
+        updated_at: new Date().toISOString()
       })
       .eq('id', user?.id);
 
@@ -55,10 +58,13 @@ export default function ProfilePage() {
     if (!error) {
       setMessage('個人資料已成功更新！');
       setTimeout(() => setMessage(''), 3000);
+    } else {
+      setMessage('更新失敗，請稍後再試。');
     }
   };
 
   if (loading) return <div className="auth-container"><Loader2 className="animate-spin" /></div>;
+
 
   return (
     <main>
@@ -101,6 +107,23 @@ export default function ProfilePage() {
                   <Mail size={18} className="input-icon" />
                   <input className="input with-icon" value={formData.email} disabled style={{ opacity: 0.5 }} />
                 </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="label">📬 每日報告接收信箱</label>
+                <div style={{ position: 'relative' }}>
+                  <Bell size={18} className="input-icon" />
+                  <input
+                    className="input with-icon"
+                    type="email"
+                    placeholder="請輸入您希望接收每日收盤報告的 Email"
+                    value={formData.notify_email}
+                    onChange={e => setFormData({...formData, notify_email: e.target.value})}
+                  />
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  每日台股收盤後，系統將自動寄送指數點位與成分股異動報告至此信箱。
+                </p>
               </div>
 
               <div className="dropdown-divider" style={{ margin: '1rem 0' }}></div>
