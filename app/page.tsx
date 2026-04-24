@@ -24,8 +24,7 @@ function DashboardContent() {
         .from('index_performance')
         .select('*')
         .eq('index_id', currentIndex)
-        .order('date', { ascending: true })
-        .limit(10000);
+        .order('date', { ascending: true }); // 移除 limit 限制，抓取完整歷史數據
       
       if (perf) setPerformanceData(perf);
 
