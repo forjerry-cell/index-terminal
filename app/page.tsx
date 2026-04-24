@@ -24,9 +24,13 @@ function DashboardContent() {
         .from('index_performance')
         .select('*')
         .eq('index_id', currentIndex)
-        .order('date', { ascending: true }); // 移除 limit 限制，抓取完整歷史數據
+        .order('date', { ascending: false }) // 改為倒序，先抓最新的
+        .limit(1000);
       
-      if (perf) setPerformanceData(perf);
+      if (perf) {
+        // 將資料反轉回來，讓圖表能正常從左往右畫
+        setPerformanceData([...perf].reverse());
+      }
 
       // 2. 抓取最新成分股 (根據當前 INDEX)
       const { data: consts } = await supabase
