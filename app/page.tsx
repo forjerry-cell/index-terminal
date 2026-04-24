@@ -15,6 +15,7 @@ function DashboardContent() {
   const [performanceData, setPerformanceData] = useState<any[]>([]);
   const [constituents, setConstituents] = useState<any[]>([]);
   const [summary, setSummary] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -25,7 +26,7 @@ function DashboardContent() {
         .select('*')
         .eq('index_id', currentIndex)
         .order('date', { ascending: false })
-        .limit(1000)
+        .limit(3000)
         .neq('date', '1900-01-01'); // 加上這行強制避開快取
       
       if (perf) {
@@ -45,6 +46,52 @@ function DashboardContent() {
               latestDate: latest.date,
             }
           ]);
+
+          // --- 動態計算所有統計數據 ---
+          const ascendingData = [...perf].reverse();
+          const tr = latest.value - 1;
+          const days = ascendingData.length;
+          const cagr = Math.pow(latest.value, 252 / days) - 1;
+
+          let peak = -Infinity;
+          let mdd = 0;
+          let returns: number[] = [];
+          
+          const annualMap: Record<string, { start: number, end: number }> = {};
+
+          ascendingData.forEach((row, idx) => {
+            if (row.value > peak) peak = row.value;
+            const dd = (peak - row.value) / peak;
+            if (dd > mdd) mdd = dd;
+
+            if (idx > 0) {
+              const prev = ascendingData[idx - 1];
+              const r = (row.value - prev.value) / prev.value;
+              returns.push(r);
+            }
+
+            const year = row.date.substring(0, 4);
+            if (!annualMap[year]) annualMap[year] = { start: row.value, end: row.value };
+            else annualMap[year].end = row.value;
+          });
+
+          const avgRet = returns.reduce((a, b) => a + b, 0) / returns.length;
+          const variance = returns.reduce((a, b) => a + Math.pow(b - avgRet, 2), 0) / returns.length;
+          const stdDev = Math.sqrt(variance);
+          const sharpe = (avgRet / stdDev) * Math.sqrt(252);
+
+          const annualStats = Object.keys(annualMap).map(year => ({
+            year,
+            return: (annualMap[year].end / annualMap[year].start) - 1
+          })).sort((a, b) => Number(b.year) - Number(a.year)); // 最新年份在最前
+
+          setStats({
+            totalReturn: tr,
+            cagr: cagr,
+            mdd: -mdd,
+            sharpe: sharpe,
+            annualStats
+          });
         }
       } else {
         setSummary([]);
@@ -129,6 +176,52 @@ function DashboardContent() {
                 </div>
               )}
             </div>
+
+            {/* 統計數據區塊 (動態計算) */}
+            {stats && (
+              <div className="card animate-fade" style={{ animationDelay: '0.3s' }}>
+                <h3 style={{ marginBottom: '1.5rem' }}>策略績效指標 (回測至今)</h3>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+                  <div style={{ padding: '1.25rem', backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--panel-border)' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>總報酬率</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, color: stats.totalReturn >= 0 ? 'var(--accent)' : 'var(--error)' }}>
+                      {(stats.totalReturn * 100).toFixed(2)}%
+                    </div>
+                  </div>
+                  <div style={{ padding: '1.25rem', backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--panel-border)' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>年化報酬率 (CAGR)</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, color: stats.cagr >= 0 ? 'var(--accent)' : 'var(--error)' }}>
+                      {(stats.cagr * 100).toFixed(2)}%
+                    </div>
+                  </div>
+                  <div style={{ padding: '1.25rem', backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--panel-border)' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>最大回撤 (MDD)</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--error)' }}>
+                      {(stats.mdd * 100).toFixed(2)}%
+                    </div>
+                  </div>
+                  <div style={{ padding: '1.25rem', backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--panel-border)' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>夏普值 (Sharpe)</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                      {stats.sharpe.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+
+                <h4 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--text-muted)' }}>各年度表現</h4>
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  {stats.annualStats.map((yr: any) => (
+                    <div key={yr.year} style={{ padding: '0.5rem 1rem', backgroundColor: 'var(--background)', borderRadius: '8px', border: '1px solid var(--panel-border)', minWidth: '80px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{yr.year}</div>
+                      <div style={{ fontWeight: 600, fontSize: '0.875rem', color: yr.return >= 0 ? 'var(--accent)' : 'var(--error)', marginTop: '2px' }}>
+                        {(yr.return * 100).toFixed(1)}%
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
 
           <section className="card">
@@ -158,7 +251,6 @@ function DashboardContent() {
                 </tbody>
               </table>
             </div>
-
           </section>
         </div>
       </div>
