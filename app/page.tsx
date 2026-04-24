@@ -151,14 +151,14 @@ function DashboardContent() {
                         </div>
                       </td>
                       <td style={{ textAlign: 'right', fontWeight: 'bold', color: 'var(--foreground)', fontSize: '1.125rem' }}>
-                        {item.weight}%
+                        {(item.weight * 100).toFixed(2)}%
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <button className="btn-secondary" style={{ width: '100%', marginTop: '1.5rem' }}>查看歷史權重異動</button>
+
           </section>
         </div>
       </div>
