@@ -37,14 +37,8 @@ export default function Navbar() {
           </div>
           <div className="flex gap-4 nav-links">
             <a 
-              href="/" 
-              className={typeof window !== 'undefined' && window.location.pathname === '/' && !window.location.search ? 'active' : ''}
-            >
-              市場概覽
-            </a>
-            <a 
               href="/?index=taiwan_high_beta"
-              className={typeof window !== 'undefined' && window.location.search.includes('taiwan') ? 'active' : ''}
+              className={typeof window !== 'undefined' && (!window.location.search || window.location.search.includes('taiwan')) ? 'active' : ''}
             >
               台股 High Beta
             </a>
