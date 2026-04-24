@@ -29,8 +29,8 @@ export default function ProfilePage() {
         setFormData({
           full_name: data?.full_name || '',
           email: user.email || '',
-          notify_email: data?.notify_email || user.email || '',
-          email_subscription: data?.email_subscription || false
+          notify_email: data?.notification_email || user.email || '',
+          email_subscription: !!data?.notification_email
         });
       }
       setLoading(false);
@@ -51,15 +51,17 @@ export default function ProfilePage() {
     }
 
     // 改用 upsert：有記錄就更新，沒有就新增
+    // 注意：因應資料庫欄位為 notification_email 且無 email_subscription
+    const payload = {
+      id: user.id,
+      full_name: formData.full_name,
+      notification_email: formData.email_subscription ? formData.notify_email : null,
+      updated_at: new Date().toISOString()
+    };
+
     const { error } = await supabase
       .from('profiles')
-      .upsert({
-        id: user.id,
-        full_name: formData.full_name,
-        notify_email: formData.notify_email,
-        email_subscription: formData.email_subscription,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'id' });
+      .upsert(payload, { onConflict: 'id' });
 
     setUpdating(false);
     if (!error) {

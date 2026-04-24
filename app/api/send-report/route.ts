@@ -34,14 +34,15 @@ export async function POST(req: Request) {
       .order('weight', { ascending: false })
       .limit(20);
 
-    // 3. 抓取訂閱名單（有填 notify_email 且開啟通知的用戶）
+    // 3. 抓取訂閱名單（有填 notification_email 的用戶即視為開啟通知）
     const { data: subscribers } = await supabase
       .from('profiles')
-      .select('full_name, notify_email')
-      .eq('email_subscription', true)
-      .not('notify_email', 'is', null);
+      .select('full_name, notification_email')
+      .not('notification_email', 'is', null);
 
-    if (!subscribers || subscribers.length === 0) {
+    const validSubscribers = subscribers?.filter(sub => sub.notification_email && sub.notification_email.trim() !== '') || [];
+
+    if (validSubscribers.length === 0) {
       return NextResponse.json({ success: true, message: '目前沒有訂閱者', count: 0 });
     }
 
@@ -109,10 +110,10 @@ export async function POST(req: Request) {
 
     // 5. 批次發送給所有訂閱者
     const results = await Promise.allSettled(
-      subscribers.map((sub: any) =>
+      validSubscribers.map((sub: any) =>
         resend.emails.send({
           from: 'BETA Terminal <onboarding@resend.dev>',
-          to: sub.notify_email,
+          to: sub.notification_email,
           subject: `📊 High Beta 指數日報 · ${latestDate}`,
           html: buildHtml(sub.full_name || ''),
         })
