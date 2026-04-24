@@ -24,8 +24,9 @@ function DashboardContent() {
         .from('index_performance')
         .select('*')
         .eq('index_id', currentIndex)
-        .order('date', { ascending: false }) // 改為倒序，先抓最新的
-        .limit(1000);
+        .order('date', { ascending: false })
+        .limit(1000)
+        .neq('date', '1900-01-01'); // 加上這行強制避開快取
       
       if (perf) {
         // 將資料反轉回來，讓圖表能正常從左往右畫
