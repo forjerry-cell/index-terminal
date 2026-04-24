@@ -90,11 +90,12 @@ export default function ProfilePage() {
           <section className="card flex-1">
             <form onSubmit={handleUpdate} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label className="label">真實姓名</label>
+                <label className="label">帳號名稱</label>
                 <div style={{ position: 'relative' }}>
                   <User size={18} className="input-icon" />
                   <input 
                     className="input with-icon" 
+                    placeholder="請輸入您的帳號名稱"
                     value={formData.full_name}
                     onChange={e => setFormData({...formData, full_name: e.target.value})}
                   />
@@ -102,11 +103,12 @@ export default function ProfilePage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="label">登入電子郵件 (不可修改)</label>
+                <label className="label">登入電子郵件</label>
                 <div style={{ position: 'relative' }}>
                   <Mail size={18} className="input-icon" />
-                  <input className="input with-icon" value={formData.email} disabled style={{ opacity: 0.5 }} />
+                  <input className="input with-icon" value={formData.email || '（訪客帳號，未綁定信箱）'} disabled style={{ opacity: 0.45, cursor: 'not-allowed' }} />
                 </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>登入信箱由系統管理，無法直接修改。如需變更，請聯繫管理員。</p>
               </div>
 
               <div className="flex flex-col gap-2">
