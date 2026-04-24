@@ -121,6 +121,11 @@ function DashboardContent() {
             <div className="card" style={{ minHeight: '450px' }}>
               <h3>指數與基準回測對比圖</h3>
               <PerformanceChart data={performanceData} />
+              {performanceData.length > 0 && (
+                <div className="text-center mt-4" style={{ color: 'var(--accent-secondary)', fontWeight: 600, fontSize: '0.875rem', borderTop: '1px solid var(--panel-border)', paddingTop: '1rem' }}>
+                  📡 數據已同步更新至：{performanceData[performanceData.length - 1].date}
+                </div>
+              )}
             </div>
           </section>
 
