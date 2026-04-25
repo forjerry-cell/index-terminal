@@ -7,7 +7,6 @@ import { Upload, Loader2, AlertCircle } from 'lucide-react';
 
 interface ScrapedData {
   strategyName: string; // 策略名稱
-  displayName: string;  // 顯示名稱
   product: string;      // 策略商品
   position: number;     // 目前部位
   price: string;        // 訊號價格
