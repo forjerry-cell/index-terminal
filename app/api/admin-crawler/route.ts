@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       // 嘗試在 Vercel 生產環境使用 sparticuz/chromium
       browser = await puppeteerCore.launch({
         args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
+        defaultViewport: { width: 1920, height: 10800 }, // 使用超大高度破解虛擬滾動 (Virtual Scrolling)
         executablePath: await chromium.executablePath(),
         headless: chromium.headless === 'new' ? true : chromium.headless,
       });
@@ -28,6 +28,7 @@ export async function POST(req: Request) {
       // 若在本機端開發，改用標準 puppeteer
       browser = await puppeteer.launch({
         headless: true,
+        defaultViewport: { width: 1920, height: 10800 },
         args: ['--no-sandbox', '--disable-setuid-sandbox']
       });
     }
