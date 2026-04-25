@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@sparticuz/chromium": "^147.0.2",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.104.0",
     "csv-parse": "^6.2.1",
@@ -17,6 +18,9 @@
     "next": "15.1.11",
     "papaparse": "^5.5.3",
     "pg": "^8.20.0",
+    "prettier": "^3.8.3",
+    "puppeteer": "^24.42.0",
+    "puppeteer-core": "^24.42.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "recharts": "^2.15.0",
