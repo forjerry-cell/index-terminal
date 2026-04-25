@@ -38,13 +38,13 @@ export default function Navbar() {
           <div className="flex gap-4 nav-links">
             <a 
               href="/?index=taiwan_high_beta"
-              className={typeof window !== 'undefined' && (!window.location.search || window.location.search.includes('taiwan')) ? 'active' : ''}
+              className={typeof window !== 'undefined' && window.location.pathname === '/' && (!window.location.search || window.location.search.includes('taiwan')) ? 'active' : ''}
             >
               台股領航強勢指數
             </a>
             <a 
               href="/?index=nasdaq_high_beta"
-              className={typeof window !== 'undefined' && window.location.search.includes('nasdaq') ? 'active' : ''}
+              className={typeof window !== 'undefined' && window.location.pathname === '/' && window.location.search.includes('nasdaq') ? 'active' : ''}
             >
               那指領航強勢指數
             </a>
