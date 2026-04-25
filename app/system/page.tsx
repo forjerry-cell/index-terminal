@@ -20,61 +20,102 @@ export default function SystemManagementPage() {
   
   const [detailData, setDetailData] = useState<ScrapedData[]>([]);
   const [summaryData, setSummaryData] = useState<{ product: string; totalPosition: number }[]>([]);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
   
+  const fetchData = async (displayNames: string[]) => {
+    if (!displayNames || displayNames.length === 0) return;
+    
+    setUploading(true);
+    try {
+      const response = await fetch('/api/admin-crawler', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayNames })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        const data: ScrapedData[] = result.data;
+        setDetailData(data);
+        
+        // 計算彙總資料
+        const summaryMap: Record<string, number> = {};
+        data.forEach(item => {
+          if (!summaryMap[item.product]) summaryMap[item.product] = 0;
+          summaryMap[item.product] += Number(item.position);
+        });
+        
+        const summaryArray = Object.keys(summaryMap).map(key => ({
+          product: key,
+          totalPosition: summaryMap[key]
+        }));
+        setSummaryData(summaryArray);
+        setLastUpdated(new Date().toLocaleTimeString());
+      }
+    } catch (err) {
+      console.error('Fetch error:', err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   useEffect(() => {
-    async function checkAuth() {
+    async function init() {
+      // 1. 驗證權限
       const { data: { user } } = await supabase.auth.getUser();
       if (user && user.email === 'forjerry@gmail.com') {
         setIsAdmin(true);
+        
+        // 2. 嘗試從 localStorage 讀取先前上傳的名單
+        const savedNames = localStorage.getItem('system_display_names');
+        if (savedNames) {
+          try {
+            const names = JSON.parse(savedNames);
+            if (Array.isArray(names) && names.length > 0) {
+              fetchData(names);
+            }
+          } catch (e) {
+            console.error('Failed to parse saved names');
+          }
+        }
       }
       setLoading(false);
     }
-    checkAuth();
+    init();
+
+    // 3. 設定每 5 分鐘自動刷新
+    const interval = setInterval(() => {
+      const savedNames = localStorage.getItem('system_display_names');
+      if (savedNames) {
+        try {
+          const names = JSON.parse(savedNames);
+          if (Array.isArray(names) && names.length > 0) {
+            fetchData(names);
+          }
+        } catch (e) {}
+      }
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploading(true);
     const reader = new FileReader();
     reader.onload = async (event) => {
       const content = event.target?.result as string;
-      const displayNames = content.split('\n').map(line => line.trim()).filter(line => line);
+      const displayNames = content.split('\n')
+        .map(line => line.trim())
+        .filter(line => line && !line.startsWith('#'));
       
-      try {
-        // 呼叫後端爬蟲 API
-        const response = await fetch('/api/admin-crawler', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ displayNames })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          const data: ScrapedData[] = result.data;
-          setDetailData(data);
-          
-          // 計算彙總資料
-          const summaryMap: Record<string, number> = {};
-          data.forEach(item => {
-            if (!summaryMap[item.product]) summaryMap[item.product] = 0;
-            summaryMap[item.product] += Number(item.position);
-          });
-          
-          const summaryArray = Object.keys(summaryMap).map(key => ({
-            product: key,
-            totalPosition: summaryMap[key]
-          }));
-          setSummaryData(summaryArray);
-        } else {
-          alert('爬取失敗: ' + result.error);
-        }
-      } catch (err) {
-        alert('發生錯誤');
-      } finally {
-        setUploading(false);
+      if (displayNames.length > 0) {
+        // 儲存到 localStorage
+        localStorage.setItem('system_display_names', JSON.stringify(displayNames));
+        // 立即抓取一次
+        fetchData(displayNames);
       }
     };
     reader.readAsText(file);
@@ -107,7 +148,14 @@ export default function SystemManagementPage() {
         <header className="flex justify-between items-center" style={{ marginBottom: '2.5rem' }}>
           <div>
             <h1 className="animate-fade">系統管理與部位分析</h1>
-            <p className="animate-fade" style={{ animationDelay: '0.1s' }}>自動爬取策略部位狀態並進行彙總統計</p>
+            <div className="flex items-center gap-4 animate-fade" style={{ animationDelay: '0.1s' }}>
+              <p>自動爬取策略部位狀態並進行彙總統計</p>
+              {lastUpdated && (
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', background: 'var(--glass)', padding: '2px 8px', borderRadius: '4px' }}>
+                  最後更新: {lastUpdated} (每 5 分鐘自動刷新)
+                </span>
+              )}
+            </div>
           </div>
           <div className="flex gap-4">
             <label className="btn flex items-center gap-2" style={{ cursor: 'pointer' }}>
