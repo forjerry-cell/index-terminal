@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "High Beta Index Terminal | 高 Beta 指數發佈平台",
+  title: "Innovation Index Terminal | 創新指數發佈平台",
   description: "專業金融指數追蹤、成分股分析與每日表現報告。",
 };
 
