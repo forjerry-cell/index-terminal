@@ -5,11 +5,13 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 interface ChartProps {
   data: any[];
+  indexName?: string;
+  benchmarkName?: string;
 }
 
 type TimeRange = '1M' | '3M' | '6M' | '1Y' | '3Y' | 'MAX';
 
-export default function PerformanceChart({ data }: ChartProps) {
+export default function PerformanceChart({ data, indexName = 'High Beta 指數', benchmarkName = '基準指數' }: ChartProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>('MAX');
 
   const filteredData = useMemo(() => {
@@ -89,7 +91,7 @@ export default function PerformanceChart({ data }: ChartProps) {
             <Line 
               type="monotone" 
               dataKey="value" 
-              name="High Beta 指數" 
+              name={indexName}
               stroke="var(--accent)" 
               strokeWidth={3} 
               dot={false}
@@ -98,7 +100,7 @@ export default function PerformanceChart({ data }: ChartProps) {
             <Line 
               type="monotone" 
               dataKey="benchmark_value" 
-              name="基準指數 (Benchmark)" 
+              name={benchmarkName}
               stroke="#64748b" 
               strokeWidth={2} 
               strokeDasharray="5 5" 

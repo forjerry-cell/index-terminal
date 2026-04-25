@@ -39,7 +39,7 @@ function DashboardContent() {
           setSummary([
             {
               id: currentIndex,
-              name: currentIndex.includes('taiwan') ? '台股 High Beta' : '那指 High Beta',
+              name: currentIndex.includes('taiwan') ? '台股領航強勢指數' : '那指領航強勢指數',
               value: latest.value,
               change: latest.change_percent,
               trend: latest.change_percent >= 0 ? 'up' : 'down',
@@ -127,9 +127,6 @@ function DashboardContent() {
             <h1 className="animate-fade">數據終端控制台</h1>
             <p className="animate-fade" style={{ animationDelay: '0.1s' }}>掌握 High Beta 策略的每日動態與歷史表現。</p>
           </div>
-          <div className="flex gap-4">
-            <button className="btn">上傳全成分股 CSV</button>
-          </div>
         </header>
 
         {/* 摘要卡片區 */}
@@ -169,7 +166,11 @@ function DashboardContent() {
           <section className="flex flex-col gap-8">
             <div className="card" style={{ minHeight: '450px' }}>
               <h3>指數與基準回測對比圖</h3>
-              <PerformanceChart data={performanceData} />
+              <PerformanceChart 
+                data={performanceData} 
+                indexName={currentIndex.includes('taiwan') ? '台股領航強勢指數' : '那指領航強勢指數'}
+                benchmarkName={currentIndex.includes('taiwan') ? '台灣加權指數' : '那指100指數'}
+              />
               {performanceData.length > 0 && (
                 <div className="text-center mt-4" style={{ color: 'var(--accent-secondary)', fontWeight: 600, fontSize: '0.875rem', borderTop: '1px solid var(--panel-border)', paddingTop: '1rem' }}>
                   📡 數據已同步更新至：{performanceData[performanceData.length - 1].date}
