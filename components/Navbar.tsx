@@ -32,7 +32,7 @@ export default function Navbar() {
       <div className="container flex items-center justify-between" style={{ height: '70px' }}>
         <div className="flex items-center gap-8">
           <div className="logo">
-            <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: '1.25rem' }}>BETA</span>
+            <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: '1.25rem' }}>INNOVATION</span>
             <span style={{ fontWeight: 400, marginLeft: '4px' }}>TERMINAL</span>
           </div>
           <div className="flex gap-4 nav-links">

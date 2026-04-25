@@ -51,14 +51,14 @@ export async function POST(req: Request) {
       <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: auto; background: #0d0f14; color: #e2e8f0; border: 1px solid #1f2228; border-radius: 12px; overflow: hidden;">
         <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0d0f14 100%); padding: 32px;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 1.75rem; font-weight: 900; color: white;">BETA</span>
+            <span style="font-size: 1.75rem; font-weight: 900; color: white;">INNOVATION</span>
             <span style="color: #93c5fd; font-size: 1rem;">TERMINAL</span>
           </div>
           <p style="color: #93c5fd; margin: 8px 0 0; font-size: 0.875rem;">${latestDate} 每日收盤報告</p>
         </div>
         <div style="padding: 32px;">
           <p style="margin-top: 0;">親愛的 <strong>${name || '會員'}</strong>，</p>
-          <p style="color: #94a3b8; font-size: 0.875rem;">以下是今日 High Beta 指數的最新表現。</p>
+          <p style="color: #94a3b8; font-size: 0.875rem;">以下是今日領航強勢指數的最新表現。</p>
 
           <h2 style="color: #60a5fa; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 24px;">📈 指數表現</h2>
           ${latestPerf.map((p: any) => `
@@ -102,7 +102,7 @@ export async function POST(req: Request) {
           </div>
 
           <p style="font-size: 11px; color: #4b5563; margin-top: 32px; text-align: center;">
-            此郵件由 BETA Terminal 自動發送 · 如需取消訂閱，請至個人設定頁關閉通知開關
+            此郵件由 INNOVATION Terminal 自動發送 · 如需取消訂閱，請至個人設定頁關閉通知開關
           </p>
         </div>
       </div>
@@ -112,9 +112,9 @@ export async function POST(req: Request) {
     const results = await Promise.allSettled(
       validSubscribers.map((sub: any) =>
         resend.emails.send({
-          from: 'BETA Terminal <onboarding@resend.dev>',
+          from: 'INNOVATION Terminal <onboarding@resend.dev>',
           to: sub.notification_email,
-          subject: `📊 High Beta 指數日報 · ${latestDate}`,
+          subject: `📊 領航強勢指數日報 · ${latestDate}`,
           html: buildHtml(sub.full_name || ''),
         })
       )
