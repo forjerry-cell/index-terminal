@@ -17,6 +17,7 @@ export default function SystemManagementPage() {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
   
   const [detailData, setDetailData] = useState<ScrapedData[]>([]);
   const [summaryData, setSummaryData] = useState<{ product: string; totalPosition: number }[]>([]);
@@ -54,12 +55,16 @@ export default function SystemManagementPage() {
         setLastUpdated(new Date().toLocaleTimeString());
 
         // 2. 儲存到使用者 Metadata 進行跨裝置同步
-        await supabase.auth.updateUser({
+        setSyncStatus('syncing');
+        const { error } = await supabase.auth.updateUser({
           data: { strategy_list: displayNames.join(',') }
         });
+        if (error) setSyncStatus('error');
+        else setSyncStatus('synced');
       }
     } catch (err) {
       console.error('Fetch error:', err);
+      setSyncStatus('error');
     } finally {
       setUploading(false);
     }
@@ -170,7 +175,13 @@ export default function SystemManagementPage() {
               )}
             </div>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            {syncStatus !== 'idle' && (
+              <div className="flex items-center gap-1" style={{ fontSize: '0.8rem', color: syncStatus === 'synced' ? 'var(--accent-secondary)' : syncStatus === 'error' ? 'var(--error)' : 'var(--text-muted)' }}>
+                {syncStatus === 'syncing' ? <Loader2 className="animate-spin" size={14} /> : <Shield size={14} />}
+                {syncStatus === 'synced' ? '雲端同步中' : syncStatus === 'error' ? '同步失敗' : '同步中...'}
+              </div>
+            )}
             <label className="btn flex items-center gap-2" style={{ cursor: 'pointer' }}>
               {uploading ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />}
               {uploading ? '爬取中...' : '上傳名單 (.txt)'}
