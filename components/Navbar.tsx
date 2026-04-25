@@ -40,13 +40,13 @@ export default function Navbar() {
               href="/?index=taiwan_high_beta"
               className={typeof window !== 'undefined' && (!window.location.search || window.location.search.includes('taiwan')) ? 'active' : ''}
             >
-              台股 High Beta
+              台股領航強勢指數
             </a>
             <a 
               href="/?index=nasdaq_high_beta"
               className={typeof window !== 'undefined' && window.location.search.includes('nasdaq') ? 'active' : ''}
             >
-              那指 High Beta
+              那指領航強勢指數
             </a>
           </div>
         </div>
