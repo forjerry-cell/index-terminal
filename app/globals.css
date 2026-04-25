@@ -67,6 +67,22 @@ button {
 .gap-4 { gap: 1rem; }
 .gap-8 { gap: 2rem; }
 
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+/* Responsive Overrides */
+@media (max-width: 992px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 1rem; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .navbar .container { gap: 1rem; flex-wrap: wrap; height: auto !important; padding: 1rem; }
+  .nav-links { overflow-x: auto; white-space: nowrap; padding-bottom: 0.5rem; }
+  header.flex { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+
 /* Components */
 .card {
   background: var(--panel-bg);

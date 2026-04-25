@@ -48,6 +48,12 @@ export default function Navbar() {
             >
               那指領航強勢指數
             </a>
+            <a 
+              href="/system"
+              className={typeof window !== 'undefined' && window.location.pathname.includes('/system') ? 'active' : ''}
+            >
+              系統管理
+            </a>
           </div>
         </div>
 
