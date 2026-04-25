@@ -76,46 +76,61 @@ export async function POST(req: Request) {
     // 多等2秒確保資料渲染完畢
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // 3. 爬取表格內容 (處理虛擬滾動：不斷往下捲動並收集所有出現過的列)
+    // 3. 爬取表格內容 (深度破解虛擬滾動)
     const tableData = await page.evaluate(async () => {
-      const scrollContainer = document.querySelector('.ant-table-body') || document.querySelector('table')?.parentElement || window;
+      // 嘗試尋找多種可能的滾動容器
+      const scrollContainer = document.querySelector('.ant-table-body') || 
+                              document.querySelector('.ant-table-content') ||
+                              document.querySelector('div[style*="overflow"]') ||
+                              document.querySelector('table')?.parentElement;
       
-      const allData = new Map(); // 用 Map 避免重複，key 為顯示名稱
+      const allData = new Map();
       
-      // 動態尋找欄位索引
-      const headers = Array.from(document.querySelectorAll('table thead th')).map(th => th.textContent?.trim() || '');
-      const idxDisplayName = headers.findIndex(h => h.includes('顯示名稱'));
-      const idxProduct = headers.findIndex(h => h.includes('策略商品'));
-      const idxPosition = headers.findIndex(h => h.includes('目前部位'));
-      const idxPrice = headers.findIndex(h => h.includes('訊號價格') || h.includes('觸發價格'));
-      const idxTriggerTime = headers.findIndex(h => h.includes('觸發時間'));
+      const extractVisibleRows = () => {
+        // 動態尋找欄位索引
+        const headers = Array.from(document.querySelectorAll('table thead th')).map(th => th.textContent?.trim() || '');
+        const idxStrategyName = headers.findIndex(h => h.includes('策略名稱'));
+        const idxDisplayName = headers.findIndex(h => h.includes('顯示名稱'));
+        const idxProduct = headers.findIndex(h => h.includes('策略商品'));
+        const idxPosition = headers.findIndex(h => h.includes('目前部位'));
+        const idxPrice = headers.findIndex(h => h.includes('訊號價格') || h.includes('觸發價格'));
+        const idxTriggerTime = headers.findIndex(h => h.includes('觸發時間'));
 
-      const extractRows = () => {
         const rows = Array.from(document.querySelectorAll('table tbody tr'));
         rows.forEach(row => {
           const cells = Array.from(row.querySelectorAll('td'));
-          const displayName = idxDisplayName !== -1 && cells[idxDisplayName] ? cells[idxDisplayName].textContent?.trim() || '' : cells[3]?.textContent?.trim() || '';
-          if (!displayName) return;
+          if (cells.length < 5) return;
           
-          allData.set(displayName, {
-            displayName,
+          // 優先使用「策略名稱」作為匹配 Key
+          const strategyName = idxStrategyName !== -1 && cells[idxStrategyName] ? cells[idxStrategyName].textContent?.trim() || '' : cells[2]?.textContent?.trim() || '';
+          if (!strategyName || strategyName === '-') return;
+          
+          allData.set(strategyName, {
+            strategyName,
+            displayName: idxDisplayName !== -1 && cells[idxDisplayName] ? cells[idxDisplayName].textContent?.trim() || '' : cells[3]?.textContent?.trim() || '',
             product: idxProduct !== -1 && cells[idxProduct] ? cells[idxProduct].textContent?.trim() || '' : cells[5]?.textContent?.trim() || '',
-            position: idxPosition !== -1 && cells[idxPosition] ? Number(cells[idxPosition].textContent?.trim() || '0') : Number(cells[7]?.textContent?.trim() || '0'),
+            position: idxPosition !== -1 && cells[idxPosition] ? Number(cells[idxPosition].textContent?.replace(/,/g, '').trim() || '0') : Number(cells[7]?.textContent?.replace(/,/g, '').trim() || '0'),
             price: idxPrice !== -1 && cells[idxPrice] ? cells[idxPrice].textContent?.trim() || '' : cells[8]?.textContent?.trim() || '',
             triggerTime: idxTriggerTime !== -1 && cells[idxTriggerTime] ? cells[idxTriggerTime].textContent?.trim() || '' : cells[9]?.textContent?.trim() || ''
           });
         });
       };
 
-      // 執行捲動 10 次，確保到底
-      for (let i = 0; i < 10; i++) {
-        extractRows();
-        if (scrollContainer.scrollTo) {
-          scrollContainer.scrollTo(0, scrollContainer.scrollHeight || 99999);
-        } else {
-          scrollContainer.scrollTop = 99999;
+      // 逐步滾動法：每次滾動 500 像素，直到到底或超過 15 次
+      if (scrollContainer) {
+        let currentScroll = 0;
+        for (let i = 0; i < 15; i++) {
+          extractVisibleRows();
+          currentScroll += 500;
+          if (scrollContainer.scrollTo) {
+            scrollContainer.scrollTo(0, currentScroll);
+          } else {
+            scrollContainer.scrollTop = currentScroll;
+          }
+          await new Promise(r => setTimeout(r, 600)); // 等待新資料渲染
         }
-        await new Promise(r => setTimeout(r, 500)); // 等待新資料渲染
+      } else {
+        extractVisibleRows();
       }
       
       return Array.from(allData.values());

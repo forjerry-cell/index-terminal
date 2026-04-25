@@ -6,11 +6,12 @@ import Navbar from '@/components/Navbar';
 import { Upload, Loader2, AlertCircle } from 'lucide-react';
 
 interface ScrapedData {
-  displayName: string; // 顯示名稱
-  product: string;     // 策略商品
-  position: number;    // 目前部位
-  price: string;       // 訊號價格
-  triggerTime: string; // 觸發時間
+  strategyName: string; // 策略名稱
+  displayName: string;  // 顯示名稱
+  product: string;      // 策略商品
+  position: number;     // 目前部位
+  price: string;        // 訊號價格
+  triggerTime: string;  // 觸發時間
 }
 
 export default function SystemManagementPage() {
@@ -201,6 +202,7 @@ export default function SystemManagementPage() {
                 <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--panel-border)' }}>
+                      <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略名稱</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>顯示名稱</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略商品</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>目前部位</th>
@@ -211,6 +213,7 @@ export default function SystemManagementPage() {
                   <tbody>
                     {detailData.map((row, idx) => (
                       <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <td style={{ padding: '12px', fontWeight: 600, color: 'var(--accent)' }}>{row.strategyName}</td>
                         <td style={{ padding: '12px' }}>{row.displayName}</td>
                         <td style={{ padding: '12px' }}>{row.product}</td>
                         <td style={{ padding: '12px', fontWeight: 600, color: row.position > 0 ? 'var(--accent-secondary)' : row.position < 0 ? 'var(--error)' : 'var(--foreground)' }}>
