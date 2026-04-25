@@ -3,12 +3,15 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User, LogOut, Settings, LayoutDashboard, ChevronDown } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export default function Navbar() {
   const [profile, setProfile] = useState<any>(null);
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const index = searchParams.get('index');
 
   useEffect(() => {
     async function loadProfile() {
@@ -31,26 +34,26 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container flex items-center justify-between" style={{ height: '70px' }}>
         <div className="flex items-center gap-8">
-          <div className="logo">
+          <div className="logo cursor-pointer" onClick={() => router.push('/')}>
             <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: '1.25rem' }}>INNOVATION</span>
             <span style={{ fontWeight: 400, marginLeft: '4px' }}>TERMINAL</span>
           </div>
           <div className="flex gap-4 nav-links">
             <a 
               href="/?index=taiwan_high_beta"
-              className={typeof window !== 'undefined' && window.location.pathname === '/' && (!window.location.search || window.location.search.includes('taiwan')) ? 'active' : ''}
+              className={pathname === '/' && (!index || index === 'taiwan_high_beta') ? 'active' : ''}
             >
               台股領航強勢指數
             </a>
             <a 
               href="/?index=nasdaq_high_beta"
-              className={typeof window !== 'undefined' && window.location.pathname === '/' && window.location.search.includes('nasdaq') ? 'active' : ''}
+              className={pathname === '/' && index === 'nasdaq_high_beta' ? 'active' : ''}
             >
               那指領航強勢指數
             </a>
             <a 
               href="/system"
-              className={typeof window !== 'undefined' && window.location.pathname.includes('/system') ? 'active' : ''}
+              className={pathname.includes('/system') ? 'active' : ''}
             >
               系統管理
             </a>
