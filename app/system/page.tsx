@@ -203,7 +203,6 @@ export default function SystemManagementPage() {
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--panel-border)' }}>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略名稱</th>
-                      <th style={{ padding: '12px', color: 'var(--text-muted)' }}>顯示名稱</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略商品</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>目前部位</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>訊號價格</th>
@@ -214,7 +213,6 @@ export default function SystemManagementPage() {
                     {detailData.map((row, idx) => (
                       <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                         <td style={{ padding: '12px', fontWeight: 600, color: 'var(--accent)' }}>{row.strategyName}</td>
-                        <td style={{ padding: '12px' }}>{row.displayName}</td>
                         <td style={{ padding: '12px' }}>{row.product}</td>
                         <td style={{ padding: '12px', fontWeight: 600, color: row.position > 0 ? 'var(--accent-secondary)' : row.position < 0 ? 'var(--error)' : 'var(--foreground)' }}>
                           {row.position}

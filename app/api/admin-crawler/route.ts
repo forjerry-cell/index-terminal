@@ -76,70 +76,83 @@ export async function POST(req: Request) {
     // 多等2秒確保資料渲染完畢
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // 3. 爬取表格內容 (深度破解虛擬滾動)
-    const tableData = await page.evaluate(async () => {
-      // 嘗試尋找多種可能的滾動容器
-      const scrollContainer = document.querySelector('.ant-table-body') || 
-                              document.querySelector('.ant-table-content') ||
-                              document.querySelector('div[style*="overflow"]') ||
-                              document.querySelector('table')?.parentElement;
+    // 3. 深度爬取與分頁處理
+    const allData = new Map();
+    const targetSet = new Set(displayNames);
+    
+    // 限制最多爬取 5 頁，避免超時
+    for (let pageNum = 1; pageNum <= 5; pageNum++) {
+      console.log(`Crawling page ${pageNum}...`);
       
-      const allData = new Map();
-      
-      const extractVisibleRows = () => {
-        // 動態尋找欄位索引
-        const headers = Array.from(document.querySelectorAll('table thead th')).map(th => th.textContent?.trim() || '');
-        const idxStrategyName = headers.findIndex(h => h.includes('策略名稱'));
-        const idxDisplayName = headers.findIndex(h => h.includes('顯示名稱'));
-        const idxProduct = headers.findIndex(h => h.includes('策略商品'));
-        const idxPosition = headers.findIndex(h => h.includes('目前部位'));
-        const idxPrice = headers.findIndex(h => h.includes('訊號價格') || h.includes('觸發價格'));
-        const idxTriggerTime = headers.findIndex(h => h.includes('觸發時間'));
+      const pageResults = await page.evaluate(async () => {
+        const scrollContainer = document.querySelector('.ant-table-body') || 
+                                document.querySelector('.ant-table-content') ||
+                                document.querySelector('div[style*="overflow"]') ||
+                                document.querySelector('table')?.parentElement;
+        
+        const localMap = new Map();
+        const extract = () => {
+          const headers = Array.from(document.querySelectorAll('table thead th')).map(th => th.textContent?.trim() || '');
+          const idxStrategyName = headers.findIndex(h => h.includes('策略名稱'));
+          const idxProduct = headers.findIndex(h => h.includes('策略商品'));
+          const idxPosition = headers.findIndex(h => h.includes('目前部位'));
+          const idxPrice = headers.findIndex(h => h.includes('訊號價格') || h.includes('觸發價格'));
+          const idxTriggerTime = headers.findIndex(h => h.includes('觸發時間'));
 
-        const rows = Array.from(document.querySelectorAll('table tbody tr'));
-        rows.forEach(row => {
-          const cells = Array.from(row.querySelectorAll('td'));
-          if (cells.length < 5) return;
-          
-          // 優先使用「策略名稱」作為匹配 Key
-          const strategyName = idxStrategyName !== -1 && cells[idxStrategyName] ? cells[idxStrategyName].textContent?.trim() || '' : cells[2]?.textContent?.trim() || '';
-          if (!strategyName || strategyName === '-') return;
-          
-          allData.set(strategyName, {
-            strategyName,
-            displayName: idxDisplayName !== -1 && cells[idxDisplayName] ? cells[idxDisplayName].textContent?.trim() || '' : cells[3]?.textContent?.trim() || '',
-            product: idxProduct !== -1 && cells[idxProduct] ? cells[idxProduct].textContent?.trim() || '' : cells[5]?.textContent?.trim() || '',
-            position: idxPosition !== -1 && cells[idxPosition] ? Number(cells[idxPosition].textContent?.replace(/,/g, '').trim() || '0') : Number(cells[7]?.textContent?.replace(/,/g, '').trim() || '0'),
-            price: idxPrice !== -1 && cells[idxPrice] ? cells[idxPrice].textContent?.trim() || '' : cells[8]?.textContent?.trim() || '',
-            triggerTime: idxTriggerTime !== -1 && cells[idxTriggerTime] ? cells[idxTriggerTime].textContent?.trim() || '' : cells[9]?.textContent?.trim() || ''
+          document.querySelectorAll('table tbody tr').forEach(row => {
+            const cells = Array.from(row.querySelectorAll('td'));
+            if (cells.length < 5) return;
+            const name = idxStrategyName !== -1 && cells[idxStrategyName] ? cells[idxStrategyName].textContent?.trim() || '' : cells[2]?.textContent?.trim() || '';
+            if (!name || name === '-') return;
+            localMap.set(name, {
+              strategyName: name,
+              product: idxProduct !== -1 && cells[idxProduct] ? cells[idxProduct].textContent?.trim() || '' : cells[5]?.textContent?.trim() || '',
+              position: Number(cells[idxPosition]?.textContent?.replace(/,/g, '').trim() || '0'),
+              price: cells[idxPrice]?.textContent?.trim() || '',
+              triggerTime: cells[idxTriggerTime]?.textContent?.trim() || ''
+            });
           });
-        });
-      };
+        };
 
-      // 逐步滾動法：每次滾動 500 像素，直到到底或超過 15 次
-      if (scrollContainer) {
-        let currentScroll = 0;
-        for (let i = 0; i < 15; i++) {
-          extractVisibleRows();
-          currentScroll += 500;
-          if (scrollContainer.scrollTo) {
-            scrollContainer.scrollTo(0, currentScroll);
-          } else {
-            scrollContainer.scrollTop = currentScroll;
-          }
-          await new Promise(r => setTimeout(r, 600)); // 等待新資料渲染
+        // 每頁滾動 3 次確保讀取虛擬列表
+        for (let s = 0; s < 3; s++) {
+          extract();
+          if (scrollContainer) scrollContainer.scrollTop += 1500;
+          await new Promise(r => setTimeout(r, 600));
         }
-      } else {
-        extractVisibleRows();
-      }
+        return Array.from(localMap.values());
+      });
+
+      // 合併資料
+      pageResults.forEach(item => allData.set(item.strategyName, item));
       
-      return Array.from(allData.values());
-    });
+      // 檢查是否已經找齊所有目標
+      const foundCount = Array.from(allData.keys()).filter(k => targetSet.has(k)).length;
+      console.log(`Found ${foundCount}/${displayNames.length} targets so far.`);
+      
+      if (foundCount >= displayNames.length) break;
+
+      // 嘗試點擊下一頁
+      const buttons = await page.$$('button.mantine-Pagination-control');
+      let clicked = false;
+      for (const btn of buttons) {
+        const txt = await page.evaluate(el => el.textContent, btn);
+        if (txt === '>') {
+          const isDisabled = await page.evaluate(el => el.disabled, btn);
+          if (!isDisabled) {
+            await btn.click();
+            await new Promise(resolve => setTimeout(resolve, 2000)); // 等待換頁渲染
+            clicked = true;
+          }
+          break;
+        }
+      }
+      if (!clicked) break; // 沒有下一頁了
+    }
 
     await browser.close();
 
-    // 4. 過濾出有在 displayNames 清單中的資料
-    const filteredData = tableData.filter(row => displayNames.includes(row.displayName));
+    const filteredData = Array.from(allData.values()).filter(row => targetSet.has(row.strategyName));
 
     return NextResponse.json({ success: true, data: filteredData });
     
