@@ -152,18 +152,7 @@ export async function POST(req: Request) {
 
     await browser.close();
 
-    // 4. 儲存名單到資料庫進行跨裝置同步 (借用 indices 表儲存配置)
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabaseAdmin = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-    
-    await supabaseAdmin.from('indices').upsert({
-      id: 'system_config_strategies',
-      name: '系統管理配置',
-      description: displayNames.join(',')
-    });
+    const filteredData = Array.from(allData.values()).filter(row => targetSet.has(row.strategyName));
 
     return NextResponse.json({ success: true, data: filteredData });
     

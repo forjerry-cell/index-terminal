@@ -39,7 +39,7 @@ export default function SystemManagementPage() {
         const data: ScrapedData[] = result.data;
         setDetailData(data);
         
-        // 計算彙總資料
+        // 1. 計算彙總資料
         const summaryMap: Record<string, number> = {};
         data.forEach(item => {
           if (!summaryMap[item.product]) summaryMap[item.product] = 0;
@@ -52,6 +52,11 @@ export default function SystemManagementPage() {
         }));
         setSummaryData(summaryArray);
         setLastUpdated(new Date().toLocaleTimeString());
+
+        // 2. 儲存到使用者 Metadata 進行跨裝置同步
+        await supabase.auth.updateUser({
+          data: { strategy_list: displayNames.join(',') }
+        });
       }
     } catch (err) {
       console.error('Fetch error:', err);
@@ -67,23 +72,17 @@ export default function SystemManagementPage() {
       if (user && user.email === 'forjerry@gmail.com') {
         setIsAdmin(true);
         
-        // 2. 嘗試從 localStorage 或資料庫讀取先前上傳的名單
+        // 2. 嘗試從 localStorage 或使用者雲端資料讀取先前上傳的名單
         let names: string[] = [];
         const savedNames = localStorage.getItem('system_display_names');
         if (savedNames) {
           try { names = JSON.parse(savedNames); } catch (e) {}
         }
 
-        // 如果 localStorage 沒有，或者為了同步，從資料庫抓一次
-        const { data: config } = await supabase
-          .from('indices')
-          .select('description')
-          .eq('id', 'system_config_strategies')
-          .single();
-        
-        if (config?.description) {
-          const dbNames = config.description.split(',');
-          // 如果資料庫的名單跟本地不同，以資料庫為準（實現同步）
+        // 優先檢查雲端資料 (實現同步)
+        const cloudList = user.user_metadata?.strategy_list;
+        if (cloudList) {
+          const dbNames = cloudList.split(',');
           if (dbNames.length > 0 && JSON.stringify(dbNames) !== JSON.stringify(names)) {
             names = dbNames;
             localStorage.setItem('system_display_names', JSON.stringify(names));
