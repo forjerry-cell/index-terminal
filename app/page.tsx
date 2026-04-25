@@ -125,7 +125,7 @@ function DashboardContent() {
         <header className="flex justify-between items-center" style={{ marginBottom: '2.5rem' }}>
           <div>
             <h1 className="animate-fade">數據終端控制台</h1>
-            <p className="animate-fade" style={{ animationDelay: '0.1s' }}>掌握 High Beta 策略的每日動態與歷史表現。</p>
+            <p className="animate-fade" style={{ animationDelay: '0.1s' }}>掌握獨特創新策略的每日動態與歷史表現。</p>
           </div>
         </header>
 
