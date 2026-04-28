@@ -27,3 +27,11 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python scripts/sync_to_supabase.py
+
+      - name: Send Daily Report Email
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -X POST https://index-terminal.vercel.app/api/send-report \
+          -H "Content-Type: application/json" \
+          -d "{\"secret\": \"$CRON_SECRET\"}"
