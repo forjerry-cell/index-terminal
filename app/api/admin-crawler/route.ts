@@ -1,163 +1,186 @@
 import { NextResponse } from 'next/server';
 import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
-// Import standard puppeteer for local development fallback
 import puppeteer from 'puppeteer';
 
-export const maxDuration = 60; // Set max duration for vercel hobby plan
+export const maxDuration = 60;
 
-export async function POST(req: Request) {
+type ScrapedRow = {
+  strategyName: string;
+  product: string;
+  position: number;
+  price: string;
+  triggerTime: string;
+};
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function launchBrowser() {
   try {
-    const { displayNames } = await req.json();
-    
-    if (!displayNames || !Array.isArray(displayNames) || displayNames.length === 0) {
-      return NextResponse.json({ success: false, error: '未提供有效的顯示名稱清單' }, { status: 400 });
-    }
+    return await puppeteerCore.launch({
+      args: chromium.args,
+      defaultViewport: { width: 1920, height: 10800 },
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    });
+  } catch {
+    return await puppeteer.launch({
+      headless: true,
+      defaultViewport: { width: 1920, height: 10800 },
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+  }
+}
 
-    let browser;
-    try {
-      // 嘗試在 Vercel 生產環境使用 sparticuz/chromium
-      browser = await puppeteerCore.launch({
-        args: chromium.args,
-        defaultViewport: { width: 1920, height: 10800 }, // 使用超大高度破解虛擬滾動 (Virtual Scrolling)
-        executablePath: await chromium.executablePath(),
-        headless: chromium.headless === 'new' ? true : chromium.headless,
-      });
-    } catch (err) {
-      console.log("Fallback to local standard puppeteer...");
-      // 若在本機端開發，改用標準 puppeteer
-      browser = await puppeteer.launch({
-        headless: true,
-        defaultViewport: { width: 1920, height: 10800 },
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-      });
-    }
+async function login(page: import('puppeteer').Page) {
+  const username = process.env.ADMIN_CRAWLER_USER || 'fubon_jerry';
+  const password = process.env.ADMIN_CRAWLER_PASS || 'Qwer1234';
 
-    const page = await browser.newPage();
-    
-    // 增加超時時間並隱藏 navigator.webdriver 避免被防爬
-    await page.setDefaultNavigationTimeout(30000);
-    await page.setExtraHTTPHeaders({
-      'Accept-Language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7'
+  await page.setDefaultNavigationTimeout(30000);
+  await page.setExtraHTTPHeaders({
+    'Accept-Language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+  });
+
+  await page.goto('https://strategy-center-admin.fbwinner.app/', { waitUntil: 'networkidle2' });
+  await page.waitForSelector('input', { timeout: 10000 });
+
+  const inputs = await page.$$('input');
+  if (inputs.length < 2) {
+    throw new Error('Login form not found');
+  }
+
+  await inputs[0].type(username);
+  await inputs[1].type(password);
+
+  try {
+    await page.click('button[type="submit"]');
+  } catch {
+    const buttons = await page.$$('button');
+    for (const btn of buttons) {
+      const text = await page.evaluate((el) => el.textContent || '', btn);
+      if (text.includes('Login') || text.includes('登入') || text.includes('Submit')) {
+        await btn.click();
+        break;
+      }
+    }
+  }
+
+  await page.waitForSelector('table', { timeout: 15000 });
+  await sleep(1500);
+}
+
+async function scrapeData(page: import('puppeteer').Page, displayNames: string[]): Promise<ScrapedRow[]> {
+  const allData = new Map<string, ScrapedRow>();
+  const targetSet = new Set(displayNames);
+
+  for (let pageNum = 1; pageNum <= 5; pageNum++) {
+    const pageResults = await page.evaluate(async () => {
+      const scrollContainer =
+        document.querySelector('.ant-table-body') ||
+        document.querySelector('.ant-table-content') ||
+        document.querySelector('div[style*="overflow"]') ||
+        document.querySelector('table')?.parentElement;
+
+      const localMap = new Map<string, ScrapedRow>();
+
+      const extract = () => {
+        const headers = Array.from(document.querySelectorAll('table thead th')).map(
+          (th) => th.textContent?.trim() || '',
+        );
+
+        const idxStrategyName = headers.findIndex((h) => h.includes('策略名稱'));
+        const idxProduct = headers.findIndex((h) => h.includes('策略商品'));
+        const idxPosition = headers.findIndex((h) => h.includes('目前部位'));
+        const idxPrice = headers.findIndex((h) => h.includes('訊號價格') || h.includes('觸發價格'));
+        const idxTriggerTime = headers.findIndex((h) => h.includes('觸發時間'));
+
+        document.querySelectorAll('table tbody tr').forEach((row) => {
+          const cells = Array.from(row.querySelectorAll('td'));
+          if (cells.length < 5) return;
+
+          const name =
+            idxStrategyName !== -1 && cells[idxStrategyName]
+              ? cells[idxStrategyName].textContent?.trim() || ''
+              : cells[2]?.textContent?.trim() || '';
+
+          if (!name || name === '-') return;
+
+          localMap.set(name, {
+            strategyName: name,
+            product:
+              idxProduct !== -1 && cells[idxProduct]
+                ? cells[idxProduct].textContent?.trim() || ''
+                : cells[5]?.textContent?.trim() || '',
+            position: Number(cells[idxPosition]?.textContent?.replace(/,/g, '').trim() || '0'),
+            price: cells[idxPrice]?.textContent?.trim() || '',
+            triggerTime: cells[idxTriggerTime]?.textContent?.trim() || '',
+          });
+        });
+      };
+
+      for (let step = 0; step < 3; step++) {
+        extract();
+        if (scrollContainer) {
+          (scrollContainer as HTMLElement).scrollTop += 1500;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 600));
+      }
+
+      return Array.from(localMap.values());
     });
 
-    // 1. 登入
-    console.log("Navigating to login...");
-    await page.goto('https://strategy-center-admin.fbwinner.app/', { waitUntil: 'networkidle2' });
-    
-    // 尋找登入表單
-    await page.waitForSelector('input', { timeout: 10000 });
-    const inputs = await page.$$('input');
-    
-    // 假設第一個 input 是帳號，第二個是密碼 (最常見的 SPA 登入介面)
-    if (inputs.length >= 2) {
-      await inputs[0].type('fubon_jerry');
-      await inputs[1].type('Qwer1234');
-      
-      // 尋找按鈕點擊
-      const buttons = await page.$$('button');
-      for (const btn of buttons) {
-        const text = await page.evaluate(el => el.textContent, btn);
-        if (text && (text.includes('Login') || text.includes('登入') || text.includes('Submit'))) {
+    pageResults.forEach((item) => allData.set(item.strategyName, item));
+
+    const foundCount = Array.from(allData.keys()).filter((name) => targetSet.has(name)).length;
+    if (foundCount >= displayNames.length) break;
+
+    const buttons = await page.$$('button.mantine-Pagination-control');
+    let clicked = false;
+    for (const btn of buttons) {
+      const txt = await page.evaluate((el) => el.textContent || '', btn);
+      if (txt === '>') {
+        const isDisabled = await page.evaluate((el) => (el as HTMLButtonElement).disabled, btn);
+        if (!isDisabled) {
           await btn.click();
-          break;
+          await sleep(2000);
+          clicked = true;
         }
-      }
-      
-      // 如果沒有找到文字按鈕，點擊第一個 type="submit" 的按鈕
-      if (buttons.length > 0) {
-        try { await page.click('button[type="submit"]'); } catch(e){}
+        break;
       }
     }
 
-    // 2. 等待登入完成並進入主頁 (等待表格出現)
-    console.log("Waiting for table to load...");
-    await page.waitForSelector('table', { timeout: 15000 });
-    // 多等2秒確保資料渲染完畢
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    if (!clicked) break;
+  }
 
-    // 3. 深度爬取與分頁處理
-    const allData = new Map();
-    const targetSet = new Set(displayNames);
-    
-    // 限制最多爬取 5 頁，避免超時
-    for (let pageNum = 1; pageNum <= 5; pageNum++) {
-      console.log(`Crawling page ${pageNum}...`);
-      
-      const pageResults = await page.evaluate(async () => {
-        const scrollContainer = document.querySelector('.ant-table-body') || 
-                                document.querySelector('.ant-table-content') ||
-                                document.querySelector('div[style*="overflow"]') ||
-                                document.querySelector('table')?.parentElement;
-        
-        const localMap = new Map();
-        const extract = () => {
-          const headers = Array.from(document.querySelectorAll('table thead th')).map(th => th.textContent?.trim() || '');
-          const idxStrategyName = headers.findIndex(h => h.includes('策略名稱'));
-          const idxProduct = headers.findIndex(h => h.includes('策略商品'));
-          const idxPosition = headers.findIndex(h => h.includes('目前部位'));
-          const idxPrice = headers.findIndex(h => h.includes('訊號價格') || h.includes('觸發價格'));
-          const idxTriggerTime = headers.findIndex(h => h.includes('觸發時間'));
+  return Array.from(allData.values()).filter((row) => targetSet.has(row.strategyName));
+}
 
-          document.querySelectorAll('table tbody tr').forEach(row => {
-            const cells = Array.from(row.querySelectorAll('td'));
-            if (cells.length < 5) return;
-            const name = idxStrategyName !== -1 && cells[idxStrategyName] ? cells[idxStrategyName].textContent?.trim() || '' : cells[2]?.textContent?.trim() || '';
-            if (!name || name === '-') return;
-            localMap.set(name, {
-              strategyName: name,
-              product: idxProduct !== -1 && cells[idxProduct] ? cells[idxProduct].textContent?.trim() || '' : cells[5]?.textContent?.trim() || '',
-              position: Number(cells[idxPosition]?.textContent?.replace(/,/g, '').trim() || '0'),
-              price: cells[idxPrice]?.textContent?.trim() || '',
-              triggerTime: cells[idxTriggerTime]?.textContent?.trim() || ''
-            });
-          });
-        };
+export async function POST(req: Request) {
+  let browser: import('puppeteer').Browser | null = null;
 
-        // 每頁滾動 3 次確保讀取虛擬列表
-        for (let s = 0; s < 3; s++) {
-          extract();
-          if (scrollContainer) scrollContainer.scrollTop += 1500;
-          await new Promise(r => setTimeout(r, 600));
-        }
-        return Array.from(localMap.values());
-      });
+  try {
+    const { displayNames } = await req.json();
 
-      // 合併資料
-      pageResults.forEach(item => allData.set(item.strategyName, item));
-      
-      // 檢查是否已經找齊所有目標
-      const foundCount = Array.from(allData.keys()).filter(k => targetSet.has(k)).length;
-      console.log(`Found ${foundCount}/${displayNames.length} targets so far.`);
-      
-      if (foundCount >= displayNames.length) break;
-
-      // 嘗試點擊下一頁
-      const buttons = await page.$$('button.mantine-Pagination-control');
-      let clicked = false;
-      for (const btn of buttons) {
-        const txt = await page.evaluate(el => el.textContent, btn);
-        if (txt === '>') {
-          const isDisabled = await page.evaluate(el => el.disabled, btn);
-          if (!isDisabled) {
-            await btn.click();
-            await new Promise(resolve => setTimeout(resolve, 2000)); // 等待換頁渲染
-            clicked = true;
-          }
-          break;
-        }
-      }
-      if (!clicked) break; // 沒有下一頁了
+    if (!displayNames || !Array.isArray(displayNames) || displayNames.length === 0) {
+      return NextResponse.json({ success: false, error: '請提供有效的策略名稱清單' }, { status: 400 });
     }
 
-    await browser.close();
-
-    const filteredData = Array.from(allData.values()).filter(row => targetSet.has(row.strategyName));
-
-    return NextResponse.json({ success: true, data: filteredData });
+    browser = await launchBrowser();
+    const page = await browser.newPage();
     
+    // 強制設定為台灣時區，確保爬取的觸發時間為台北時間
+    await page.emulateTimezone('Asia/Taipei');
+
+    await login(page);
+    const data = await scrapeData(page, displayNames);
+
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
-    console.error("Crawler Error:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error('Crawler Error:', error);
+    return NextResponse.json({ success: false, error: error.message || 'Crawler failed' }, { status: 500 });
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
   }
 }

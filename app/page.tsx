@@ -9,7 +9,12 @@ import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2 } from 'lucide-react'
 
 function DashboardContent() {
   const searchParams = useSearchParams();
-  const currentIndex = searchParams.get('index') || 'taiwan_high_beta';
+  const indexParam = searchParams.get('index');
+  
+  // 映射短網址參數到資料庫 ID
+  const currentIndex = indexParam === 'taiwan' ? 'taiwan_high_beta' 
+                     : indexParam === 'nasdaq' ? 'nasdaq_high_beta'
+                     : indexParam || 'taiwan_high_beta';
   
   const [loading, setLoading] = useState(true);
   const [performanceData, setPerformanceData] = useState<any[]>([]);
@@ -119,7 +124,7 @@ function DashboardContent() {
 
   return (
     <main>
-      <Navbar />
+      <Navbar forceActive={currentIndex.includes('nasdaq') ? 'nasdaq' : 'taiwan'} />
       
       <div className="container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
         <header className="flex justify-between items-center" style={{ marginBottom: '2.5rem' }}>
