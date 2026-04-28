@@ -1,0 +1,65 @@
+
+> web@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.1.11
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.105:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 4.1s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 2.8s (98 modules)
+ ○ Compiling / ...
+ ✓ Compiled /system in 25.5s (1782 modules)
+ GET /system 200 in 6487ms
+ ✓ Compiled /favicon.ico in 289ms (926 modules)
+ GET /favicon.ico 200 in 631ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 640ms (1810 modules)
+ GET /login 200 in 939ms
+ GET / 200 in 16ms
+ GET / 200 in 12ms
+ GET /system 200 in 59ms
+ GET /login 200 in 34ms
+ GET / 200 in 14ms
+ GET / 200 in 15ms
+ GET /system 200 in 30ms
+ ○ Compiling /api/system-cache ...
+ ✓ Compiled /api/system-cache in 918ms (1853 modules)
+ GET /api/system-cache 401 in 1472ms
+ POST /api/system-cache 401 in 340ms
+ ✓ Compiled /api/admin-crawler in 371ms (1859 modules)
+ POST /api/admin-crawler 200 in 12475ms
+ POST /api/system-cache 401 in 560ms
+ ✓ Compiled in 234ms (982 modules)
+ GET /system 200 in 71ms
+ GET /system 200 in 135ms
+ GET /api/system-cache 401 in 100ms
+ POST /api/admin-crawler 200 in 7149ms
+ POST /api/system-cache 401 in 68ms
+ ✓ Compiled in 987ms (1859 modules)
+ GET /system 200 in 234ms
+ GET /api/system-cache 401 in 252ms
+ POST /api/admin-crawler 200 in 7331ms
+ POST /api/system-cache 401 in 150ms
+ GET /login 200 in 35ms
+ GET / 200 in 16ms
+ GET / 200 in 12ms
+ GET /system 200 in 28ms
+ GET /api/system-cache 401 in 183ms
+ POST /api/admin-crawler 200 in 7645ms
+ POST /api/system-cache 401 in 172ms
+ ✓ Compiled in 771ms (1859 modules)
+ GET /system 200 in 152ms
+ POST /api/admin-crawler 200 in 7124ms
+ POST /api/admin-crawler 200 in 7428ms
+ ✓ Compiled in 1584ms (1796 modules)
+ GET /system 200 in 235ms
+ ✓ Compiled /api/admin-crawler in 290ms (940 modules)
+ POST /api/admin-crawler 200 in 7622ms
+ GET /?index=nasdaq_high_beta 200 in 51ms
+ ✓ Compiled in 616ms (1796 modules)
+ ✓ Compiled in 306ms (1796 modules)
+ ✓ Compiled in 467ms (1796 modules)

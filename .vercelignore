@@ -1,0 +1,4 @@
+scratch
+scripts/patch_missing_data.js
+scripts/upload_to_supabase.js
+.playwright-mcp

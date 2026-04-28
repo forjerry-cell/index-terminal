@@ -115,7 +115,7 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
                 : cells[5]?.innerText?.trim() || '',
             position: Number(cells[idxPosition]?.innerText?.replace(/,/g, '').trim() || '0'),
             price: cells[idxPrice]?.innerText?.trim() || '',
-            triggerTime: cells[idxTriggerTime]?.innerText?.trim() || '',
+            triggerTime: (cells[idxTriggerTime]?.innerText || '').toString().trim(),
           });
         });
       };
