@@ -1,3 +1,5 @@
+process.env.TZ = 'Asia/Taipei';
+
 import { NextResponse } from 'next/server';
 import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
@@ -100,8 +102,8 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
 
           const name =
             idxStrategyName !== -1 && cells[idxStrategyName]
-              ? cells[idxStrategyName].textContent?.trim() || ''
-              : cells[2]?.textContent?.trim() || '';
+              ? cells[idxStrategyName].innerText?.trim() || ''
+              : cells[2]?.innerText?.trim() || '';
 
           if (!name || name === '-') return;
 
@@ -109,11 +111,11 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
             strategyName: name,
             product:
               idxProduct !== -1 && cells[idxProduct]
-                ? cells[idxProduct].textContent?.trim() || ''
-                : cells[5]?.textContent?.trim() || '',
-            position: Number(cells[idxPosition]?.textContent?.replace(/,/g, '').trim() || '0'),
-            price: cells[idxPrice]?.textContent?.trim() || '',
-            triggerTime: cells[idxTriggerTime]?.textContent?.trim() || '',
+                ? cells[idxProduct].innerText?.trim() || ''
+                : cells[5]?.innerText?.trim() || '',
+            position: Number(cells[idxPosition]?.innerText?.replace(/,/g, '').trim() || '0'),
+            price: cells[idxPrice]?.innerText?.trim() || '',
+            triggerTime: cells[idxTriggerTime]?.innerText?.trim() || '',
           });
         });
       };
@@ -137,7 +139,7 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
     const buttons = await page.$$('button.mantine-Pagination-control');
     let clicked = false;
     for (const btn of buttons) {
-      const txt = await page.evaluate((el) => el.textContent || '', btn);
+      const txt = await page.evaluate((el) => (el as HTMLElement).innerText || '', btn);
       if (txt === '>') {
         const isDisabled = await page.evaluate((el) => (el as HTMLButtonElement).disabled, btn);
         if (!isDisabled) {
