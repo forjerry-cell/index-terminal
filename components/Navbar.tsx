@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
 import { LogOut, Settings, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -12,7 +12,7 @@ interface NavbarProps {
   forceActive?: NavbarTab;
 }
 
-export default function Navbar({ forceActive }: NavbarProps) {
+function NavbarContent({ forceActive }: NavbarProps) {
   const [profile, setProfile] = useState<any>(null);
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
@@ -203,5 +203,13 @@ export default function Navbar({ forceActive }: NavbarProps) {
         }
       `}</style>
     </nav>
+  );
+}
+
+export default function Navbar(props: NavbarProps) {
+  return (
+    <Suspense fallback={<div className="navbar" style={{ height: '70px' }}></div>}>
+      <NavbarContent {...props} />
+    </Suspense>
   );
 }
