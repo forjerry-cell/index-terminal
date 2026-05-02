@@ -2,12 +2,14 @@ import { Resend } from 'resend';
 import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const RESEND_KEY = process.env.RESEND_API_KEY || 're_dWBAYs26_EihDSQjyKXpaKhfpSh7BnDVn';
+const ALLOWED_SECRET = process.env.CRON_SECRET || 'innovation-cron-2026';
+const resend = new Resend(RESEND_KEY);
 
 export async function POST(req: Request) {
   // 1. 驗證權限（由 GitHub Actions Cron 帶 secret 觸發）
   const body = await req.json().catch(() => ({ secret: '' }));
-  if (body.secret !== process.env.CRON_SECRET) {
+  if (body.secret !== ALLOWED_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
