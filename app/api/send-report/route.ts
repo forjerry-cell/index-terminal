@@ -24,14 +24,7 @@ export async function POST(req: Request) {
       performance?.find(p => p.index_id === id)
     ).filter(Boolean);
 
-    const { data: constituents } = await supabase
-      .from('index_constituents')
-      .select('*')
-      .order('date', { ascending: false })
-      .order('weight', { ascending: false })
-      .limit(20);
-
-    // 3. 抓取訂閱名單（有填 notification_email 的用戶即視為開啟通知）
+    // 2b. 抓取訂閱名單（有填 notification_email 的用戶即視為開啟通知）
     const { data: subscribers } = await supabase
       .from('profiles')
       .select('full_name, notification_email')
@@ -71,26 +64,6 @@ export async function POST(req: Request) {
               </div>
             </div>
           `).join('')}
-
-          <h2 style="color: #60a5fa; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 24px;">⚖️ 成分股 Top 10</h2>
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-            <thead>
-              <tr style="background: #1a1d24; color: #94a3b8;">
-                <th style="padding: 10px 12px; text-align: left;">名稱</th>
-                <th style="padding: 10px 12px; text-align: left;">代號</th>
-                <th style="padding: 10px 12px; text-align: right;">權重</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${constituents?.slice(0, 10).map((c: any) => `
-                <tr style="border-bottom: 1px solid #1f2228;">
-                  <td style="padding: 10px 12px;">${c.name}</td>
-                  <td style="padding: 10px 12px; color: #60a5fa;">${c.symbol}</td>
-                  <td style="padding: 10px 12px; text-align: right; font-weight: bold;">${(c.weight * 100).toFixed(2)}%</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
 
           <div style="margin-top: 32px; text-align: center;">
             <a href="https://index-terminal.vercel.app" style="background: #3b82f6; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
