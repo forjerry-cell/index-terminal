@@ -61,7 +61,7 @@ export async function POST(req: Request) {
           ${latestPerf.map((p: any) => `
             <div style="background: #1a1d24; border-radius: 8px; padding: 16px; margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 600; font-size: 0.9rem;">${p.index_id.includes('taiwan') ? '🇹🇼 台股 High Beta' : '🇺🇸 那指 High Beta'}</span>
+                <span style="font-weight: 600; font-size: 0.9rem;">${p.index_id.includes('taiwan') ? '🇹🇼 台股領航強勢指數' : '🇺🇸 那指領航強勢指數'}</span>
                 <div style="text-align: right;">
                   <div style="font-size: 1.25rem; font-weight: 800;">${p.value?.toFixed(2)}</div>
                   <div style="color: ${(p.change_percent || 0) >= 0 ? '#10b981' : '#ef4444'}; font-size: 0.8rem;">
