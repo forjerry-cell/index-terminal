@@ -73,13 +73,13 @@ def calculate_taiwan_high_beta(start_date, end_date):
     full_data = yf.download(universe + [bm_ticker], start=fetch_start, end=end_date, progress=False, auto_adjust=False)
     
     if isinstance(full_data.columns, pd.MultiIndex):
-        adj_close = full_data['Adj Close'].fillna(method='ffill')
-        price_close = full_data['Close'].fillna(method='ffill')
+        adj_close = full_data['Adj Close'].ffill()
+        price_close = full_data['Close'].ffill()
         volume = full_data['Volume'].fillna(0)
     else:
         # 單一股票情況 (理論上不會發生)
-        adj_close = full_data[['Adj Close']].fillna(method='ffill')
-        price_close = full_data[['Close']].fillna(method='ffill')
+        adj_close = full_data[['Adj Close']].ffill()
+        price_close = full_data[['Close']].ffill()
         volume = full_data[['Volume']].fillna(0)
     
     if bm_ticker not in adj_close.columns:
@@ -99,15 +99,16 @@ def calculate_taiwan_high_beta(start_date, end_date):
     
     # 計算該日的 Beta 排名
     hist_lookback = last_rb - timedelta(days=365)
-    hist_data = adj_close.loc[hist_lookback:last_rb].pct_change().dropna()
-    m_rets = hist_data[bm_ticker]
-    v_m = np.var(m_rets)
+    hist_data = adj_close.loc[hist_lookback:last_rb].pct_change()
     
     betas = {}
     for t in universe:
-        if t in hist_data.columns and len(hist_data[t].dropna()) > 200:
-            cov = np.cov(hist_data[t], m_rets)[0,1]
-            betas[t] = cov / v_m if v_m != 0 else 0
+        if t in hist_data.columns:
+            pair = hist_data[[t, bm_ticker]].dropna()
+            if len(pair) > 200:
+                cov = np.cov(pair[t], pair[bm_ticker])[0,1]
+                v_m_pair = np.var(pair[bm_ticker])
+                betas[t] = cov / v_m_pair if v_m_pair != 0 else 0
             
     # 排序並選出前 50
     eligible = [t for t in betas if betas[t] > 0]
@@ -201,10 +202,10 @@ def calculate_nasdaq_high_beta(start_date, end_date):
     full_data = yf.download(tickers + [bm_ticker], start=fetch_start, end=end_date, progress=False, auto_adjust=False)
     
     if isinstance(full_data.columns, pd.MultiIndex):
-        adj_close = full_data['Adj Close'].fillna(method='ffill')
-        price_close = full_data['Close'].fillna(method='ffill')
+        adj_close = full_data['Adj Close'].ffill()
+        price_close = full_data['Close'].ffill()
     else:
-        adj_close = full_data[['Adj Close']].fillna(method='ffill')
+        adj_close = full_data[['Adj Close']].ffill()
     
     if bm_ticker not in adj_close.columns:
         print(f"錯誤：找不到基準指數 {bm_ticker} 的數據")
@@ -221,15 +222,16 @@ def calculate_nasdaq_high_beta(start_date, end_date):
     if last_rb > adj_close.index[-1]: last_rb = adj_close.index[-20] # 安全回退
     
     hist_lookback = last_rb - timedelta(days=365)
-    hist_data = adj_close.loc[hist_lookback:last_rb].pct_change().dropna()
-    m_rets = hist_data[bm_ticker]
-    v_m = np.var(m_rets)
+    hist_data = adj_close.loc[hist_lookback:last_rb].pct_change()
     
     betas = {}
     for t in tickers:
-        if t in hist_data.columns and len(hist_data[t].dropna()) > 200:
-            cov = np.cov(hist_data[t], m_rets)[0,1]
-            betas[t] = cov / v_m if v_m != 0 else 0
+        if t in hist_data.columns:
+            pair = hist_data[[t, bm_ticker]].dropna()
+            if len(pair) > 200:
+                cov = np.cov(pair[t], pair[bm_ticker])[0,1]
+                v_m_pair = np.var(pair[bm_ticker])
+                betas[t] = cov / v_m_pair if v_m_pair != 0 else 0
             
     top_30 = sorted(betas.items(), key=lambda x: x[1], reverse=True)[:30]
     holdings = [t for t, b in top_30]
