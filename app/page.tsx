@@ -111,7 +111,7 @@ function DashboardContent() {
         .eq('index_id', currentIndex)
         .order('date', { ascending: false })
         .order('weight', { ascending: false })
-        .limit(5);
+        .limit(10);
       
       if (consts) setConstituents(consts);
       
@@ -231,7 +231,7 @@ function DashboardContent() {
           </section>
 
           <section className="card">
-            <h3>即時成分股權重 (Top 5)</h3>
+            <h3>即時成分股權重 (Top 10)</h3>
             <div className="table-container">
               <table>
                 <thead>
