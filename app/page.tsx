@@ -250,7 +250,7 @@ function DashboardContent() {
                         </div>
                       </td>
                       <td style={{ textAlign: 'right', fontWeight: 'bold', color: 'var(--foreground)', fontSize: '1.125rem' }}>
-                        {(item.weight * 100).toFixed(2)}%
+                        {(item.weight).toFixed(2)}%
                       </td>
                     </tr>
                   ))}
