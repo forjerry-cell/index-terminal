@@ -6,7 +6,7 @@ import { LogOut, Settings, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-type NavbarTab = 'taiwan' | 'nasdaq' | 'system';
+type NavbarTab = 'taiwan' | 'nasdaq' | 'system' | 'alphafalcon';
 
 interface NavbarProps {
   forceActive?: NavbarTab;
@@ -20,15 +20,18 @@ function NavbarContent({ forceActive }: NavbarProps) {
   const searchParams = useSearchParams();
 
   const isSystemPage = pathname === '/system' || pathname.startsWith('/system/');
+  const isAlphaFalconPage = pathname === '/alphafalcon' || pathname.startsWith('/alphafalcon/');
   const indexParam = searchParams.get('index');
   
   const activeTab: NavbarTab = forceActive
     ? forceActive
     : isSystemPage
       ? 'system'
-      : indexParam === 'nasdaq' || indexParam === 'nasdaq_high_beta'
-        ? 'nasdaq'
-        : 'taiwan';
+      : isAlphaFalconPage
+        ? 'alphafalcon'
+        : indexParam === 'nasdaq' || indexParam === 'nasdaq_high_beta'
+          ? 'nasdaq'
+          : 'taiwan';
 
   useEffect(() => {
     async function loadProfile() {
@@ -74,6 +77,9 @@ function NavbarContent({ forceActive }: NavbarProps) {
             </Link>
             <Link href="/?index=nasdaq" style={getNavStyle('nasdaq')}>
               那指領航強勢指數
+            </Link>
+            <Link href="/alphafalcon" style={getNavStyle('alphafalcon')}>
+              AlphaFalcon 飆股預測
             </Link>
             <Link href="/system" style={getNavStyle('system')}>
               系統管理

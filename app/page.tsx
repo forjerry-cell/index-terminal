@@ -259,6 +259,62 @@ function DashboardContent() {
             </div>
           </section>
         </div>
+
+        {/* AlphaFalcon AI 量化選股預覽區塊 */}
+        <section style={{ marginTop: '3rem' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(0, 242, 254, 0.04) 0%, rgba(168, 85, 247, 0.04) 50%, rgba(17, 19, 23, 0.9) 100%)',
+            border: '1px solid rgba(0, 242, 254, 0.15)',
+            borderRadius: '16px',
+            padding: '2.5rem',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            {/* 背景光暈裝飾 */}
+            <div style={{ position: 'absolute', top: '-60px', right: '-60px', width: '240px', height: '240px', background: 'radial-gradient(circle, rgba(0, 242, 254, 0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: '-40px', left: '30%', width: '180px', height: '180px', background: 'radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', position: 'relative', zIndex: 1 }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#00F2FE', boxShadow: '0 0 8px rgba(0,242,254,0.6)', animation: 'pulse 2s ease-in-out infinite' }} />
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#00F2FE', letterSpacing: '0.1em' }}>ALPHAFALCON QUANT ENGINE · AI POWERED</span>
+                </div>
+                <h2 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#f9fafb', margin: 0, marginBottom: '0.5rem' }}>
+                  飆股預測雷達
+                </h2>
+                <p style={{ color: '#9ca3af', maxWidth: '480px', margin: 0 }}>
+                  結合投信鎖碼、VCP波動收縮突破與機器學習三重障礙法（RF · AUC 0.78），每日盤後自動掃描全市場，計算個股未來 6 個月上漲 50% 的量化機率。
+                </p>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
+                  {[
+                    { label: '風控停損', value: '-15%', color: '#f43f5e' },
+                    { label: '目標報酬', value: '+50%', color: '#10b981' },
+                    { label: '預測窗口', value: '6 個月', color: '#a855f7' },
+                    { label: '模型精度', value: 'AUC 0.78', color: '#00F2FE' }
+                  ].map(item => (
+                    <div key={item.label} style={{ padding: '4px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{item.label}：</span>
+                      <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: item.color }}>{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <a href="/alphafalcon" style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                padding: '0.875rem 1.75rem',
+                background: 'linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(168,85,247,0.15) 100%)',
+                border: '1px solid rgba(0,242,254,0.3)',
+                borderRadius: '12px', color: '#00F2FE', fontWeight: 700,
+                fontSize: '0.9375rem', textDecoration: 'none',
+                transition: 'all 0.2s ease', whiteSpace: 'nowrap'
+              }}>
+                <TrendingUp size={18} />
+                進入 AI 預測終端
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
 
       <style jsx>{`

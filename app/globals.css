@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 :root {
   --background: #0a0b0d;
   --foreground: #f9fafb;
@@ -9,8 +11,23 @@
   --text-muted: #9ca3af;
   --error: #ef4444;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --glass: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
+
+  /* AlphaFalcon 量化終端專屬 Design Tokens */
+  --af-cyan: #00F2FE;
+  --af-cyan-dim: rgba(0, 242, 254, 0.12);
+  --af-cyan-border: rgba(0, 242, 254, 0.2);
+  --af-gold: #ffbd59;
+  --af-gold-dim: rgba(255, 189, 89, 0.12);
+  --af-purple: #a855f7;
+  --af-purple-dim: rgba(168, 85, 247, 0.12);
+  --af-green: #10b981;
+  --af-red: #f43f5e;
+  --af-glass: rgba(255, 255, 255, 0.035);
+  --af-glass-border: rgba(255, 255, 255, 0.09);
+  --af-card-bg: rgba(17, 19, 23, 0.85);
 }
 
 * {

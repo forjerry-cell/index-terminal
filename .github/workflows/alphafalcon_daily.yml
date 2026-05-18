@@ -1,0 +1,39 @@
+name: AlphaFalcon 每日盤後自動掃描
+
+on:
+  # 台灣時間 16:30 = UTC 08:30，每週一至週五自動執行
+  schedule:
+    - cron: '30 8 * * 1-5'
+  # 允許手動觸發（在 GitHub Actions 頁面點 Run workflow）
+  workflow_dispatch:
+
+jobs:
+  daily-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 簽出程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安裝 Python 依賴套件
+        run: |
+          pip install --upgrade pip
+          pip install yfinance pandas numpy requests supabase
+
+      - name: 執行 AlphaFalcon 雲端掃描器
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python alphafalcon_cloud_scanner.py
+
+      - name: 掃描完成通知
+        if: success()
+        run: echo "AlphaFalcon 每日掃描完成！結果已寫入 Supabase。"
