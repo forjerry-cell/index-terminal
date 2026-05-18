@@ -104,16 +104,26 @@ function DashboardContent() {
         setConstituents([]);
       }
 
-      // 2. 抓取最新成分股 (根據當前 INDEX)
-      const { data: consts } = await supabase
+      // 2. 抓取最新成分股 (根據當前 INDEX 且只拿最新一天的資料，防止因 limit 抓到歷史舊資料而重複)
+      const { data: latestDateRow } = await supabase
         .from('index_constituents')
-        .select('*')
+        .select('date')
         .eq('index_id', currentIndex)
         .order('date', { ascending: false })
-        .order('weight', { ascending: false })
-        .limit(100);
-      
-      if (consts) setConstituents(consts);
+        .limit(1);
+
+      if (latestDateRow && latestDateRow.length > 0) {
+        const { data: consts } = await supabase
+          .from('index_constituents')
+          .select('*')
+          .eq('index_id', currentIndex)
+          .eq('date', latestDateRow[0].date)
+          .order('weight', { ascending: false });
+        
+        if (consts) setConstituents(consts);
+      } else {
+        setConstituents([]);
+      }
       
       setLoading(false);
     }
