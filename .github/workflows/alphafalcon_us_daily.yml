@@ -1,0 +1,42 @@
+name: AlphaFalcon-US 每日盤後自動掃描
+
+on:
+  # 美股收盤時間是紐約時間 16:00
+  # 台灣時間夏令為 04:00 / 冬令為 05:00
+  # 設定在 UTC 時間每週一至週五 22:30 執行 (＝ 台灣時間每週二至週六 06:30)
+  schedule:
+    - cron: '30 22 * * 1-5'
+  # 允許手動觸發
+  workflow_dispatch:
+
+jobs:
+  daily-scan-us:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 簽出程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安裝 Python 依賴套件
+        run: |
+          pip install --upgrade pip
+          pip install yfinance pandas numpy requests supabase
+
+      - name: 執行 AlphaFalcon 美股雲端掃描器
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          # 為了簡化，GitHub Actions 時將腳本拷貝或直接執行新目錄下的腳本
+          python Index/AlphaFalcon/alphafalcon_us_cloud_scanner.py
+
+      - name: 掃描完成通知
+        if: success()
+        run: echo "AlphaFalcon 美股每日掃描完成！結果已寫入 Supabase。"

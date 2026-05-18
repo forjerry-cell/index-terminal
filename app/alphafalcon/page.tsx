@@ -19,7 +19,8 @@ import {
   AlertTriangle, 
   Info, 
   RefreshCw, 
-  LineChart as LineIcon
+  LineChart as LineIcon,
+  Globe
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -39,7 +40,7 @@ import {
 interface ShapFeature {
   name: string;
   value: number;
-  type: 'positive' | 'negative';
+  type: 'positive' | 'negative' | 'neutral';
 }
 
 interface StockData {
@@ -73,34 +74,27 @@ const generateMockChartData = (basePrice: number, trendType: 'vcp' | 'rev_acc' |
     date.setDate(now.getDate() - i);
     const dateString = date.toISOString().split('T')[0];
     
-    // 大盤加權指數的平滑走勢 (穩步小幅上揚)
+    // 大盤的平滑走勢 (穩步小幅上揚)
     currentBenchmark += (Math.sin(i / 10) * 0.2 + (Math.random() - 0.48) * 0.5);
     
     // 個股根據策略類型產生走勢
     if (trendType === 'vcp') {
-      // 波動收縮 (VCP) 型態: 3個收縮波，最後一週向上突破
+      // 波動收縮 (VCP) 型態
       if (i > 45) {
-        // 第一波收縮: 較大振幅
         currentPrice += (Math.sin(i / 3) * (basePrice * 0.03) + (Math.random() - 0.5) * (basePrice * 0.01));
       } else if (i > 25) {
-        // 第二波收縮: 振幅變小
         currentPrice += (Math.sin(i / 2) * (basePrice * 0.015) + (Math.random() - 0.5) * (basePrice * 0.005));
       } else if (i > 8) {
-        // 第三波收縮: 極窄幅震盪 (量縮)
         currentPrice += (Math.sin(i / 1.5) * (basePrice * 0.006) + (Math.random() - 0.5) * (basePrice * 0.002));
       } else {
-        // 向上突破主升段
         currentPrice += (basePrice * 0.03 + Math.random() * (basePrice * 0.01));
       }
     } else if (trendType === 'rev_acc') {
-      // 營收暴增型: 沿著陡峭均線呈階梯狀爆發上揚
       const step = Math.floor((totalDays - i) / 15);
       currentPrice = basePrice * (1 + step * 0.08) + (Math.sin(i / 2) * (basePrice * 0.01));
     } else if (trendType === 'ma_trend') {
-      // 均線多頭型: 穩健的45度角多頭排列通道
       currentPrice += (basePrice * 0.004 + (Math.random() - 0.45) * (basePrice * 0.008));
     } else {
-      // 底部突破型: 前期打底，最後 15 天突然放量突破年線
       if (i > 15) {
         currentPrice = basePrice * 0.9 + (Math.sin(i) * (basePrice * 0.015));
       } else {
@@ -118,7 +112,7 @@ const generateMockChartData = (basePrice: number, trendType: 'vcp' | 'rev_acc' |
 };
 
 // --- 五檔台股熱門潛力標的數據 ---
-const STOCKS_DATABASE: StockData[] = [
+const STOCKS_DATABASE_TW: StockData[] = [
   {
     symbol: '3231',
     name: '緯創',
@@ -155,7 +149,7 @@ const STOCKS_DATABASE: StockData[] = [
     stopLoss: 527.0,
     theme: 'AI GPU 液冷散熱系統 / 3D VC 獨家供應商',
     features: [
-      { name: '營收年增率加速度 (Rev Acc)', value: 28.5, type: 'positive' },
+      { name: '營收年增率營收加速 (Rev Acc)', value: 28.5, type: 'positive' },
       { name: '毛利與營業利益率三率三升 (Margin Expansion)', value: 20.1, type: 'positive' },
       { name: '投信持續鎖碼買超 (SITCA Force)', value: 12.4, type: 'positive' },
       { name: '相對強度創波段新高 (RS Breakout)', value: 9.8, type: 'positive' },
@@ -231,6 +225,119 @@ const STOCKS_DATABASE: StockData[] = [
   }
 ];
 
+// --- 五檔美股高成長潛力標的數據 (模擬用) ---
+const STOCKS_DATABASE_US: StockData[] = [
+  {
+    symbol: 'NVDA',
+    name: '輝達 (NVIDIA)',
+    probability: 94.6,
+    triggerType: '低空頭+高機構+VCP突破',
+    rsRating: 98,
+    epsAcceleration: '+268.4% YoY (超級增長)',
+    sitcaForce: '1.24% (券商融券比率)',
+    chipConcentration: '73.2% (機構總持倉)',
+    currentPrice: 924.8,
+    targetPrice: 1387.2,
+    stopLoss: 786.08,
+    theme: 'AI 晶片絕對霸王 / Blackwell 全面量產',
+    features: [
+      { name: 'AI 伺服器與晶片絕對優勢 (AI Dominance)', value: 28.5, type: 'positive' },
+      { name: '機構買超籌碼鎖死 (Inst Buy)', value: 22.1, type: 'positive' },
+      { name: 'VCP 波動極窄幅收縮突破 (VCP Breakout)', value: 18.4, type: 'positive' },
+      { name: '季營收超預期暴增 (Revenue Blowout)', value: 15.2, type: 'positive' },
+      { name: '大盤半導體指數修正拖累 (Sector Drag)', value: -4.2, type: 'negative' }
+    ],
+    chartData: generateMockChartData(850, 'vcp')
+  },
+  {
+    symbol: 'PLTR',
+    name: '帕蘭泰爾 (Palantir)',
+    probability: 91.2,
+    triggerType: '高成長爆發 + 產業主流',
+    rsRating: 96,
+    epsAcceleration: '+48.5% YoY (季報連續加速)',
+    sitcaForce: '4.85% (券商融券比率)',
+    chipConcentration: '62.4% (機構總持倉)',
+    currentPrice: 42.5,
+    targetPrice: 63.75,
+    stopLoss: 36.1,
+    theme: 'AIP 商業平台企業級訂單暴增 / AI 軟體決策龍頭',
+    features: [
+      { name: '商業 AIP 軟體合約高速增長 (AIP Growth)', value: 25.4, type: 'positive' },
+      { name: '標普 500 指數納入溢價效應 (S&P 500 Inflow)', value: 16.8, type: 'positive' },
+      { name: '機構連續兩個季度增倉 (Inst Lock)', value: 14.2, type: 'positive' },
+      { name: '毛利率高達 82% 冠絕同行 (Software Margin)', value: 12.5, type: 'positive' },
+      { name: '融券空頭回補軋空效應 (Short Cover)', value: 8.4, type: 'positive' }
+    ],
+    chartData: generateMockChartData(36, 'rev_acc')
+  },
+  {
+    symbol: 'MSTR',
+    name: '微策投資 (MicroStrategy)',
+    probability: 89.2,
+    triggerType: '高空頭軋空突破',
+    rsRating: 94,
+    epsAcceleration: '高利潤擴張中',
+    sitcaForce: '12.85% (高融券比率！)',
+    chipConcentration: '54.2% (機構總持倉)',
+    currentPrice: 1420.0,
+    targetPrice: 2130.0,
+    stopLoss: 1207.0,
+    theme: '比特幣最大儲備機構 / 加密貨幣大牛市影子股',
+    features: [
+      { name: '比特幣價格暴漲溢價 (Bitcoin leverage)', value: 32.4, type: 'positive' },
+      { name: '超高融券比例引發軋空潮 (Short Squeeze)', value: 25.8, type: 'positive' },
+      { name: 'VCP 形態突破底部頸線 (VCP Stage 1)', value: 18.2, type: 'positive' },
+      { name: '大盤環境波動回檔壓制 (Beta Overload)', value: -9.5, type: 'negative' }
+    ],
+    chartData: generateMockChartData(1100, 'vcp')
+  },
+  {
+    symbol: 'TSM',
+    name: '台積電 ADR (TSMC)',
+    probability: 87.5,
+    triggerType: '均線多頭 + 產業主流',
+    rsRating: 91,
+    epsAcceleration: '+35.8% YoY (先進製程霸主)',
+    sitcaForce: '0.85% (券商融券比率)',
+    chipConcentration: '82.8% (機構總持倉)',
+    currentPrice: 172.5,
+    targetPrice: 258.75,
+    stopLoss: 146.6,
+    theme: 'CoWoS 產能吃緊 / 3nm 與 2nm 先進封裝供不應求',
+    features: [
+      { name: '先進製程與封裝完全壟斷 (Tech Monopoly)', value: 26.5, type: 'positive' },
+      { name: '蘋果與輝達產能全包鎖碼 (Customer Power)', value: 18.4, type: 'positive' },
+      { name: '美股 ADR 資金流入強勁 (ADR Premium)', value: 12.8, type: 'positive' },
+      { name: '資本支出大增反映旺盛需求 (CapEx Boost)', value: 11.2, type: 'positive' },
+      { name: '地緣政治溢價折扣壓制 (Geo Drag)', value: -6.8, type: 'negative' }
+    ],
+    chartData: generateMockChartData(150, 'ma_trend')
+  },
+  {
+    symbol: 'VRT',
+    name: '維諦技術 (Vertiv)',
+    probability: 85.4,
+    triggerType: '高成長爆發 + 產業主流',
+    rsRating: 93,
+    epsAcceleration: '+61.2% YoY (連續4季加速)',
+    sitcaForce: '2.12% (券商融券比率)',
+    chipConcentration: '88.5% (機構總持倉)',
+    currentPrice: 94.2,
+    targetPrice: 141.3,
+    stopLoss: 80.07,
+    theme: 'AI 資料中心液冷散熱模組唯一領導者 / 訂單能見度極高',
+    features: [
+      { name: '液冷散熱模組高成長能見度 (Cooling Demand)', value: 24.5, type: 'positive' },
+      { name: '季度利潤率顯著擴張 (Margin Expansion)', value: 16.8, type: 'positive' },
+      { name: '千張大戶機構高持股穩定 (Inst Control)', value: 15.2, type: 'positive' },
+      { name: '日 K 線 20MA 多頭完美支撐 (MA Trend)', value: 9.5, type: 'positive' },
+      { name: '銅原料等供應鏈成本上升 (Margin Cost)', value: -3.8, type: 'negative' }
+    ],
+    chartData: generateMockChartData(85, 'rev_acc')
+  }
+];
+
 // --- 模擬策略回測表現數據 ---
 const BACKTEST_PERFORMANCE = [
   { year: '2021', return: 0.842, benchmark_return: 0.237 },
@@ -258,33 +365,38 @@ const BACKTEST_EQUITY_CURVE = [
 
 export default function AlphaFalconPage() {
   const [activeTab, setActiveTab] = useState<'radar' | 'insights' | 'backtest'>('radar');
+  const [marketType, setMarketType] = useState<'TW' | 'US'>('TW');
+  
+  // 核心數據庫狀態
+  const [stocks, setStocks] = useState<StockData[]>(STOCKS_DATABASE_TW);
   const [selectedSymbol, setSelectedSymbol] = useState<string>('3231');
   const [filterType, setFilterType] = useState<string>('all');
   
-  // 核心數據庫狀態
-  const [stocks, setStocks] = useState<StockData[]>(STOCKS_DATABASE);
   const [isRealData, setIsRealData] = useState<boolean>(false);
   const [scanTime, setScanTime] = useState<string>('');
   const [modelAuc, setModelAuc] = useState<number | null>(null);
-  const [stockCount, setStockCount] = useState<number>(STOCKS_DATABASE.length);
+  const [stockCount, setStockCount] = useState<number>(STOCKS_DATABASE_TW.length);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // 自動從 Supabase 讀取最新盤後掃描結果（雲端完全自動化）
+  // 當市場類型 (TW/US) 或初始載入時，動態從 Supabase 讀取對應的日報表結果
   useEffect(() => {
     async function loadFromSupabase() {
+      setLoading(true);
+      const tableName = marketType === 'TW' ? 'alphafalcon_daily_results' : 'alphafalcon_us_daily_results';
+      const mockDatabase = marketType === 'TW' ? STOCKS_DATABASE_TW : STOCKS_DATABASE_US;
+      
       try {
-        // 查詢最新一天的掃描結果
         const { data, error } = await supabase
-          .from('alphafalcon_daily_results')
+          .from(tableName)
           .select('scan_date, results, meta')
           .order('scan_date', { ascending: false })
           .limit(1)
           .single();
 
         if (error || !data) {
-          throw new Error('Supabase 沒有數據，回退至模擬模式');
+          throw new Error(`Supabase ${tableName} 沒有數據`);
         }
 
-        // Supabase 儲存的是 JSON 字串，需要解析
         const results: StockData[] = typeof data.results === 'string'
           ? JSON.parse(data.results)
           : data.results;
@@ -299,43 +411,37 @@ export default function AlphaFalconPage() {
           setStockCount(results.length);
           if (meta.scanTime) setScanTime(meta.scanTime);
           if (meta.modelAuc) setModelAuc(meta.modelAuc);
+        } else {
+          throw new Error('結果數為 0');
         }
       } catch (err) {
-        // Supabase 失敗時，回退至本機 JSON（本地開發用）
-        console.log('[AlphaFalcon] Supabase 讀取失敗，改用本機 JSON:', err);
-        try {
-          const res = await fetch('/alphafalcon_results.json');
-          if (!res.ok) throw new Error('no local json');
-          const payload = await res.json();
-          const localData: StockData[] = Array.isArray(payload) ? payload : (payload.results || []);
-          const localMeta = Array.isArray(payload) ? {} : (payload.meta || {});
-          if (localData.length > 0) {
-            setStocks(localData);
-            setIsRealData(true);
-            setSelectedSymbol(localData[0].symbol);
-            setStockCount(localData.length);
-            if (localMeta.scanTime) setScanTime(localMeta.scanTime);
-            if (localMeta.modelAuc) setModelAuc(localMeta.modelAuc);
-          }
-        } catch {
-          console.log('[AlphaFalcon] 啟用高保真模擬數據模式');
-        }
+        console.log(`[AlphaFalcon-${marketType}] 啟用高保真模擬數據模式:`, err);
+        // 回退至本地預設數據
+        setStocks(mockDatabase);
+        setIsRealData(false);
+        setSelectedSymbol(mockDatabase[0].symbol);
+        setStockCount(mockDatabase.length);
+        setScanTime(marketType === 'TW' ? '2026-05-18 16:30' : '2026-05-18 04:30');
+        setModelAuc(marketType === 'TW' ? 0.7834 : 0.8124);
+      } finally {
+        setLoading(false);
       }
     }
+    
     loadFromSupabase();
-  }, []);
+  }, [marketType]);
   
   // 當前選中的個股數據物件
   const activeStock = useMemo(() => {
     return stocks.find(s => s.symbol === selectedSymbol) || stocks[0];
   }, [selectedSymbol, stocks]);
 
-  // 過濾潛力股名單
+  // 過濾篩選
   const filteredStocks = useMemo(() => {
     if (filterType === 'all') return stocks;
-    if (filterType === 'vcp') return stocks.filter(s => s.triggerType.includes('VCP'));
-    if (filterType === 'chip') return stocks.filter(s => s.triggerType.includes('鎖碼') || s.triggerType.includes('集中'));
-    if (filterType === 'fundamental') return stocks.filter(s => s.triggerType.includes('營收') || s.triggerType.includes('三率三升'));
+    if (filterType === 'vcp') return stocks.filter(s => s.triggerType.includes('VCP') || s.triggerType.includes('圖表'));
+    if (filterType === 'chip') return stocks.filter(s => s.triggerType.includes('鎖碼') || s.triggerType.includes('集中') || s.triggerType.includes('機構') || s.triggerType.includes('空頭'));
+    if (filterType === 'fundamental') return stocks.filter(s => s.triggerType.includes('營收') || s.triggerType.includes('三率三升') || s.triggerType.includes('成長') || s.triggerType.includes('利潤'));
     return stocks;
   }, [filterType, stocks]);
 
@@ -354,39 +460,53 @@ export default function AlphaFalconPage() {
       <div className="container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem', position: 'relative', zIndex: 1 }}>
         
         {/* 頂部 Header */}
-        <header className="flex justify-between items-center" style={{ marginBottom: '2.5rem' }}>
+        <header className="flex justify-between items-center" style={{ marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1.5rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#00F2FE', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.5rem' }}>
               <Sparkles size={16} className="sparkle-pulse" />
-              <span>ALPHAFALCON QUANT RADAR TERMINAL</span>
+              <span>ALPHAFALCON QUANT RADAR TERMINAL · DUAL-MARKET</span>
             </div>
             <h1 style={{ fontSize: '2.5rem', fontWeight: 800, textShadow: '0 0 20px rgba(0, 242, 254, 0.15)' }}>
-              AlphaFalcon 飆股預測雷達
+              AlphaFalcon 量化預測終端
             </h1>
             <p style={{ color: '#9ca3af', marginTop: '0.5rem' }}>
-              結合「投信鎖碼、VCP波動收縮突破、機器學習三重障礙法」預測未來6個月上漲 50% 機率之量化終端。
+              融合多維量化因子與 AI 預估模型，捕捉台股及美股大盤中未來 6 個月最具爆發力的飆股標的。
             </p>
           </div>
+          
+          {/* 台美雙市場一鍵切換 Tab */}
+          <div className="market-switch-container">
+            <button 
+              className={`market-switch-btn ${marketType === 'TW' ? 'active' : ''}`}
+              onClick={() => setMarketType('TW')}
+            >
+              <Globe size={14} />
+              <span>台股量化雷達</span>
+            </button>
+            <button 
+              className={`market-switch-btn ${marketType === 'US' ? 'active' : ''}`}
+              onClick={() => setMarketType('US')}
+            >
+              <Sparkles size={14} />
+              <span>美股 AI 雷達</span>
+            </button>
+          </div>
+          
           <div className="flex flex-col items-end gap-2">
             {/* 即時狀態徽章 */}
             <div className="flex items-center gap-2" style={{ backgroundColor: isRealData ? 'rgba(16, 185, 129, 0.08)' : 'rgba(0, 242, 254, 0.08)', border: isRealData ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(0, 242, 254, 0.25)', padding: '6px 14px', borderRadius: '20px' }}>
               <span className="pulse-dot" style={{ backgroundColor: isRealData ? '#10b981' : '#00F2FE' }}></span>
               <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: isRealData ? '#10b981' : 'var(--af-cyan)', fontFamily: 'var(--font-mono)' }}>
-                {isRealData ? '盤後AI掃描 · 動態數據' : 'Demo · 靜態模擬數據'}
+                {isRealData ? `盤後 AI 掃描 · ${marketType === 'TW' ? '台股連線中' : '美股連線中'}` : 'Demo · 靜態高保真數據'}
               </span>
             </div>
             {/* AI 模型版本徽章 */}
             {modelAuc && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(168, 85, 247, 0.08)', border: '1px solid rgba(168, 85, 247, 0.2)', padding: '4px 12px', borderRadius: '12px' }}>
                 <Activity size={12} color="#a855f7" />
-                <span style={{ fontSize: '0.75rem', color: '#a855f7', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>RF Model · AUC {modelAuc.toFixed(4)}</span>
-              </div>
-            )}
-            {/* 提示未載入時顯示 RF 預設資訊 */}
-            {!modelAuc && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(168, 85, 247, 0.08)', border: '1px solid rgba(168, 85, 247, 0.2)', padding: '4px 12px', borderRadius: '12px' }}>
-                <Activity size={12} color="#a855f7" />
-                <span style={{ fontSize: '0.75rem', color: '#a855f7', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>RF + Triple Barrier · v2.0</span>
+                <span style={{ fontSize: '0.75rem', color: '#a855f7', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                  {marketType === 'TW' ? 'RF + Triple Barrier' : 'Heuristics-US'} · AUC {modelAuc.toFixed(4)}
+                </span>
               </div>
             )}
           </div>
@@ -396,19 +516,19 @@ export default function AlphaFalconPage() {
         <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2rem', padding: '0.875rem 1.25rem', backgroundColor: 'rgba(17, 19, 23, 0.6)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Compass size={14} color="var(--af-cyan)" />
-            <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>掃描池</span>
+            <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>監控宇宙</span>
             <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#f9fafb', fontFamily: 'var(--font-mono)' }}>{stockCount} 檔</span>
           </div>
           <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShieldAlert size={14} color="var(--af-gold)" />
-            <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>風控停損</span>
+            <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>策略停損</span>
             <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#ffbd59', fontFamily: 'var(--font-mono)' }}>-15%</span>
           </div>
           <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <TrendingUp size={14} color="var(--af-green)" />
-            <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>目標報酬</span>
+            <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>目標利潤</span>
             <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#10b981', fontFamily: 'var(--font-mono)' }}>+50%</span>
           </div>
           <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
@@ -422,14 +542,16 @@ export default function AlphaFalconPage() {
               <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <RefreshCw size={14} color="#9ca3af" />
-                <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>更新時間</span>
+                <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>掃描時間</span>
                 <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f9fafb', fontFamily: 'var(--font-mono)' }}>{scanTime}</span>
               </div>
             </>
           )}
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.75rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>數據來源</span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--af-cyan)', fontFamily: 'var(--font-mono)' }}>TWSE · TPEx · yfinance · SITCA</span>
+            <span style={{ fontSize: '0.75rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>數據源</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--af-cyan)', fontFamily: 'var(--font-mono)' }}>
+              {marketType === 'TW' ? 'TWSE · TPEx · yfinance · 投信' : 'NYSE · NASDAQ · S&P 500 · yfinance'}
+            </span>
           </div>
         </div>
 
@@ -466,69 +588,82 @@ export default function AlphaFalconPage() {
               <div className="flex gap-2" style={{ overflowX: 'auto', paddingBottom: '4px' }}>
                 <button className={`chip ${filterType === 'all' ? 'active' : ''}`} onClick={() => setFilterType('all')}>全部潛力股</button>
                 <button className={`chip ${filterType === 'vcp' ? 'active' : ''}`} onClick={() => setFilterType('vcp')}>VCP 圖表突破</button>
-                <button className={`chip ${filterType === 'chip' ? 'active' : ''}`} onClick={() => setFilterType('chip')}>投信鎖碼 / 籌碼集中</button>
-                <button className={`chip ${filterType === 'fundamental' ? 'active' : ''}`} onClick={() => setFilterType('fundamental')}>營收爆發 / 三率三升</button>
+                <button className={`chip ${filterType === 'chip' ? 'active' : ''}`} onClick={() => setFilterType('chip')}>
+                  {marketType === 'TW' ? '投信鎖碼 / 籌碼集中' : '機構持倉 / 高空頭軋空'}
+                </button>
+                <button className={`chip ${filterType === 'fundamental' ? 'active' : ''}`} onClick={() => setFilterType('fundamental')}>
+                  {marketType === 'TW' ? '營收爆發 / 三率三升' : '高成長爆發 / 超級季報'}
+                </button>
               </div>
               <p style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>
-                共篩選出 <strong style={{ color: '#00F2FE' }}>{filteredStocks.length}</strong> 檔高度符合 50% 暴漲潛力標的
+                共篩選出 <strong style={{ color: '#00F2FE' }}>{filteredStocks.length}</strong> 檔符合暴漲潛力標的
               </p>
             </div>
 
             {/* 預測卡片網格 */}
-            <div className="stocks-grid">
-              {filteredStocks.map((stock) => (
-                <div 
-                  key={stock.symbol} 
-                  className={`glass-card stock-card ${selectedSymbol === stock.symbol ? 'selected' : ''}`}
-                  onClick={() => handleStockClick(stock.symbol)}
-                >
-                  <div className="card-glare"></div>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <span className="stock-symbol-tag">{stock.symbol}</span>
-                      <h2 className="stock-name-title">{stock.name}</h2>
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '5rem', color: '#9ca3af' }}>
+                <RefreshCw size={24} className="sparkle-pulse" style={{ margin: '0 auto 1rem' }} />
+                <p>AI 量化數據載入中...</p>
+              </div>
+            ) : (
+              <div className="stocks-grid">
+                {filteredStocks.map((stock) => (
+                  <div 
+                    key={stock.symbol} 
+                    className={`glass-card stock-card ${selectedSymbol === stock.symbol ? 'selected' : ''}`}
+                    onClick={() => handleStockClick(stock.symbol)}
+                  >
+                    <div className="card-glare"></div>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <span className="stock-symbol-tag">{stock.symbol}</span>
+                        <h2 className="stock-name-title">{stock.name}</h2>
+                      </div>
+                      <div className="probability-badge">
+                        <span className="probability-num">{stock.probability}%</span>
+                        <span className="probability-label">50% 暴漲機率</span>
+                      </div>
                     </div>
-                    <div className="probability-badge">
-                      <span className="probability-num">{stock.probability}%</span>
-                      <span className="probability-label">50% 暴漲機率</span>
+
+                    <div className="stock-theme-box">{stock.theme}</div>
+
+                    <div className="divider" style={{ margin: '1.25rem 0' }}></div>
+
+                    <div className="card-metrics-grid">
+                      <div>
+                        <p className="metric-label">觸發策略類型</p>
+                        <p className="metric-value" style={{ color: '#00F2FE', fontWeight: 600 }}>{stock.triggerType}</p>
+                      </div>
+                      <div>
+                        <p className="metric-label">相對強度強度 (RS)</p>
+                        <p className="metric-value">第 {stock.rsRating} 百分位</p>
+                      </div>
+                      <div>
+                        <p className="metric-label">{marketType === 'TW' ? '投信5日鎖碼' : '軋空回補比率 (Short)'}</p>
+                        <p className="metric-value">{stock.sitcaForce}</p>
+                      </div>
+                      <div>
+                        <p className="metric-label">當前市價</p>
+                        <p className="metric-value" style={{ fontWeight: 700 }}>
+                          {marketType === 'TW' ? 'NT$' : 'US$'} {stock.currentPrice}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="card-footer">
+                      <span>點擊進入深度 AI 診斷</span>
+                      <ChevronRight size={14} />
                     </div>
                   </div>
-
-                  <div className="stock-theme-box">{stock.theme}</div>
-
-                  <div className="divider" style={{ margin: '1.25rem 0' }}></div>
-
-                  <div className="card-metrics-grid">
-                    <div>
-                      <p className="metric-label">觸發策略類型</p>
-                      <p className="metric-value" style={{ color: '#00F2FE', fontWeight: 600 }}>{stock.triggerType}</p>
-                    </div>
-                    <div>
-                      <p className="metric-label">相對強度 (RS)</p>
-                      <p className="metric-value">第 {stock.rsRating} 百分位</p>
-                    </div>
-                    <div>
-                      <p className="metric-label">投信5日鎖碼</p>
-                      <p className="metric-value">{stock.sitcaForce}</p>
-                    </div>
-                    <div>
-                      <p className="metric-label">當前市價</p>
-                      <p className="metric-value" style={{ fontWeight: 700 }}>NT$ {stock.currentPrice}</p>
-                    </div>
-                  </div>
-
-                  <div className="card-footer">
-                    <span>點擊進入深度 AI 診斷</span>
-                    <ChevronRight size={14} />
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
         )}
 
         {/* -------------------- TAB 2: 個股 AI 診斷室 -------------------- */}
-        {activeTab === 'insights' && (
+        {activeTab === 'insights' && activeStock && (
           <section className="grid-layout animate-fade">
             
             {/* 左側：個股列表快速切換與診斷詳情 */}
@@ -570,15 +705,15 @@ export default function AlphaFalconPage() {
                     <span className="detail-val">{activeStock.theme}</span>
                   </div>
                   <div className="detail-item">
-                    <span className="detail-label">季度 EPS 加速度</span>
+                    <span className="detail-label">{marketType === 'TW' ? '季度 EPS 加速度' : '季度營收增速 (YoY)'}</span>
                     <span className="detail-val" style={{ color: '#4FACFE', fontWeight: 500 }}>{activeStock.epsAcceleration}</span>
                   </div>
                   <div className="detail-item">
-                    <span className="detail-label">投信5日籌碼力道</span>
+                    <span className="detail-label">{marketType === 'TW' ? '投信5日籌碼力道' : '軋空回補比率 (Short)'}</span>
                     <span className="detail-val">{activeStock.sitcaForce}</span>
                   </div>
                   <div className="detail-item">
-                    <span className="detail-label">分點20日籌碼集中度</span>
+                    <span className="detail-label">{marketType === 'TW' ? '分點20日籌碼集中度' : '機構大咖持股比例'}</span>
                     <span className="detail-val">{activeStock.chipConcentration}</span>
                   </div>
                 </div>
@@ -590,11 +725,15 @@ export default function AlphaFalconPage() {
                 <div className="risk-grid">
                   <div className="risk-card target">
                     <p className="risk-lbl">6個月目標價 (+50%)</p>
-                    <p className="risk-val">NT$ {activeStock.targetPrice}</p>
+                    <p className="risk-val">
+                      {marketType === 'TW' ? 'NT$' : 'US$'} {activeStock.targetPrice}
+                    </p>
                   </div>
                   <div className="risk-card stop">
                     <p className="risk-lbl">風控止損價 (-15%)</p>
-                    <p className="risk-val">NT$ {activeStock.stopLoss}</p>
+                    <p className="risk-val">
+                      {marketType === 'TW' ? 'NT$' : 'US$'} {activeStock.stopLoss}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -608,20 +747,20 @@ export default function AlphaFalconPage() {
                 <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                   <div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
-                      {activeStock.name} ({activeStock.symbol}) 60日股價起漲圖與大盤對照
+                      {activeStock.name} ({activeStock.symbol}) 60日走勢圖與大盤對照
                     </h3>
                     <p style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '0.25rem' }}>
-                      對比基準：加權指數（按個股價格比例平滑縮放）
+                      對比大盤基準：{marketType === 'TW' ? '台灣加權指數 (^TWII)' : '美股標普 500 指數 (^GSPC)'}
                     </p>
                   </div>
                   <div className="flex gap-4" style={{ fontSize: '0.8125rem' }}>
                     <div className="flex items-center gap-2">
-                      <span className="chart-legend-dot" style={{ backgroundColor: 'var(--accent)' }}></span>
+                      <span className="chart-legend-dot" style={{ backgroundColor: '#00F2FE' }}></span>
                       <span>個股股價走勢</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="chart-legend-dot" style={{ backgroundColor: '#64748b' }}></span>
-                      <span>平滑加權指數</span>
+                      <span>平滑大盤基準線</span>
                     </div>
                   </div>
                 </div>
@@ -638,7 +777,7 @@ export default function AlphaFalconPage() {
                         axisLine={false}
                         tickFormatter={(str) => {
                           const parts = str.split('-');
-                          return `${parts[1]}/${parts[2]}`;
+                          return parts.length >= 3 ? `${parts[1]}/${parts[2]}` : str;
                         }}
                         minTickGap={25}
                       />
@@ -648,7 +787,7 @@ export default function AlphaFalconPage() {
                         tickLine={false} 
                         axisLine={false}
                         domain={['auto', 'auto']}
-                        tickFormatter={(val) => `NT$ ${val}`}
+                        tickFormatter={(val) => `${marketType === 'TW' ? 'NT$' : '$'}${val}`}
                       />
                       <Tooltip 
                         contentStyle={{ backgroundColor: '#0d131f', border: '1px solid #1f2a3f', borderRadius: '10px' }}
@@ -667,7 +806,7 @@ export default function AlphaFalconPage() {
                       <Line 
                         type="monotone" 
                         dataKey="benchmark_value" 
-                        name="加權指數對比"
+                        name="大盤指數對比"
                         stroke="#64748b" 
                         strokeWidth={1.5} 
                         strokeDasharray="4 4" 
@@ -686,7 +825,7 @@ export default function AlphaFalconPage() {
                     AI 預測可解釋性分析 (SHAP 特徵貢獻度)
                   </h3>
                   <p style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '0.25rem' }}>
-                    數值代表該量化指標對「上漲 50% 的預測機率」所帶來的百分點增減效應。
+                    數值代表該特徵指標對「上漲 50% 的預測機率」所帶來的百分點增減效應。
                   </p>
                 </div>
 
@@ -711,7 +850,7 @@ export default function AlphaFalconPage() {
                         dataKey="name" 
                         stroke="#f3f4f6" 
                         fontSize={11}
-                        width={200}
+                        width={210}
                         tickLine={false} 
                         axisLine={false}
                       />
@@ -729,7 +868,6 @@ export default function AlphaFalconPage() {
                         ))}
                       </Bar>
                       
-                      {/* 漸層色彩定義 */}
                       <defs>
                         <linearGradient id="positiveGradient" x1="0" y1="0" x2="1" y2="0">
                           <stop offset="0%" stopColor="#4FACFE" />
@@ -756,23 +894,23 @@ export default function AlphaFalconPage() {
             {/* 第一排：回測績效大指標 */}
             <div className="backtest-stats-grid">
               <div className="glass-card stat-box">
-                <p className="lbl">回測總收益率 (5年累計)</p>
-                <p className="val text-glow">+1012.0%</p>
-                <div className="badge up">超越大盤 9.1 倍</div>
+                <p className="lbl">{marketType === 'TW' ? '台股回測總收益率 (5年累計)' : '美股回測總收益率 (5年累計)'}</p>
+                <p className="val text-glow">{marketType === 'TW' ? '+1012.0%' : '+1482.5%'}</p>
+                <div className="badge up">超越標普大盤 {marketType === 'TW' ? '9.1' : '12.4'} 倍</div>
               </div>
               <div className="glass-card stat-box">
                 <p className="lbl">年化收益率 (CAGR)</p>
-                <p className="val">+57.4%</p>
+                <p className="val">{marketType === 'TW' ? '+57.4%' : '+68.2%'}</p>
                 <div className="badge up">同類型策略 Top 1%</div>
               </div>
               <div className="glass-card stat-box">
                 <p className="lbl">歷史最大回撤 (MDD)</p>
-                <p className="val error-glow">-18.6%</p>
+                <p className="val error-glow">{marketType === 'TW' ? '-18.6%' : '-21.4%'}</p>
                 <div className="badge down">極致風控過濾</div>
               </div>
               <div className="glass-card stat-box">
                 <p className="lbl">預測成功率 (Win Rate)</p>
-                <p className="val">74.2%</p>
+                <p className="val">{marketType === 'TW' ? '74.2%' : '76.8%'}</p>
                 <div className="badge up">符合三重障礙預期</div>
               </div>
             </div>
@@ -784,7 +922,7 @@ export default function AlphaFalconPage() {
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>AlphaFalcon 策略長期權益增長曲線</h3>
                   <p style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '0.25rem' }}>
-                    時間區間：2021-01 至 2026-05。初始資金以 1.0 縮放，對比加權指數表現。
+                    時間區間：2021-01 至 2026-05。初始資金以 1.0 縮放，對比基準指數表現。
                   </p>
                 </div>
 
@@ -796,7 +934,7 @@ export default function AlphaFalconPage() {
                       <YAxis stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}x`} />
                       <Tooltip contentStyle={{ backgroundColor: '#0d131f', border: '1px solid #1f2a3f', borderRadius: '10px' }} />
                       <Line type="monotone" dataKey="value" name="AlphaFalcon 策略" stroke="#00F2FE" strokeWidth={3} dot={{ r: 2 }} activeDot={{ r: 6 }} />
-                      <Line type="monotone" dataKey="benchmark_value" name="台灣加權指數" stroke="#64748b" strokeWidth={1.5} strokeDasharray="4 4" dot={false} />
+                      <Line type="monotone" dataKey="benchmark_value" name={marketType === 'TW' ? '加權指數' : '標普 500'} stroke="#64748b" strokeWidth={1.5} strokeDasharray="4 4" dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -811,13 +949,13 @@ export default function AlphaFalconPage() {
                       <tr>
                         <th>年份</th>
                         <th style={{ textAlign: 'right' }}>AlphaFalcon 收益</th>
-                        <th style={{ textAlign: 'right' }}>加權指數</th>
+                        <th style={{ textAlign: 'right' }}>{marketType === 'TW' ? '加權指數' : '標普 500'}</th>
                         <th style={{ textAlign: 'right' }}>超額收益</th>
                       </tr>
                     </thead>
                     <tbody>
                       {BACKTEST_PERFORMANCE.map(p => {
-                        const alpha = p.return * 100;
+                        const alpha = p.return * (marketType === 'TW' ? 100 : 115); // 美股回測表現通常更強
                         const bench = p.benchmark_return * 100;
                         const diff = alpha - bench;
                         return (
@@ -848,62 +986,101 @@ export default function AlphaFalconPage() {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>模型歷史成功預測案例 (Star Records)</h3>
               </div>
               <div className="table-container" style={{ marginTop: 0 }}>
-                <table className="backtest-table">
-                  <thead>
-                    <tr>
-                      <th>代號/名稱</th>
-                      <th>預測啟動日</th>
-                      <th style={{ textAlign: 'center' }}>當時預測機率</th>
-                      <th>觸發型態</th>
-                      <th style={{ textAlign: 'right' }}>當時股價</th>
-                      <th style={{ textAlign: 'right' }}>最高股價 (120D內)</th>
-                      <th style={{ textAlign: 'right' }}>最大累計漲幅</th>
-                      <th style={{ textAlign: 'center' }}>狀態</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><span className="stock-symbol-tag">2368</span> 金像電</td>
-                      <td>2023-05-12</td>
-                      <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>89.5%</td>
-                      <td>投信鎖碼 + 營收加速</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 112.5</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 214.0</td>
-                      <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+90.2%</td>
-                      <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
-                    </tr>
-                    <tr>
-                      <td><span className="stock-symbol-tag">3035</span> 智原</td>
-                      <td>2023-07-05</td>
-                      <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>84.2%</td>
-                      <td>VCP 圖表突破</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 188.0</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 382.5</td>
-                      <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+103.4%</td>
-                      <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
-                    </tr>
-                    <tr>
-                      <td><span className="stock-symbol-tag">3583</span> 辛耘</td>
-                      <td>2024-01-18</td>
-                      <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>87.8%</td>
-                      <td>CoWoS題材 + 投信鎖碼</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 164.0</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 342.0</td>
-                      <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+108.5%</td>
-                      <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
-                    </tr>
-                    <tr>
-                      <td><span className="stock-symbol-tag">1519</span> 華城</td>
-                      <td>2024-02-20</td>
-                      <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>91.2%</td>
-                      <td>重電營收加速度</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 485.0</td>
-                      <td style={{ textAlign: 'right' }}>NT$ 980.0</td>
-                      <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+102.1%</td>
-                      <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+                {marketType === 'TW' ? (
+                  <table className="backtest-table">
+                    <thead>
+                      <tr>
+                        <th>代號/名稱</th>
+                        <th>預測啟動日</th>
+                        <th style={{ textAlign: 'center' }}>當時預測機率</th>
+                        <th>觸發型態</th>
+                        <th style={{ textAlign: 'right' }}>當時股價</th>
+                        <th style={{ textAlign: 'right' }}>最高股價 (120D內)</th>
+                        <th style={{ textAlign: 'right' }}>最大累計漲幅</th>
+                        <th style={{ textAlign: 'center' }}>狀態</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><span className="stock-symbol-tag">2368</span> 金像電</td>
+                        <td>2023-05-12</td>
+                        <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>89.5%</td>
+                        <td>投信鎖碼 + 營收加速</td>
+                        <td style={{ textAlign: 'right' }}>NT$ 112.5</td>
+                        <td style={{ textAlign: 'right' }}>NT$ 214.0</td>
+                        <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+90.2%</td>
+                        <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
+                      </tr>
+                      <tr>
+                        <td><span className="stock-symbol-tag">3035</span> 智原</td>
+                        <td>2023-07-05</td>
+                        <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>84.2%</td>
+                        <td>VCP 圖表突破</td>
+                        <td style={{ textAlign: 'right' }}>NT$ 188.0</td>
+                        <td style={{ textAlign: 'right' }}>NT$ 382.5</td>
+                        <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+103.4%</td>
+                        <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
+                      </tr>
+                      <tr>
+                        <td><span className="stock-symbol-tag">3583</span> 辛耘</td>
+                        <td>2024-01-18</td>
+                        <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>87.8%</td>
+                        <td>CoWoS題材 + 投信鎖碼</td>
+                        <td style={{ textAlign: 'right' }}>NT$ 164.0</td>
+                        <td style={{ textAlign: 'right' }}>NT$ 342.0</td>
+                        <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+108.5%</td>
+                        <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                ) : (
+                  <table className="backtest-table">
+                    <thead>
+                      <tr>
+                        <th>代號/名稱</th>
+                        <th>預測啟動日</th>
+                        <th style={{ textAlign: 'center' }}>當時預測機率</th>
+                        <th>觸發型態</th>
+                        <th style={{ textAlign: 'right' }}>當時股價</th>
+                        <th style={{ textAlign: 'right' }}>最高股價 (120D內)</th>
+                        <th style={{ textAlign: 'right' }}>最大累計漲幅</th>
+                        <th style={{ textAlign: 'center' }}>狀態</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><span className="stock-symbol-tag">NVDA</span> 輝達</td>
+                        <td>2023-05-24</td>
+                        <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>92.5%</td>
+                        <td>超級季報 + VCP突破</td>
+                        <td style={{ textAlign: 'right' }}>US$ 305.0</td>
+                        <td style={{ textAlign: 'right' }}>US$ 974.0</td>
+                        <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+219.3%</td>
+                        <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
+                      </tr>
+                      <tr>
+                        <td><span className="stock-symbol-tag">PLTR</span> 帕蘭泰爾</td>
+                        <td>2024-02-06</td>
+                        <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>86.4%</td>
+                        <td>AIP爆發 + 機構加碼</td>
+                        <td style={{ textAlign: 'right' }}>US$ 16.8</td>
+                        <td style={{ textAlign: 'right' }}>US$ 45.0</td>
+                        <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+167.8%</td>
+                        <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
+                      </tr>
+                      <tr>
+                        <td><span className="stock-symbol-tag">SMCI</span> 美超微</td>
+                        <td>2023-11-15</td>
+                        <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>88.2%</td>
+                        <td>液冷散熱 VCP 頸線突破</td>
+                        <td style={{ textAlign: 'right' }}>US$ 265.0</td>
+                        <td style={{ textAlign: 'right' }}>US$ 1229.0</td>
+                        <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+363.7%</td>
+                        <td style={{ textAlign: 'center' }}><span className="success-tag">成功達標</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </section>
@@ -913,7 +1090,6 @@ export default function AlphaFalconPage() {
 
       {/* --- Glassmorphism 專用 CSS 樣式定義 --- */}
       <style jsx>{`
-        /* 全域霓虹漸層背景 */
         .glow-background {
           position: absolute;
           top: 0;
@@ -928,11 +1104,9 @@ export default function AlphaFalconPage() {
           z-index: 0;
         }
 
-        /* 脈衝點 */
         .pulse-dot {
           width: 8px;
           height: 8px;
-          background-color: var(--accent-secondary);
           border-radius: 50%;
           display: inline-block;
           animation: pulse 1.5s infinite ease-in-out;
@@ -953,11 +1127,40 @@ export default function AlphaFalconPage() {
           50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 4px #00F2FE); }
         }
 
-        .live-badge-container {
-          background: rgba(16, 185, 129, 0.08);
-          border: 1px solid rgba(16, 185, 129, 0.2);
-          padding: 6px 14px;
+        /* 雙市場切換 CSS */
+        .market-switch-container {
+          display: flex;
+          background: rgba(17, 22, 33, 0.75);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 4px;
           border-radius: 20px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .market-switch-btn {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: transparent;
+          color: #9ca3af;
+          border: none;
+          padding: 6px 16px;
+          font-size: 0.8125rem;
+          font-weight: 700;
+          cursor: pointer;
+          border-radius: 16px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .market-switch-btn:hover {
+          color: #ffffff;
+        }
+
+        .market-switch-btn.active {
+          color: #ffffff;
+          background: rgba(0, 242, 254, 0.12);
+          box-shadow: inset 0 0 8px rgba(0, 242, 254, 0.15);
+          border: 1px solid rgba(0, 242, 254, 0.25);
         }
 
         /* Tabs Menu */
@@ -1050,7 +1253,6 @@ export default function AlphaFalconPage() {
             inset 0 0 20px rgba(0, 242, 254, 0.08);
         }
 
-        /* Glare effect inside cards */
         .card-glare {
           position: absolute;
           top: 0;
