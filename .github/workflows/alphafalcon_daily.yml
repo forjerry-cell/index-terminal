@@ -28,10 +28,9 @@ jobs:
 
       - name: 執行 AlphaFalcon 雲端掃描器
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
-          python alphafalcon_cloud_scanner.py
+          python Index/AlphaFalcon/alphafalcon_cloud_scanner.py
 
       - name: 掃描完成通知
         if: success()

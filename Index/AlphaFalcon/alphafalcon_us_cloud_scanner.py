@@ -19,20 +19,19 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
-from supabase import create_client, Client
+import requests
 
 warnings.filterwarnings('ignore')
 
-# ── Supabase 連線（從 GitHub Actions Secrets 注入）─────────────────────────
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+# ── Next.js 後端安全中轉 API 設定 ──────────────────────────────────────────
+API_URL = os.environ.get("API_URL", "https://index-terminal.vercel.app/api/alphafalcon-us")
+API_SECRET = os.environ.get("ADMIN_PASSWORD", "")
 
-if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
-    print("[ERROR] 缺少 SUPABASE_URL 或 SUPABASE_SERVICE_ROLE_KEY 環境變數")
+if not API_SECRET:
+    print("[ERROR] 缺少 ADMIN_PASSWORD (API_SECRET) 環境變數以供安全驗證")
     sys.exit(1)
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
-print(f"[OK] Supabase 連線成功: {SUPABASE_URL[:40]}...")
+print(f"[OK] Next.js 安全中轉 API 已就緒: {API_URL}")
 
 # ── 美股選股宇宙定義 (科技、半導體、高動能成長股) ──────────────────────────────────
 UNIVERSE_NAME_MAP = {
@@ -282,7 +281,7 @@ def main():
     results = sorted(results, key=lambda x: x["probability"], reverse=True)
     print(f"\n[INFO] 分析完成，共 {len(results)} 檔有效結果")
 
-    # ── 寫入 Supabase ──────────────────────────────────────────────────────
+    # ── 寫入 Next.js 中轉 API (安全連線至 Supabase) ──────────────────────────
     meta = {
         "scanTime": datetime.now().strftime('%Y-%m-%d %H:%M'),
         "totalScanned": len(tickers),
@@ -293,17 +292,25 @@ def main():
 
     payload = {
         "scan_date": latest_date_str,
-        "results": json.dumps(results, ensure_ascii=False),
-        "meta": json.dumps(meta, ensure_ascii=False),
+        "results": results,
+        "meta": meta,
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-secret": API_SECRET
     }
 
     try:
-        supabase.table("alphafalcon_us_daily_results").upsert(
-            payload, on_conflict="scan_date"
-        ).execute()
-        print(f"[OK] Supabase 美股更新成功！日期: {latest_date_str}，共 {len(results)} 筆")
+        print(f"[INFO] 正在向 Next.js 中轉 API 上傳資料 (URL: {API_URL})...")
+        res = requests.post(API_URL, headers=headers, json=payload)
+        if res.status_code == 200:
+            print(f"[OK] Next.js 中轉 API 寫入成功！日期: {latest_date_str}，共 {len(results)} 筆")
+        else:
+            print(f"[ERROR] 中轉 API 寫入失敗: {res.status_code} {res.text}")
+            sys.exit(1)
     except Exception as e:
-        print(f"[ERROR] Supabase 美股寫入失敗: {e}")
+        print(f"[ERROR] 中轉 API 請求發送失敗: {e}")
         sys.exit(1)
 
     print("\n[OK] 美股任務完成！網頁將自動顯示最新美股預測數據。")

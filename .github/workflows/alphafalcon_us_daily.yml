@@ -30,10 +30,8 @@ jobs:
 
       - name: 執行 AlphaFalcon 美股雲端掃描器
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
-          # 為了簡化，GitHub Actions 時將腳本拷貝或直接執行新目錄下的腳本
           python Index/AlphaFalcon/alphafalcon_us_cloud_scanner.py
 
       - name: 掃描完成通知
