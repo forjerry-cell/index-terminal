@@ -122,9 +122,9 @@ const STOCKS_DATABASE_TW: StockData[] = [
     epsAcceleration: '+42.1% YoY (連續2季加速)',
     sitcaForce: '1.85% (近5日買超佔股本)',
     chipConcentration: '14.8% (20日籌碼集中度)',
-    currentPrice: 124.5,
-    targetPrice: 186.5,
-    stopLoss: 105.8,
+    currentPrice: 132.5,
+    targetPrice: 198.8,
+    stopLoss: 112.6,
     theme: 'AI 伺服器代工 / 水冷模組整合',
     features: [
       { name: '投信近5日鎖碼力道 (SITCA Force)', value: 22.5, type: 'positive' },
@@ -133,7 +133,7 @@ const STOCKS_DATABASE_TW: StockData[] = [
       { name: '千張大戶持股比例增加 (Large Holder)', value: 11.4, type: 'positive' },
       { name: '大盤季線反壓拖累 (Market Drag)', value: -3.5, type: 'negative' }
     ],
-    chartData: generateMockChartData(110, 'vcp')
+    chartData: generateMockChartData(132, 'vcp')
   },
   {
     symbol: '3017',
@@ -144,9 +144,9 @@ const STOCKS_DATABASE_TW: StockData[] = [
     epsAcceleration: '+68.3% YoY (連續3季加速)',
     sitcaForce: '0.95% (近5日買超佔股本)',
     chipConcentration: '11.2% (20日籌碼集中度)',
-    currentPrice: 620.0,
-    targetPrice: 930.0,
-    stopLoss: 527.0,
+    currentPrice: 2390.0,
+    targetPrice: 3585.0,
+    stopLoss: 2031.5,
     theme: 'AI GPU 液冷散熱系統 / 3D VC 獨家供應商',
     features: [
       { name: '營收年增率營收加速 (Rev Acc)', value: 28.5, type: 'positive' },
@@ -155,7 +155,7 @@ const STOCKS_DATABASE_TW: StockData[] = [
       { name: '相對強度創波段新高 (RS Breakout)', value: 9.8, type: 'positive' },
       { name: '本益比處於歷史偏高區間 (Valuation Drag)', value: -6.5, type: 'negative' }
     ],
-    chartData: generateMockChartData(550, 'rev_acc')
+    chartData: generateMockChartData(2390, 'rev_acc')
   },
   {
     symbol: '2330',
@@ -188,9 +188,9 @@ const STOCKS_DATABASE_TW: StockData[] = [
     epsAcceleration: '+54.2% YoY (大幅彈升)',
     sitcaForce: '1.15% (近5日買超佔股本)',
     chipConcentration: '13.2% (20日籌碼集中度)',
-    currentPrice: 2450.0,
-    targetPrice: 3675.0,
-    stopLoss: 2082.5,
+    currentPrice: 4430.0,
+    targetPrice: 6645.0,
+    stopLoss: 3765.5,
     theme: '美系 CSP 巨頭客製化 ASIC / 矽智財 (IP)',
     features: [
       { name: 'VCP 波動收縮完畢放量突破 (VCP Setup)', value: 24.1, type: 'positive' },
@@ -199,7 +199,7 @@ const STOCKS_DATABASE_TW: StockData[] = [
       { name: '投信法人重啟加碼建倉 (SITCA Force)', value: 11.2, type: 'positive' },
       { name: '千元高價股流動性溢價降低 (Price Liquidity)', value: -4.8, type: 'negative' }
     ],
-    chartData: generateMockChartData(2200, 'vcp')
+    chartData: generateMockChartData(4430, 'vcp')
   },
   {
     symbol: '3037',
@@ -210,9 +210,9 @@ const STOCKS_DATABASE_TW: StockData[] = [
     epsAcceleration: '+18.5% YoY (落底回溫)',
     sitcaForce: '1.42% (近5日買超佔股本)',
     chipConcentration: '9.8% (20日籌碼集中度)',
-    currentPrice: 185.0,
-    targetPrice: 277.5,
-    stopLoss: 157.0,
+    currentPrice: 818.0,
+    targetPrice: 1227.0,
+    stopLoss: 695.3,
     theme: 'AI 伺服器 ABF 載板 / 下半年出貨爆發',
     features: [
       { name: '投信卡位打底築底期 (SITCA Force)', value: 21.4, type: 'positive' },
@@ -221,7 +221,7 @@ const STOCKS_DATABASE_TW: StockData[] = [
       { name: '外資與投信聯手同步買超 (Institutional Align)', value: 8.2, type: 'positive' },
       { name: '上方年線反壓蓋頂待消化 (MA Resistance)', value: -6.5, type: 'negative' }
     ],
-    chartData: generateMockChartData(172, 'bottom')
+    chartData: generateMockChartData(818, 'bottom')
   }
 ];
 
@@ -236,9 +236,9 @@ const STOCKS_DATABASE_US: StockData[] = [
     epsAcceleration: '+268.4% YoY (超級增長)',
     sitcaForce: '1.24% (券商融券比率)',
     chipConcentration: '73.2% (機構總持倉)',
-    currentPrice: 924.8,
-    targetPrice: 1387.2,
-    stopLoss: 786.08,
+    currentPrice: 222.3,
+    targetPrice: 333.5,
+    stopLoss: 189.0,
     theme: 'AI 晶片絕對霸王 / Blackwell 全面量產',
     features: [
       { name: 'AI 伺服器與晶片絕對優勢 (AI Dominance)', value: 28.5, type: 'positive' },
@@ -247,7 +247,7 @@ const STOCKS_DATABASE_US: StockData[] = [
       { name: '季營收超預期暴增 (Revenue Blowout)', value: 15.2, type: 'positive' },
       { name: '大盤半導體指數修正拖累 (Sector Drag)', value: -4.2, type: 'negative' }
     ],
-    chartData: generateMockChartData(850, 'vcp')
+    chartData: generateMockChartData(222, 'vcp')
   },
   {
     symbol: 'PLTR',
@@ -258,9 +258,9 @@ const STOCKS_DATABASE_US: StockData[] = [
     epsAcceleration: '+48.5% YoY (季報連續加速)',
     sitcaForce: '4.85% (券商融券比率)',
     chipConcentration: '62.4% (機構總持倉)',
-    currentPrice: 42.5,
-    targetPrice: 63.75,
-    stopLoss: 36.1,
+    currentPrice: 135.1,
+    targetPrice: 202.7,
+    stopLoss: 114.8,
     theme: 'AIP 商業平台企業級訂單暴增 / AI 軟體決策龍頭',
     features: [
       { name: '商業 AIP 軟體合約高速增長 (AIP Growth)', value: 25.4, type: 'positive' },
@@ -269,7 +269,7 @@ const STOCKS_DATABASE_US: StockData[] = [
       { name: '毛利率高達 82% 冠絕同行 (Software Margin)', value: 12.5, type: 'positive' },
       { name: '融券空頭回補軋空效應 (Short Cover)', value: 8.4, type: 'positive' }
     ],
-    chartData: generateMockChartData(36, 'rev_acc')
+    chartData: generateMockChartData(135, 'rev_acc')
   },
   {
     symbol: 'MSTR',
@@ -280,9 +280,9 @@ const STOCKS_DATABASE_US: StockData[] = [
     epsAcceleration: '高利潤擴張中',
     sitcaForce: '12.85% (高融券比率！)',
     chipConcentration: '54.2% (機構總持倉)',
-    currentPrice: 1420.0,
-    targetPrice: 2130.0,
-    stopLoss: 1207.0,
+    currentPrice: 166.6,
+    targetPrice: 249.9,
+    stopLoss: 141.6,
     theme: '比特幣最大儲備機構 / 加密貨幣大牛市影子股',
     features: [
       { name: '比特幣價格暴漲溢價 (Bitcoin leverage)', value: 32.4, type: 'positive' },
@@ -290,7 +290,7 @@ const STOCKS_DATABASE_US: StockData[] = [
       { name: 'VCP 形態突破底部頸線 (VCP Stage 1)', value: 18.2, type: 'positive' },
       { name: '大盤環境波動回檔壓制 (Beta Overload)', value: -9.5, type: 'negative' }
     ],
-    chartData: generateMockChartData(1100, 'vcp')
+    chartData: generateMockChartData(166, 'vcp')
   },
   {
     symbol: 'TSM',
@@ -301,9 +301,9 @@ const STOCKS_DATABASE_US: StockData[] = [
     epsAcceleration: '+35.8% YoY (先進製程霸主)',
     sitcaForce: '0.85% (券商融券比率)',
     chipConcentration: '82.8% (機構總持倉)',
-    currentPrice: 172.5,
-    targetPrice: 258.75,
-    stopLoss: 146.6,
+    currentPrice: 396.0,
+    targetPrice: 594.0,
+    stopLoss: 336.6,
     theme: 'CoWoS 產能吃緊 / 3nm 與 2nm 先進封裝供不應求',
     features: [
       { name: '先進製程與封裝完全壟斷 (Tech Monopoly)', value: 26.5, type: 'positive' },
@@ -312,7 +312,7 @@ const STOCKS_DATABASE_US: StockData[] = [
       { name: '資本支出大增反映旺盛需求 (CapEx Boost)', value: 11.2, type: 'positive' },
       { name: '地緣政治溢價折扣壓制 (Geo Drag)', value: -6.8, type: 'negative' }
     ],
-    chartData: generateMockChartData(150, 'ma_trend')
+    chartData: generateMockChartData(396, 'ma_trend')
   },
   {
     symbol: 'VRT',
@@ -323,9 +323,9 @@ const STOCKS_DATABASE_US: StockData[] = [
     epsAcceleration: '+61.2% YoY (連續4季加速)',
     sitcaForce: '2.12% (券商融券比率)',
     chipConcentration: '88.5% (機構總持倉)',
-    currentPrice: 94.2,
-    targetPrice: 141.3,
-    stopLoss: 80.07,
+    currentPrice: 339.7,
+    targetPrice: 509.5,
+    stopLoss: 288.7,
     theme: 'AI 資料中心液冷散熱模組唯一領導者 / 訂單能見度極高',
     features: [
       { name: '液冷散熱模組高成長能見度 (Cooling Demand)', value: 24.5, type: 'positive' },
@@ -334,7 +334,7 @@ const STOCKS_DATABASE_US: StockData[] = [
       { name: '日 K 線 20MA 多頭完美支撐 (MA Trend)', value: 9.5, type: 'positive' },
       { name: '銅原料等供應鏈成本上升 (Margin Cost)', value: -3.8, type: 'negative' }
     ],
-    chartData: generateMockChartData(85, 'rev_acc')
+    chartData: generateMockChartData(339, 'rev_acc')
   }
 ];
 
