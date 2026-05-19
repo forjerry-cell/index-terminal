@@ -24,10 +24,10 @@ warnings.filterwarnings('ignore')
 
 # ── Next.js 後端安全中轉 API 設定 ──────────────────────────────────────────
 API_URL = os.environ.get("API_URL", "https://index-terminal.vercel.app/api/alphafalcon")
-API_SECRET = os.environ.get("ADMIN_PASSWORD", "")
+API_SECRET = os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY", "")
 
 if not API_SECRET:
-    print("[ERROR] 缺少 ADMIN_PASSWORD (API_SECRET) 環境變數以供安全驗證")
+    print("[ERROR] 缺少 NEXT_PUBLIC_SUPABASE_ANON_KEY (API_SECRET) 環境變數以供安全驗證")
     sys.exit(1)
 
 print(f"[OK] Next.js 安全中轉 API 已就緒: {API_URL}")
