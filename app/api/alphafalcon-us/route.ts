@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     // 1. 安全驗證：比對 API 密鑰與 ADMIN_PASSWORD
     const apiSecret = request.headers.get('x-api-secret');
-    const expectedSecret = process.env.ADMIN_PASSWORD;
+    const expectedSecret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!apiSecret || apiSecret !== expectedSecret) {
       return NextResponse.json({ error: 'Unauthorized: Invalid API secret' }, { status: 401 });

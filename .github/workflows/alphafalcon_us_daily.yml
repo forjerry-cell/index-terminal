@@ -30,7 +30,7 @@ jobs:
 
       - name: 執行 AlphaFalcon 美股雲端掃描器
         env:
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: |
           python Index/AlphaFalcon/alphafalcon_us_cloud_scanner.py
 
