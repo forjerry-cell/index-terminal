@@ -166,9 +166,9 @@ const STOCKS_DATABASE_TW: StockData[] = [
     epsAcceleration: '+25.4% YoY (穩定增長)',
     sitcaForce: '0.25% (大型股投信影響小)',
     chipConcentration: '6.8% (20日籌碼集中度)',
-    currentPrice: 895.0,
-    targetPrice: 1342.5,
-    stopLoss: 760.5,
+    currentPrice: 2205.0,
+    targetPrice: 3307.5,
+    stopLoss: 1874.2,
     theme: 'CoWoS 先進封裝 / 3奈米製程產能滿載',
     features: [
       { name: '半導體先進製程產業龍頭 (Industry Lead)', value: 25.0, type: 'positive' },
@@ -177,7 +177,7 @@ const STOCKS_DATABASE_TW: StockData[] = [
       { name: '日線/週線均線完美多頭排列 (MA Trend)', value: 8.7, type: 'positive' },
       { name: '股本龐大拉抬所需資金量極高 (Liquidity Drag)', value: -7.2, type: 'negative' }
     ],
-    chartData: generateMockChartData(820, 'ma_trend')
+    chartData: generateMockChartData(2200, 'ma_trend')
   },
   {
     symbol: '3661',
