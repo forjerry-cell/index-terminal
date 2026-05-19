@@ -29,7 +29,7 @@ jobs:
       - name: 安裝 Python 依賴套件
         run: |
           pip install --upgrade pip
-          pip install yfinance pandas numpy requests supabase
+          pip install yfinance pandas numpy requests supabase scikit-learn joblib
 
       - name: 執行 AlphaFalcon 雲端掃描器
         env:
