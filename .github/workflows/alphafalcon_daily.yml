@@ -12,9 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    permissions:
+      contents: write
+
     steps:
       - name: 簽出程式碼
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: 設定 Python 3.11
         uses: actions/setup-python@v5
@@ -32,6 +37,14 @@ jobs:
         run: |
           python Index/AlphaFalcon/alphafalcon_cloud_scanner.py
 
+      - name: 提交並推送最新數據 JSON
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          git commit -m "data: Auto-update AlphaFalcon daily scan results [skip ci]" || echo "No changes to commit"
+          git push origin main
+
       - name: 掃描完成通知
         if: success()
-        run: echo "AlphaFalcon 每日掃描完成！結果已寫入 Supabase。"
+        run: echo "AlphaFalcon 台股每日掃描與 Jamstack 部署成功！"

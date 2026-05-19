@@ -315,6 +315,18 @@ def main():
         "meta": meta,
     }
 
+    # ── 新增：本地保存為靜態 JSON 檔案 (供 Jamstack 高可用性架構優先讀取) ──
+    try:
+        import json
+        os.makedirs("public/data", exist_ok=True)
+        json_path = "public/data/alphafalcon_results.json"
+        print(f"[INFO] 正在寫入靜態 JSON 檔案至 {json_path}...")
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+        print("[OK] 靜態 JSON 檔案寫入成功！")
+    except Exception as json_err:
+        print(f"[WARNING] 寫入靜態 JSON 失敗 (這不影響 API 上傳): {json_err}")
+
     headers = {
         "Content-Type": "application/json",
         "x-api-secret": API_SECRET
@@ -326,11 +338,9 @@ def main():
         if res.status_code == 200:
             print(f"[OK] Next.js 中轉 API 寫入成功！日期: {latest_date_str}，共 {len(results)} 筆")
         else:
-            print(f"[ERROR] 中轉 API 寫入失敗: {res.status_code} {res.text}")
-            sys.exit(1)
+            print(f"[WARNING] 中轉 API 寫入失敗: {res.status_code} {res.text} (由於已有靜態 JSON，這不影響網頁顯示)")
     except Exception as e:
-        print(f"[ERROR] 中轉 API 請求發送失敗: {e}")
-        sys.exit(1)
+        print(f"[WARNING] 中轉 API 請求發送失敗: {e} (由於已有靜態 JSON，這不影響網頁顯示)")
 
     print("\n[OK] 任務完成！網頁將自動顯示最新預測數據。")
     print(f"  Top 5: {[(r['name'], r['probability']) for r in results[:5]]}")

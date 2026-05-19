@@ -383,26 +383,49 @@ export default function AlphaFalconPage() {
     async function loadFromSupabase() {
       setLoading(true);
       const tableName = marketType === 'TW' ? 'alphafalcon_daily_results' : 'alphafalcon_us_daily_results';
+      const jsonPath = marketType === 'TW' ? '/data/alphafalcon_results.json' : '/data/alphafalcon_us_results.json';
       const mockDatabase = marketType === 'TW' ? STOCKS_DATABASE_TW : STOCKS_DATABASE_US;
       
       try {
-        const { data, error } = await supabase
-          .from(tableName)
-          .select('scan_date, results, meta')
-          .order('scan_date', { ascending: false })
-          .limit(1)
-          .single();
+        let results: StockData[] = [];
+        let meta: any = {};
+        let loaded = False;
 
-        if (error || !data) {
-          throw new Error(`Supabase ${tableName} 沒有數據`);
+        // 1. 優先嘗試從靜態 JSON 加載 (極速且免資料庫連接)
+        try {
+          const res = await fetch(jsonPath);
+          if (res.ok) {
+            const staticData = await res.json();
+            if (staticData && staticData.results) {
+              results = typeof staticData.results === 'string' ? JSON.parse(staticData.results) : staticData.results;
+              meta = typeof staticData.meta === 'string' ? JSON.parse(staticData.meta) : (staticData.meta || {});
+              if (staticData.scan_date) meta.scan_date = staticData.scan_date;
+              loaded = true;
+              console.log(`[AlphaFalcon-${marketType}] 成功自靜態 JSON 加載最新數據`);
+            }
+          }
+        } catch (jsonErr) {
+          console.log(`[AlphaFalcon-${marketType}] 靜態 JSON 加載失敗，嘗試回退至 Supabase:`, jsonErr);
         }
 
-        const results: StockData[] = typeof data.results === 'string'
-          ? JSON.parse(data.results)
-          : data.results;
-        const meta = typeof data.meta === 'string'
-          ? JSON.parse(data.meta)
-          : (data.meta || {});
+        // 2. 若靜態 JSON 未成功加載，則回退至 Supabase 讀取
+        if (!loaded) {
+          const { data, error } = await supabase
+            .from(tableName)
+            .select('scan_date, results, meta')
+            .order('scan_date', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (error || !data) {
+            throw new Error(`Supabase ${tableName} 沒有數據`);
+          }
+
+          results = typeof data.results === 'string' ? JSON.parse(data.results) : data.results;
+          meta = typeof data.meta === 'string' ? JSON.parse(data.meta) : (data.meta || {});
+          loaded = true;
+          console.log(`[AlphaFalcon-${marketType}] 成功自 Supabase 加載數據`);
+        }
 
         if (results && results.length > 0) {
           setStocks(results);
@@ -410,6 +433,7 @@ export default function AlphaFalconPage() {
           setSelectedSymbol(results[0].symbol);
           setStockCount(results.length);
           if (meta.scanTime) setScanTime(meta.scanTime);
+          else if (meta.scan_date) setScanTime(meta.scan_date + " 16:30");
           if (meta.modelAuc) setModelAuc(meta.modelAuc);
         } else {
           throw new Error('結果數為 0');
