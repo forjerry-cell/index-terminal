@@ -1,5 +1,5 @@
 {
-  "scan_date": "2026-05-25",
+  "scan_date": "2026-05-26",
   "results": [
     {
       "symbol": "AVGO",
@@ -1038,7 +1038,7 @@
       "rsRating": 60,
       "epsAcceleration": "+30.1% YoY",
       "sitcaForce": "5.15% (券商融券比率)",
-      "chipConcentration": "76.1% (機構總持倉)",
+      "chipConcentration": "76.0% (機構總持倉)",
       "currentPrice": 172.2,
       "targetPrice": 258.3,
       "stopLoss": 146.37,
@@ -9270,7 +9270,7 @@
       "rsRating": 99,
       "epsAcceleration": "+32.2% YoY",
       "sitcaForce": "5.38% (券商融券比率)",
-      "chipConcentration": "92.0% (機構總持倉)",
+      "chipConcentration": "92.1% (機構總持倉)",
       "currentPrice": 222.32,
       "targetPrice": 333.48,
       "stopLoss": 188.97,
@@ -10636,7 +10636,7 @@
     }
   ],
   "meta": {
-    "scanTime": "2026-05-25 23:41",
+    "scanTime": "2026-05-26 23:43",
     "totalScanned": 40,
     "totalResults": 31,
     "modelType": "Heuristics-US (VCP + ShortInterest + RevenueGrowth)",
