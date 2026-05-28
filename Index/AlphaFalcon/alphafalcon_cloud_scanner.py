@@ -68,9 +68,16 @@ STOCK_THEMES = {
 # ─────────────────────────────────────────────────────────────────────────────
 
 def get_latest_trading_day():
-    today = datetime.now()
-    if today.hour < 14:
+    """以台灣時間（UTC+8）判斷最新交易日，確保在 GitHub Actions UTC 環境下也正確"""
+    from datetime import timezone
+    utc_now = datetime.now(timezone.utc)
+    # 台灣時間 = UTC+8
+    tw_now = utc_now + timedelta(hours=8)
+    today = tw_now.replace(tzinfo=None)
+    # 台灣時間 16:30 盤後執行，若 16:30 前視為盤中，取前一個交易日
+    if today.hour < 16 or (today.hour == 16 and today.minute < 30):
         today -= timedelta(days=1)
+    # 跳過週末
     while today.weekday() >= 5:
         today -= timedelta(days=1)
     return today.strftime('%Y-%m-%d'), today
@@ -298,7 +305,8 @@ def main():
     print(f"[INFO] 最新交易日: {latest_date_str}")
 
     print("[INFO] 下載加權指數基準...")
-    benchmark_df = yf.download("^TWII", start="2025-01-01", end=latest_date_str, progress=False)
+    start_bm = (datetime.strptime(latest_date_str, '%Y-%m-%d') - timedelta(days=400)).strftime('%Y-%m-%d')
+    benchmark_df = yf.download("^TWII", start=start_bm, end=latest_date_str, progress=False)
     if benchmark_df.empty:
         benchmark_df = pd.DataFrame({"Close": [18000 + i*15 for i in range(300)]})
         print("[WARN] 加權指數下載失敗，啟用備援基準線")
@@ -316,7 +324,9 @@ def main():
         name = UNIVERSE_NAME_MAP[ticker]
         print(f"  [{idx:02d}/{len(tickers)}] {ticker} {name}", end=" ... ")
         try:
-            df = yf.download(ticker, start="2025-01-01", end=latest_date_str, progress=False)
+            # 動態計算 start 日期（抓最近 400 個日曆天），確保每天都能拿到最新收盤
+            start_date = (datetime.strptime(latest_date_str, '%Y-%m-%d') - timedelta(days=400)).strftime('%Y-%m-%d')
+            df = yf.download(ticker, start=start_date, end=latest_date_str, progress=False)
             if df.empty or len(df) < 100:
                 print("資料不足，跳過")
                 continue

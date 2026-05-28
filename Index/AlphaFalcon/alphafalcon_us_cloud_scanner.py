@@ -67,13 +67,15 @@ STOCK_THEMES = {
 # ─────────────────────────────────────────────────────────────────────────────
 
 def get_latest_trading_day():
-    """獲取美股最新交易日 (紐約時間盤後)"""
-    # 考量時差，美股收盤為台灣時間凌晨 4:00 (夏令) 或 5:00 (冬令)
-    # 本地運行或 Actions 運行時以當前時間作計算
-    today = datetime.now()
-    # 美股收盤後才執行，通常設定在台灣時間早上 6:00 之後執行
-    if today.hour < 6:
-        today -= timedelta(days=1)
+    """以 UTC 正確推算美股盤後最新交易日（紐約時間 UTC-4/UTC-5）"""
+    from datetime import timezone
+    utc_now = datetime.now(timezone.utc)
+    # 美股正常收盤為 紐約時間 16:00，相當於 UTC 20:00 (夏令) / UTC 21:00 (冬令)
+    # 我們 Actions 設定在 UTC 22:30 執行，此時當日收盤已完成
+    # 若 UTC 小時 < 20，簡守地視為尚未收盤，取前一個交易日
+    if utc_now.hour < 20:
+        utc_now = utc_now - timedelta(days=1)
+    today = utc_now.replace(tzinfo=None)
     while today.weekday() >= 5:
         today -= timedelta(days=1)
     return today.strftime('%Y-%m-%d'), today
@@ -280,7 +282,8 @@ def main():
     print(f"[INFO] 最新交易日: {latest_date_str}")
 
     print("[INFO] 下載標普 500 指數基準 (^GSPC)...")
-    benchmark_df = yf.download("^GSPC", start="2025-01-01", end=latest_date_str, progress=False)
+    start_bm = (datetime.strptime(latest_date_str, '%Y-%m-%d') - timedelta(days=400)).strftime('%Y-%m-%d')
+    benchmark_df = yf.download("^GSPC", start=start_bm, end=latest_date_str, progress=False)
     if benchmark_df.empty:
         benchmark_df = pd.DataFrame({"Close": [5000 + i*5 for i in range(300)]})
         print("[WARN] 標普 500 下載失敗，啟用備援基準線")
@@ -293,7 +296,8 @@ def main():
         name = UNIVERSE_NAME_MAP[ticker]
         print(f"  [{idx:02d}/{len(tickers)}] {ticker} {name}", end=" ... ")
         try:
-            df = yf.download(ticker, start="2025-01-01", end=latest_date_str, progress=False)
+            start_date = (datetime.strptime(latest_date_str, '%Y-%m-%d') - timedelta(days=400)).strftime('%Y-%m-%d')
+            df = yf.download(ticker, start=start_date, end=latest_date_str, progress=False)
             if df.empty or len(df) < 100:
                 print("資料不足，跳過")
                 continue
