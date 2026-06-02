@@ -369,7 +369,7 @@ export default function AlphaFalconPage() {
   
   // 核心數據庫狀態
   const [stocks, setStocks] = useState<StockData[]>(STOCKS_DATABASE_TW);
-  const [selectedSymbol, setSelectedSymbol] = useState<string>('3231');
+  const [selectedSymbol, setSelectedSymbol] = useState<string>('2330');
   const [filterType, setFilterType] = useState<string>('all');
   
   const [isRealData, setIsRealData] = useState<boolean>(false);
@@ -430,7 +430,10 @@ export default function AlphaFalconPage() {
         if (results && results.length > 0) {
           setStocks(results);
           setIsRealData(true);
-          setSelectedSymbol(results[0].symbol);
+          // 確保選中的 symbol 在新數據中存在，否則預設選第一個
+          if (!results.some(s => s.symbol === selectedSymbol)) {
+            setSelectedSymbol(results[0].symbol);
+          }
           setStockCount(results.length);
           if (meta.scanTime) setScanTime(meta.scanTime);
           else if (meta.scan_date) setScanTime(meta.scan_date + " 16:30");
