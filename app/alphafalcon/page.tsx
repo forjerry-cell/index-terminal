@@ -389,7 +389,7 @@ export default function AlphaFalconPage() {
       try {
         let results: StockData[] = [];
         let meta: any = {};
-        let loaded = False;
+        let loaded = false;
 
         // 1. 優先嘗試從靜態 JSON 加載 (極速且免資料庫連接)
         try {
