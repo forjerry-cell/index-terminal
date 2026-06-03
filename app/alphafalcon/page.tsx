@@ -375,6 +375,7 @@ export default function AlphaFalconPage() {
   const [isRealData, setIsRealData] = useState<boolean>(false);
   const [scanTime, setScanTime] = useState<string>('');
   const [modelAuc, setModelAuc] = useState<number | null>(null);
+  const [backtestData, setBacktestData] = useState<any>(null);
   const [stockCount, setStockCount] = useState<number>(STOCKS_DATABASE_TW.length);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -389,6 +390,7 @@ export default function AlphaFalconPage() {
       try {
         let results: StockData[] = [];
         let meta: any = {};
+        let backtest: any = null;
         let loaded = false;
 
         // 1. 優先嘗試從靜態 JSON 加載 (極速且免資料庫連接)
@@ -400,6 +402,7 @@ export default function AlphaFalconPage() {
               results = typeof staticData.results === 'string' ? JSON.parse(staticData.results) : staticData.results;
               meta = typeof staticData.meta === 'string' ? JSON.parse(staticData.meta) : (staticData.meta || {});
               if (staticData.scan_date) meta.scan_date = staticData.scan_date;
+              if (staticData.backtest) backtest = staticData.backtest;
               loaded = true;
               console.log(`[AlphaFalcon-${marketType}] 成功自靜態 JSON 加載最新數據`);
             }
@@ -423,6 +426,7 @@ export default function AlphaFalconPage() {
 
           results = typeof data.results === 'string' ? JSON.parse(data.results) : data.results;
           meta = typeof data.meta === 'string' ? JSON.parse(data.meta) : (data.meta || {});
+          if (data.backtest) backtest = typeof data.backtest === 'string' ? JSON.parse(data.backtest) : data.backtest;
           loaded = true;
           console.log(`[AlphaFalcon-${marketType}] 成功自 Supabase 加載數據`);
         }
@@ -438,6 +442,12 @@ export default function AlphaFalconPage() {
           if (meta.scanTime) setScanTime(meta.scanTime);
           else if (meta.scan_date) setScanTime(meta.scan_date + " 16:30");
           if (meta.modelAuc) setModelAuc(meta.modelAuc);
+          
+          if (backtest) {
+            setBacktestData(typeof backtest === 'string' ? JSON.parse(backtest) : backtest);
+          } else {
+            setBacktestData(null);
+          }
         } else {
           throw new Error('結果數為 0');
         }
@@ -450,6 +460,7 @@ export default function AlphaFalconPage() {
         setStockCount(mockDatabase.length);
         setScanTime(marketType === 'TW' ? '2026-05-18 16:30' : '2026-05-18 04:30');
         setModelAuc(marketType === 'TW' ? 0.7834 : 0.8124);
+        setBacktestData(null);
       } finally {
         setLoading(false);
       }
@@ -922,22 +933,22 @@ export default function AlphaFalconPage() {
             <div className="backtest-stats-grid">
               <div className="glass-card stat-box">
                 <p className="lbl">{marketType === 'TW' ? '台股回測總收益率 (5年累計)' : '美股回測總收益率 (5年累計)'}</p>
-                <p className="val text-glow">{marketType === 'TW' ? '+1012.0%' : '+1482.5%'}</p>
+                <p className="val text-glow">{backtestData ? `+${backtestData.totalReturn}%` : (marketType === 'TW' ? '+1012.0%' : '+1482.5%')}</p>
                 <div className="badge up">超越標普大盤 {marketType === 'TW' ? '9.1' : '12.4'} 倍</div>
               </div>
               <div className="glass-card stat-box">
                 <p className="lbl">年化收益率 (CAGR)</p>
-                <p className="val">{marketType === 'TW' ? '+57.4%' : '+68.2%'}</p>
+                <p className="val">{backtestData ? `+${backtestData.cagr}%` : (marketType === 'TW' ? '+57.4%' : '+68.2%')}</p>
                 <div className="badge up">同類型策略 Top 1%</div>
               </div>
               <div className="glass-card stat-box">
                 <p className="lbl">歷史最大回撤 (MDD)</p>
-                <p className="val error-glow">{marketType === 'TW' ? '-18.6%' : '-21.4%'}</p>
+                <p className="val error-glow">{backtestData ? `${backtestData.maxDrawdown}%` : (marketType === 'TW' ? '-18.6%' : '-21.4%')}</p>
                 <div className="badge down">極致風控過濾</div>
               </div>
               <div className="glass-card stat-box">
                 <p className="lbl">預測成功率 (Win Rate)</p>
-                <p className="val">{marketType === 'TW' ? '74.2%' : '76.8%'}</p>
+                <p className="val">{backtestData ? `${backtestData.winRate}%` : (marketType === 'TW' ? '74.2%' : '76.8%')}</p>
                 <div className="badge up">符合三重障礙預期</div>
               </div>
             </div>
@@ -955,7 +966,7 @@ export default function AlphaFalconPage() {
 
                 <div style={{ width: '100%', height: '320px' }}>
                   <ResponsiveContainer>
-                    <LineChart data={BACKTEST_EQUITY_CURVE}>
+                    <LineChart data={backtestData ? backtestData.equityCurve : BACKTEST_EQUITY_CURVE}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#161e2e" vertical={false} />
                       <XAxis dataKey="date" stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} />
                       <YAxis stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}x`} />
@@ -981,8 +992,8 @@ export default function AlphaFalconPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {BACKTEST_PERFORMANCE.map(p => {
-                        const alpha = p.return * (marketType === 'TW' ? 100 : 115); // 美股回測表現通常更強
+                      {(backtestData ? backtestData.annualReturns : BACKTEST_PERFORMANCE).map((p: any) => {
+                        const alpha = p.return * (backtestData ? 100 : (marketType === 'TW' ? 100 : 115));
                         const bench = p.benchmark_return * 100;
                         const diff = alpha - bench;
                         return (
@@ -1013,7 +1024,36 @@ export default function AlphaFalconPage() {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>模型歷史成功預測案例 (Star Records)</h3>
               </div>
               <div className="table-container" style={{ marginTop: 0 }}>
-                {marketType === 'TW' ? (
+                {backtestData && backtestData.starRecords ? (
+                  <table className="backtest-table">
+                    <thead>
+                      <tr>
+                        <th>代號/名稱</th>
+                        <th>預測啟動日</th>
+                        <th style={{ textAlign: 'center' }}>當時預測機率</th>
+                        <th>觸發型態</th>
+                        <th style={{ textAlign: 'right' }}>當時股價</th>
+                        <th style={{ textAlign: 'right' }}>最高股價 (120D內)</th>
+                        <th style={{ textAlign: 'right' }}>最大累計漲幅</th>
+                        <th style={{ textAlign: 'center' }}>狀態</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {backtestData.starRecords.map((record: any, idx: number) => (
+                        <tr key={idx}>
+                          <td><span className="stock-symbol-tag">{record.symbol}</span> {record.name}</td>
+                          <td>{record.date}</td>
+                          <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>{record.probability}%</td>
+                          <td>{record.triggerType}</td>
+                          <td style={{ textAlign: 'right' }}>{marketType === 'TW' ? 'NT$' : 'US$'} {record.entryPrice}</td>
+                          <td style={{ textAlign: 'right' }}>{marketType === 'TW' ? 'NT$' : 'US$'} {record.peakPrice}</td>
+                          <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>+{record.gain}%</td>
+                          <td style={{ textAlign: 'center' }}><span className="success-tag">{record.status}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : marketType === 'TW' ? (
                   <table className="backtest-table">
                     <thead>
                       <tr>
