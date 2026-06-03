@@ -415,9 +415,9 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
         except:
             pass
 
-    trigger = ("投信鎖碼 + VCP突破" if (vcp_score > 50 and chip_score > 30)
-               else "營收爆發 + 三率三升" if fund_score > 60
-               else "均線多頭 + 產業主流")
+    trigger = ("投信鎖碼 + VCP突破" if (vcp_score >= 40 and chip_score >= 20)
+               else "營收爆發 + 三率三升" if fund_score >= 40
+               else "圖表均線多頭 + 營收雙增")
 
     return {
         "symbol": ticker.split('.')[0],
