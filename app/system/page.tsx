@@ -32,7 +32,7 @@ const LOCAL_STORAGE_KEYS = {
   updatedAt: 'system_last_updated',
 } as const;
 
-const ADMIN_EMAIL = 'forjerry@gmail.com';
+const ADMIN_EMAILS = ['forjerry@gmail.com', 'yichun0515@gmail.com'];
 
 function parseNames(raw: string | null | undefined): string[] {
   if (!raw) return [];
@@ -168,7 +168,7 @@ export default function SystemManagementPage() {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user || user.email !== ADMIN_EMAIL) {
+      if (!user || !ADMIN_EMAILS.includes(user.email ?? '')) {
         setLoading(false);
         return;
       }
