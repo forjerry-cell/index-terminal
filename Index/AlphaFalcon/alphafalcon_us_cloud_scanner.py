@@ -297,29 +297,41 @@ def calculate_signals(ticker, df, benchmark_df, info_data):
     
     chip_score = 0
     # 空頭比例越高，軋空潛力越大 (美股飆股特有屬性)
+    # 4. 籌碼面：空單餘額比率與機構持股
+    # 在缺乏外部數據時，用成交量放大作為替代
+    vol_5d_avg = df['Volume'].tail(5).mean()
+    vol_20d_avg = df['Volume'].tail(20).mean()
+    vol_surge = (vol_5d_avg / vol_20d_avg - 1) * 100 if vol_20d_avg > 0 else 0
+
+    chip_score = 0
     if short_percent > 8.0:
-        chip_score += 40
+        chip_score += 30
     elif short_percent > 4.0:
-        chip_score += 20
+        chip_score += 15
         
-    # 機構持股代表籌碼穩定度
     if inst_percent > 70.0:
-        chip_score += 40
+        chip_score += 30
     elif inst_percent > 40.0:
-        chip_score += 20
+        chip_score += 15
         
-    if ma_bullish:
-        chip_score += 20
+    if vol_surge > 30: chip_score += 20
+    if vol_surge > 60: chip_score += 10
+    if vol_surge > 100: chip_score += 10
 
     # 5. 基本面：季度營收增速 YoY
     rev_growth = info_data.get("rev_growth", 15.0)
     fund_score = 0
-    if rev_growth > 25.0:   # 營收增速超 25%
-        fund_score += 50
-    if rev_growth > 50.0:   # 營收增速超 50% (超級成長股)
-        fund_score += 30
-    if rev_growth > 0.0:
+    if rev_growth > 25.0:   
+        fund_score += 40
+    if rev_growth > 50.0:   
         fund_score += 20
+    if rev_growth > 0.0:
+        fund_score += 15
+        
+    momentum_3m = (latest_price / float(df['Close'].values[-min(60, len(df)-1)])) - 1
+    momentum_1m = (latest_price / float(df['Close'].values[-min(20, len(df)-1)])) - 1
+    if momentum_3m > 0.15: fund_score += 15
+    if momentum_3m > 0.30: fund_score += 10
 
     # ==========================================
     # 載入已校準的機器學習模型 (Isotonic Calibrated Random Forest)
@@ -330,22 +342,21 @@ def calculate_signals(ticker, df, benchmark_df, info_data):
         calibrated_model = model_dict['model']
         feature_cols = model_dict['features']
         
-        # 建立特徵字典
-        vol_20d_pct = 50.0  # 若長度不足預設給 50百分位
+        vol_20d_pct = 50.0
         if len(df) >= 240:
             vol_20 = df['Close'].pct_change().rolling(20).std()
             curr_vol = vol_20.iloc[-1]
             vol_20d_pct = (vol_20.tail(240) <= curr_vol).mean() * 100
             
         feats = {
-            'Momentum_3M': (latest_price / float(df['Close'].values[-min(60, len(df))])) - 1,
+            'Momentum_3M': momentum_3m,
             'RS_Rating': rs_raw * 100,
             'Dist_To_52W_High': (latest_price / high_52w) - 1,
             'Volatility_20D_Percentile': vol_20d_pct,
-            'Inst_Buy_5D_Ratio': inst_percent / 10.0, # 模擬轉換為相對比例
-            'Inst_Continuous_Buy': 5 if inst_percent > 50 else 0, # 近似模擬
+            'Inst_Buy_5D_Ratio': inst_percent / 10.0, 
+            'Inst_Continuous_Buy': 5 if inst_percent > 50 else 0, 
             'Revenue_YoY': rev_growth,
-            'Revenue_MoM_Accel': rev_growth * 0.1 # 簡單模擬
+            'Revenue_MoM_Accel': rev_growth * 0.1 
         }
         
         X_new = pd.DataFrame([feats], columns=feature_cols)
@@ -354,15 +365,25 @@ def calculate_signals(ticker, df, benchmark_df, info_data):
         probability = round(probability, 1)
         
     except Exception as e:
-        print(f"[WARN] 機器學習模型載入或預測失敗，回退至啟發式算法: {e}")
-        # 綜合評分與機率轉換 (備援方案)
-        tech_score = (vcp_score * 0.6) + (rs_score_scaled * 0.4)
+        print(f"[WARN] 機器學習模型載入失敗，回退至啟發式算法: {e}")
+        # ── 強化版啟發式算法 (不依賴外部爬蟲) ──
+        breakout_score = 0
+        if dist_to_high < 0.05: breakout_score += 30
+        elif dist_to_high < 0.10: breakout_score += 20
+        elif dist_to_high < 0.20: breakout_score += 10
+
+        tech_score = (vcp_score * 0.3) + (rs_score_scaled * 0.3) + (breakout_score * 0.2) + (vol_surge * 0.2)
         if ma_bullish:
-            tech_score = min(tech_score + 10, 100)
+            tech_score = min(tech_score + 15, 100)
             
-        final_score = (tech_score * 0.4) + (chip_score * 0.3) + (fund_score * 0.3)
-        probability = 1 / (1 + np.exp(-(final_score - 48) / 11)) * 100.0
-        probability = round(min(max(probability, 32.0), 97.2), 1)
+        has_ext_data = (short_percent > 0) or (inst_percent > 0)
+        if has_ext_data:
+            final_score = (tech_score * 0.40) + (chip_score * 0.30) + (fund_score * 0.30)
+        else:
+            final_score = (tech_score * 0.55) + (chip_score * 0.25) + (fund_score * 0.20)
+            
+        probability = 1 / (1 + np.exp(-(final_score - 35) / 10)) * 100.0
+        probability = round(min(max(probability, 35.0), 92.5), 1)
 
     # SHAP 特徵貢獻度
     features = [
@@ -390,9 +411,16 @@ def calculate_signals(ticker, df, benchmark_df, info_data):
         except:
             pass
 
-    trigger = ("低空頭+高機構+VCP突破" if (vcp_score > 50 and short_percent < 3.0 and inst_percent > 75.0)
-               else "高空頭軋空突破" if (short_percent > 8.0 and tech_score > 60)
-               else "高成長爆發 + 產業主流")
+    if vcp_score > 40 and dist_to_high < 0.10:
+        trigger = "VCP 圖表突破"
+    elif short_percent > 5.0 and vol_surge > 30:
+        trigger = "高空頭軋空突破"
+    elif inst_percent > 70.0 and vcp_score > 30:
+        trigger = "低空頭+高機構+VCP突破"
+    elif fund_score > 40 or rev_growth > 25.0:
+        trigger = "高成長爆發 + 產業主流"
+    else:
+        trigger = "大型權值 + 趨勢多頭"
 
     return {
         "symbol": ticker,

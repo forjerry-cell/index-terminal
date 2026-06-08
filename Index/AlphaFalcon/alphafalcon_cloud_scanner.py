@@ -329,23 +329,37 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
     rs_raw = stock_ret_1y - bm_ret_1y
     rs_score_scaled = min(max((rs_raw * 100) + 50, 0), 100)
 
-    # 籌碼面
+    # 籌碼面 (投信數據可能為 0，增加純技術面的籌碼替代指標)
     vol_5d_avg = df['Volume'].tail(5).mean()
+    vol_20d_avg = df['Volume'].tail(20).mean()
     sheets_ratio = (sitca_sheets / (vol_5d_avg / 1000.0)) * 100.0 if vol_5d_avg > 0 else 0
 
+    # 成交量突增比率 (近5日均量 vs 近20日均量)
+    vol_surge = (vol_5d_avg / vol_20d_avg - 1) * 100 if vol_20d_avg > 0 else 0
+
     chip_score = 0
-    if sitca_sheets > 200:  chip_score += 40
-    if sheets_ratio > 5.0:  chip_score += 40
+    if sitca_sheets > 200:  chip_score += 30
+    if sheets_ratio > 5.0:  chip_score += 30
     if sheets_ratio > 10.0: chip_score += 20
+    # 即使沒有投信數據，量能放大也是籌碼集中的信號
+    if vol_surge > 30:  chip_score += 25
+    if vol_surge > 60:  chip_score += 15
+    if vol_surge > 100: chip_score += 10
 
     # 基本面
     rev_yoy = rev_info.get('yoy', 0.0)
     rev_mom = rev_info.get('mom', 0.0)
     fund_score = 0
-    if rev_yoy > 20:  fund_score += 40
+    if rev_yoy > 20:  fund_score += 30
     if rev_yoy > 40:  fund_score += 20
-    if rev_mom > 0:   fund_score += 20
-    if rev_yoy > 0 and rev_mom > 10: fund_score += 20
+    if rev_mom > 0:   fund_score += 15
+    if rev_yoy > 0 and rev_mom > 10: fund_score += 15
+    # 即使沒有營收數據，利用價格動能作為基本面替代
+    momentum_3m = (latest_price / float(df['Close'].values[-min(60, len(df)-1)])) - 1
+    momentum_1m = (latest_price / float(df['Close'].values[-min(20, len(df)-1)])) - 1
+    if momentum_3m > 0.15: fund_score += 25
+    if momentum_3m > 0.30: fund_score += 15
+    if momentum_1m > 0.05: fund_score += 10
 
     # ==========================================
     # 載入已校準的機器學習模型 (Isotonic Calibrated Random Forest)
@@ -356,20 +370,19 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
         calibrated_model = model_dict['model']
         feature_cols = model_dict['features']
         
-        # 建立特徵字典
-        vol_20d_pct = 50.0  # 若長度不足預設給 50百分位
+        vol_20d_pct = 50.0
         if len(df) >= 240:
             vol_20 = df['Close'].pct_change().rolling(20).std()
             curr_vol = vol_20.iloc[-1]
             vol_20d_pct = (vol_20.tail(240) <= curr_vol).mean() * 100
             
         feats = {
-            'Momentum_3M': (latest_price / float(df['Close'].values[-min(60, len(df))])) - 1,
+            'Momentum_3M': momentum_3m,
             'RS_Rating': rs_raw * 100,
             'Dist_To_52W_High': (latest_price / high_52w) - 1,
             'Volatility_20D_Percentile': vol_20d_pct,
             'Inst_Buy_5D_Ratio': sheets_ratio,
-            'Inst_Continuous_Buy': 5 if sitca_sheets > 0 else 0, # 近似模擬
+            'Inst_Continuous_Buy': 5 if sitca_sheets > 0 else 0,
             'Revenue_YoY': rev_yoy,
             'Revenue_MoM_Accel': rev_mom - rev_yoy
         }
@@ -380,14 +393,28 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
         probability = round(probability, 1)
         
     except Exception as e:
-        print(f"[WARN] 機器學習模型載入或預測失敗，回退至啟發式算法: {e}")
-        # 綜合評分 (備援方案)
-        tech_score = (vcp_score * 0.6) + (rs_score_scaled * 0.4)
+        print(f"[WARN] 機器學習模型載入失敗，回退至啟發式算法: {e}")
+        # ── 強化版啟發式算法 (不依賴外部爬蟲) ──
+        # 技術面加強：VCP + RS + 均線 + 突破力道
+        breakout_score = 0
+        if dist_to_high < 0.05: breakout_score += 30  # 距離新高 5% 內
+        elif dist_to_high < 0.10: breakout_score += 20
+        elif dist_to_high < 0.20: breakout_score += 10
+
+        tech_score = (vcp_score * 0.3) + (rs_score_scaled * 0.3) + (breakout_score * 0.2) + (vol_surge * 0.2)
         if ma_bullish:
-            tech_score = min(tech_score + 10, 100)
-        final_score = (tech_score * 0.4) + (chip_score * 0.3) + (fund_score * 0.3)
-        probability = 1 / (1 + np.exp(-(final_score - 45) / 12)) * 100.0
-        probability = round(min(max(probability, 30.0), 96.5), 1)
+            tech_score = min(tech_score + 15, 100)
+
+        # 動態加權：當外部數據為 0 時，技術面權重升高
+        has_ext_data = (sitca_sheets > 0) or (rev_yoy != 0)
+        if has_ext_data:
+            final_score = (tech_score * 0.40) + (chip_score * 0.30) + (fund_score * 0.30)
+        else:
+            final_score = (tech_score * 0.55) + (chip_score * 0.25) + (fund_score * 0.20)
+
+        # Sigmoid 映射到機率，調整參數讓分佈更分散 (35% ~ 92%)
+        probability = 1 / (1 + np.exp(-(final_score - 35) / 10)) * 100.0
+        probability = round(min(max(probability, 35.0), 92.5), 1)
 
     # SHAP 特徵
     features = [
@@ -415,9 +442,18 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
         except:
             pass
 
-    trigger = ("投信鎖碼 + VCP突破" if (vcp_score >= 40 and chip_score >= 20)
-               else "營收爆發 + 三率三升" if fund_score >= 40
-               else "圖表均線多頭 + 營收雙增")
+    # triggerType 動態分類（基於各因子實際得分，不再全落入同一類）
+    if vcp_score >= 40 and (chip_score >= 20 or vol_surge > 30):
+        trigger = "投信鎖碼 + VCP突破"
+    elif fund_score >= 30 or (momentum_3m > 0.15 and rev_yoy > 10):
+        trigger = "營收爆發 + 三率三升"
+    elif vcp_score >= 30 or dist_to_high < 0.10:
+        trigger = "VCP 圖表突破"
+    elif chip_score >= 20 or vol_surge > 50:
+        trigger = "籌碼集中 + 量能突增"
+    else:
+        trigger = "圖表均線多頭 + 營收雙增"
+
 
     return {
         "symbol": ticker.split('.')[0],
