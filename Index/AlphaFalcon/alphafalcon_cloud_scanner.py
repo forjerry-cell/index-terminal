@@ -27,8 +27,7 @@ API_URL = os.environ.get("API_URL", "https://index-terminal.vercel.app/api/alpha
 API_SECRET = os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY", "")
 
 if not API_SECRET:
-    print("[ERROR] 缺少 NEXT_PUBLIC_SUPABASE_ANON_KEY (API_SECRET) 環境變數以供安全驗證")
-    sys.exit(1)
+    print("[WARN] 缺少 NEXT_PUBLIC_SUPABASE_ANON_KEY (API_SECRET) 環境變數以供安全驗證，這將導致無法寫入雲端資料庫，但仍會產出本地 JSON。")
 
 print(f"[OK] Next.js 安全中轉 API 已就緒: {API_URL}")
 
@@ -361,60 +360,27 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
     if momentum_3m > 0.30: fund_score += 15
     if momentum_1m > 0.05: fund_score += 10
 
-    # ==========================================
-    # 載入已校準的機器學習模型 (Isotonic Calibrated Random Forest)
-    # ==========================================
-    try:
-        import joblib
-        model_dict = joblib.load('Index/AlphaFalcon/models/alphafalcon_tw_calibrated.pkl')
-        calibrated_model = model_dict['model']
-        feature_cols = model_dict['features']
-        
-        vol_20d_pct = 50.0
-        if len(df) >= 240:
-            vol_20 = df['Close'].pct_change().rolling(20).std()
-            curr_vol = vol_20.iloc[-1]
-            vol_20d_pct = (vol_20.tail(240) <= curr_vol).mean() * 100
-            
-        feats = {
-            'Momentum_3M': momentum_3m,
-            'RS_Rating': rs_raw * 100,
-            'Dist_To_52W_High': (latest_price / high_52w) - 1,
-            'Volatility_20D_Percentile': vol_20d_pct,
-            'Inst_Buy_5D_Ratio': sheets_ratio,
-            'Inst_Continuous_Buy': 5 if sitca_sheets > 0 else 0,
-            'Revenue_YoY': rev_yoy,
-            'Revenue_MoM_Accel': rev_mom - rev_yoy
-        }
-        
-        X_new = pd.DataFrame([feats], columns=feature_cols)
-        X_new.fillna(0, inplace=True)
-        probability = float(calibrated_model.predict_proba(X_new)[0, 1]) * 100.0
-        probability = round(probability, 1)
-        
-    except Exception as e:
-        print(f"[WARN] 機器學習模型載入失敗，回退至啟發式算法: {e}")
-        # ── 強化版啟發式算法 (不依賴外部爬蟲) ──
-        # 技術面加強：VCP + RS + 均線 + 突破力道
-        breakout_score = 0
-        if dist_to_high < 0.05: breakout_score += 30  # 距離新高 5% 內
-        elif dist_to_high < 0.10: breakout_score += 20
-        elif dist_to_high < 0.20: breakout_score += 10
+    # ── 強化版啟發式算法 (不依賴外部爬蟲) ──
+    # 技術面加強：VCP + RS + 均線 + 突破力道
+    breakout_score = 0
+    if dist_to_high < 0.05: breakout_score += 30  # 距離新高 5% 內
+    elif dist_to_high < 0.10: breakout_score += 20
+    elif dist_to_high < 0.20: breakout_score += 10
 
-        tech_score = (vcp_score * 0.3) + (rs_score_scaled * 0.3) + (breakout_score * 0.2) + (vol_surge * 0.2)
-        if ma_bullish:
-            tech_score = min(tech_score + 15, 100)
+    tech_score = (vcp_score * 0.3) + (rs_score_scaled * 0.3) + (breakout_score * 0.2) + (vol_surge * 0.2)
+    if ma_bullish:
+        tech_score = min(tech_score + 15, 100)
 
-        # 動態加權：當外部數據為 0 時，技術面權重升高
-        has_ext_data = (sitca_sheets > 0) or (rev_yoy != 0)
-        if has_ext_data:
-            final_score = (tech_score * 0.40) + (chip_score * 0.30) + (fund_score * 0.30)
-        else:
-            final_score = (tech_score * 0.55) + (chip_score * 0.25) + (fund_score * 0.20)
+    # 動態加權：當外部數據為 0 時，技術面權重升高
+    has_ext_data = (sitca_sheets > 0) or (rev_yoy != 0)
+    if has_ext_data:
+        final_score = (tech_score * 0.40) + (chip_score * 0.30) + (fund_score * 0.30)
+    else:
+        final_score = (tech_score * 0.55) + (chip_score * 0.25) + (fund_score * 0.20)
 
-        # Sigmoid 映射到機率，調整參數讓分佈更分散 (35% ~ 92%)
-        probability = 1 / (1 + np.exp(-(final_score - 35) / 10)) * 100.0
-        probability = round(min(max(probability, 35.0), 92.5), 1)
+    # Sigmoid 映射到機率，調整參數讓分佈更分散 (35% ~ 92%)
+    probability = 1 / (1 + np.exp(-(final_score - 35) / 10)) * 100.0
+    probability = round(min(max(probability, 35.0), 92.5), 1)
 
     # SHAP 特徵
     features = [
