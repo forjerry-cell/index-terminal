@@ -348,8 +348,8 @@ def calculate_signals(ticker, df, benchmark_df, info_data):
     else:
         final_score = (tech_score * 0.55) + (chip_score * 0.25) + (fund_score * 0.20)
         
-    probability = 1 / (1 + np.exp(-(final_score - 35) / 10)) * 100.0
-    probability = round(min(max(probability, 35.0), 92.5), 1)
+    probability = 1 / (1 + np.exp(-(final_score - 25) / 15)) * 100.0
+    probability = round(min(probability, 96.5), 1)
 
     # SHAP 特徵貢獻度
     features = [

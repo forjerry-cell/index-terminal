@@ -378,9 +378,10 @@ def calculate_signals(ticker, df, benchmark_df, sitca_sheets, rev_info):
     else:
         final_score = (tech_score * 0.55) + (chip_score * 0.25) + (fund_score * 0.20)
 
-    # Sigmoid 映射到機率，調整參數讓分佈更分散 (35% ~ 92%)
-    probability = 1 / (1 + np.exp(-(final_score - 35) / 10)) * 100.0
-    probability = round(min(max(probability, 35.0), 92.5), 1)
+    # 調整 Sigmoid 映射參數，讓平均分數(約 15-20 分)的股票能自然落在 30%~40% 區間
+    # 這樣就不需要硬性設定 35% 的下限，保留每檔股票的真實機率差異
+    probability = 1 / (1 + np.exp(-(final_score - 25) / 15)) * 100.0
+    probability = round(min(probability, 96.5), 1)  # 僅保留上限，移除硬性下限
 
     # SHAP 特徵
     features = [
