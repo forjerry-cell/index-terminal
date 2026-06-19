@@ -4,7 +4,7 @@
     {
       "symbol": "ARM",
       "name": "安謀 (ARM)",
-      "probability": 89.1,
+      "probability": 88.8,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 99,
       "epsAcceleration": "+20.1% YoY",
@@ -347,7 +347,7 @@
     {
       "symbol": "LLY",
       "name": "禮來 (Eli Lilly)",
-      "probability": 84.9,
+      "probability": 86.1,
       "triggerType": "VCP 圖表突破",
       "rsRating": 69,
       "epsAcceleration": "+55.5% YoY",
@@ -690,7 +690,7 @@
     {
       "symbol": "AMD",
       "name": "超微 (AMD)",
-      "probability": 83.5,
+      "probability": 85.2,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 99,
       "epsAcceleration": "+37.8% YoY",
@@ -1033,7 +1033,7 @@
     {
       "symbol": "DDOG",
       "name": "數狗安全 (Datadog)",
-      "probability": 83.4,
+      "probability": 85.1,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 97,
       "epsAcceleration": "+32.2% YoY",
@@ -1376,7 +1376,7 @@
     {
       "symbol": "ANET",
       "name": "阿里斯塔網路 (Arista Networks)",
-      "probability": 83.4,
+      "probability": 85.1,
       "triggerType": "VCP 圖表突破",
       "rsRating": 99,
       "epsAcceleration": "+35.1% YoY",
@@ -1719,7 +1719,7 @@
     {
       "symbol": "PANW",
       "name": "帕羅奧圖 (Palo Alto)",
-      "probability": 82.8,
+      "probability": 84.7,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 67,
       "epsAcceleration": "+31.1% YoY",
@@ -2062,7 +2062,7 @@
     {
       "symbol": "VRT",
       "name": "維諦技術 (Vertiv)",
-      "probability": 80.2,
+      "probability": 83.2,
       "triggerType": "低空頭+高機構+VCP突破",
       "rsRating": 99,
       "epsAcceleration": "+30.1% YoY",
@@ -2405,7 +2405,7 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR (TSMC)",
-      "probability": 79.5,
+      "probability": 82.8,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 99,
       "epsAcceleration": "+35.1% YoY",
@@ -2748,7 +2748,7 @@
     {
       "symbol": "NVDA",
       "name": "輝達 (NVIDIA)",
-      "probability": 78.4,
+      "probability": 82.2,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 71,
       "epsAcceleration": "+85.2% YoY",
@@ -3091,7 +3091,7 @@
     {
       "symbol": "AVGO",
       "name": "博通 (Broadcom)",
-      "probability": 69.5,
+      "probability": 77.1,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 88,
       "epsAcceleration": "+47.9% YoY",
@@ -3434,7 +3434,7 @@
     {
       "symbol": "CRWD",
       "name": "眾擊安全 (CrowdStrike)",
-      "probability": 66.3,
+      "probability": 75.4,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 64,
       "epsAcceleration": "+25.6% YoY",
@@ -3777,7 +3777,7 @@
     {
       "symbol": "SNOW",
       "name": "雪花計算 (Snowflake)",
-      "probability": 64.7,
+      "probability": 74.4,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+33.5% YoY",
@@ -4120,7 +4120,7 @@
     {
       "symbol": "SMCI",
       "name": "美超微 (Super Micro)",
-      "probability": 62.1,
+      "probability": 73.0,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+122.7% YoY",
@@ -4463,7 +4463,7 @@
     {
       "symbol": "GOOGL",
       "name": "谷歌 (Alphabet)",
-      "probability": 57.4,
+      "probability": 70.4,
       "triggerType": "VCP 圖表突破",
       "rsRating": 99,
       "epsAcceleration": "+21.8% YoY",
@@ -4806,7 +4806,7 @@
     {
       "symbol": "ASML",
       "name": "艾司摩爾 (ASML)",
-      "probability": 55.5,
+      "probability": 69.3,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 99,
       "epsAcceleration": "+13.2% YoY",
@@ -5149,7 +5149,7 @@
     {
       "symbol": "CELH",
       "name": "攝氏飲料 (Celsius)",
-      "probability": 53.5,
+      "probability": 68.1,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+137.7% YoY",
@@ -5492,7 +5492,7 @@
     {
       "symbol": "SOFI",
       "name": "蘇菲金融 (SoFi)",
-      "probability": 51.8,
+      "probability": 67.1,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+42.5% YoY",
@@ -5835,7 +5835,7 @@
     {
       "symbol": "HOOD",
       "name": "羅賓漢 (Robinhood)",
-      "probability": 50.8,
+      "probability": 66.6,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 67,
       "epsAcceleration": "+15.1% YoY",
@@ -6178,7 +6178,7 @@
     {
       "symbol": "ELF",
       "name": "艾夫化妝品 (e.l.f. Beauty)",
-      "probability": 45.7,
+      "probability": 63.5,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+35.1% YoY",
@@ -6521,7 +6521,7 @@
     {
       "symbol": "U",
       "name": "優尼蒂 (Unity)",
-      "probability": 45.6,
+      "probability": 63.4,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 60,
       "epsAcceleration": "+16.8% YoY",
@@ -6864,7 +6864,7 @@
     {
       "symbol": "QCOM",
       "name": "高通 (Qualcomm)",
-      "probability": 43.3,
+      "probability": 61.9,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 76,
       "epsAcceleration": "高利潤擴張中",
@@ -7207,7 +7207,7 @@
     {
       "symbol": "NET",
       "name": "雲閃 (Cloudflare)",
-      "probability": 42.4,
+      "probability": 61.3,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+33.5% YoY",
@@ -7550,7 +7550,7 @@
     {
       "symbol": "NFLX",
       "name": "網飛 (Netflix)",
-      "probability": 40.6,
+      "probability": 60.2,
       "triggerType": "低空頭+高機構+VCP突破",
       "rsRating": 60,
       "epsAcceleration": "+16.2% YoY",
@@ -7893,7 +7893,7 @@
     {
       "symbol": "AAPL",
       "name": "蘋果 (Apple)",
-      "probability": 39.8,
+      "probability": 59.6,
       "triggerType": "VCP 圖表突破",
       "rsRating": 73,
       "epsAcceleration": "+16.6% YoY",
@@ -8236,7 +8236,7 @@
     {
       "symbol": "SE",
       "name": "冬海集團 (Sea Limited)",
-      "probability": 38.7,
+      "probability": 58.9,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+46.6% YoY",
@@ -8579,7 +8579,7 @@
     {
       "symbol": "MELI",
       "name": "美卡多 (MercadoLibre)",
-      "probability": 36.2,
+      "probability": 57.2,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+49.0% YoY",
@@ -8922,7 +8922,7 @@
     {
       "symbol": "PLTR",
       "name": "帕蘭泰爾 (Palantir)",
-      "probability": 35.1,
+      "probability": 56.4,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+84.7% YoY",
@@ -9263,1038 +9263,9 @@
       ]
     },
     {
-      "symbol": "MSFT",
-      "name": "微軟 (Microsoft)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+18.3% YoY",
-      "sitcaForce": "1.19% (券商融券比率)",
-      "chipConcentration": "75.8% (機構總持倉)",
-      "currentPrice": 379.4,
-      "targetPrice": 569.1,
-      "stopLoss": 322.49,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 6.0,
-          "type": "neutral"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 7.6,
-          "type": "positive"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 0.0,
-          "type": "negative"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 0.6,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 370.2,
-          "benchmark_value": 333.4
-        },
-        {
-          "date": "2026-03-26",
-          "value": 365.2,
-          "benchmark_value": 327.6
-        },
-        {
-          "date": "2026-03-27",
-          "value": 356.0,
-          "benchmark_value": 322.2
-        },
-        {
-          "date": "2026-03-30",
-          "value": 358.2,
-          "benchmark_value": 320.9
-        },
-        {
-          "date": "2026-03-31",
-          "value": 369.4,
-          "benchmark_value": 330.2
-        },
-        {
-          "date": "2026-04-01",
-          "value": 368.6,
-          "benchmark_value": 332.6
-        },
-        {
-          "date": "2026-04-02",
-          "value": 372.7,
-          "benchmark_value": 333.0
-        },
-        {
-          "date": "2026-04-06",
-          "value": 372.1,
-          "benchmark_value": 334.4
-        },
-        {
-          "date": "2026-04-07",
-          "value": 371.5,
-          "benchmark_value": 334.7
-        },
-        {
-          "date": "2026-04-08",
-          "value": 373.5,
-          "benchmark_value": 343.1
-        },
-        {
-          "date": "2026-04-09",
-          "value": 372.3,
-          "benchmark_value": 345.2
-        },
-        {
-          "date": "2026-04-10",
-          "value": 370.1,
-          "benchmark_value": 344.8
-        },
-        {
-          "date": "2026-04-13",
-          "value": 383.5,
-          "benchmark_value": 348.3
-        },
-        {
-          "date": "2026-04-14",
-          "value": 392.3,
-          "benchmark_value": 352.4
-        },
-        {
-          "date": "2026-04-15",
-          "value": 410.3,
-          "benchmark_value": 355.2
-        },
-        {
-          "date": "2026-04-16",
-          "value": 419.4,
-          "benchmark_value": 356.2
-        },
-        {
-          "date": "2026-04-17",
-          "value": 421.9,
-          "benchmark_value": 360.5
-        },
-        {
-          "date": "2026-04-20",
-          "value": 417.2,
-          "benchmark_value": 359.6
-        },
-        {
-          "date": "2026-04-21",
-          "value": 423.2,
-          "benchmark_value": 357.3
-        },
-        {
-          "date": "2026-04-22",
-          "value": 432.0,
-          "benchmark_value": 361.1
-        },
-        {
-          "date": "2026-04-23",
-          "value": 414.9,
-          "benchmark_value": 359.6
-        },
-        {
-          "date": "2026-04-24",
-          "value": 423.7,
-          "benchmark_value": 362.4
-        },
-        {
-          "date": "2026-04-27",
-          "value": 423.9,
-          "benchmark_value": 362.9
-        },
-        {
-          "date": "2026-04-28",
-          "value": 428.3,
-          "benchmark_value": 361.1
-        },
-        {
-          "date": "2026-04-29",
-          "value": 423.5,
-          "benchmark_value": 361.0
-        },
-        {
-          "date": "2026-04-30",
-          "value": 406.9,
-          "benchmark_value": 364.7
-        },
-        {
-          "date": "2026-05-01",
-          "value": 413.5,
-          "benchmark_value": 365.7
-        },
-        {
-          "date": "2026-05-04",
-          "value": 412.7,
-          "benchmark_value": 364.2
-        },
-        {
-          "date": "2026-05-05",
-          "value": 410.5,
-          "benchmark_value": 367.2
-        },
-        {
-          "date": "2026-05-06",
-          "value": 413.1,
-          "benchmark_value": 372.5
-        },
-        {
-          "date": "2026-05-07",
-          "value": 419.9,
-          "benchmark_value": 371.1
-        },
-        {
-          "date": "2026-05-08",
-          "value": 414.2,
-          "benchmark_value": 374.3
-        },
-        {
-          "date": "2026-05-11",
-          "value": 411.8,
-          "benchmark_value": 375.0
-        },
-        {
-          "date": "2026-05-12",
-          "value": 406.9,
-          "benchmark_value": 374.4
-        },
-        {
-          "date": "2026-05-13",
-          "value": 404.3,
-          "benchmark_value": 376.6
-        },
-        {
-          "date": "2026-05-14",
-          "value": 408.5,
-          "benchmark_value": 379.4
-        },
-        {
-          "date": "2026-05-15",
-          "value": 421.0,
-          "benchmark_value": 374.7
-        },
-        {
-          "date": "2026-05-18",
-          "value": 422.6,
-          "benchmark_value": 374.5
-        },
-        {
-          "date": "2026-05-19",
-          "value": 416.5,
-          "benchmark_value": 372.0
-        },
-        {
-          "date": "2026-05-20",
-          "value": 420.1,
-          "benchmark_value": 376.0
-        },
-        {
-          "date": "2026-05-21",
-          "value": 419.1,
-          "benchmark_value": 376.6
-        },
-        {
-          "date": "2026-05-22",
-          "value": 418.6,
-          "benchmark_value": 378.0
-        },
-        {
-          "date": "2026-05-26",
-          "value": 416.0,
-          "benchmark_value": 380.3
-        },
-        {
-          "date": "2026-05-27",
-          "value": 412.7,
-          "benchmark_value": 380.4
-        },
-        {
-          "date": "2026-05-28",
-          "value": 427.0,
-          "benchmark_value": 382.6
-        },
-        {
-          "date": "2026-05-29",
-          "value": 450.2,
-          "benchmark_value": 383.4
-        },
-        {
-          "date": "2026-06-01",
-          "value": 460.5,
-          "benchmark_value": 384.4
-        },
-        {
-          "date": "2026-06-02",
-          "value": 441.3,
-          "benchmark_value": 384.9
-        },
-        {
-          "date": "2026-06-03",
-          "value": 427.3,
-          "benchmark_value": 382.1
-        },
-        {
-          "date": "2026-06-04",
-          "value": 428.0,
-          "benchmark_value": 383.6
-        },
-        {
-          "date": "2026-06-05",
-          "value": 416.7,
-          "benchmark_value": 373.5
-        },
-        {
-          "date": "2026-06-08",
-          "value": 411.7,
-          "benchmark_value": 374.6
-        },
-        {
-          "date": "2026-06-09",
-          "value": 403.4,
-          "benchmark_value": 373.6
-        },
-        {
-          "date": "2026-06-10",
-          "value": 397.4,
-          "benchmark_value": 367.6
-        },
-        {
-          "date": "2026-06-11",
-          "value": 390.3,
-          "benchmark_value": 374.0
-        },
-        {
-          "date": "2026-06-12",
-          "value": 390.7,
-          "benchmark_value": 375.9
-        },
-        {
-          "date": "2026-06-15",
-          "value": 399.8,
-          "benchmark_value": 382.1
-        },
-        {
-          "date": "2026-06-16",
-          "value": 393.8,
-          "benchmark_value": 379.9
-        },
-        {
-          "date": "2026-06-17",
-          "value": 378.9,
-          "benchmark_value": 375.3
-        },
-        {
-          "date": "2026-06-18",
-          "value": 379.4,
-          "benchmark_value": 379.4
-        }
-      ]
-    },
-    {
-      "symbol": "TSLA",
-      "name": "特斯拉 (Tesla)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+15.8% YoY",
-      "sitcaForce": "2.3% (券商融券比率)",
-      "chipConcentration": "44.9% (機構總持倉)",
-      "currentPrice": 400.49,
-      "targetPrice": 600.73,
-      "stopLoss": 340.42,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 3.0,
-          "type": "neutral"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 4.5,
-          "type": "negative"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 3.0,
-          "type": "negative"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 6.1,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 386.0,
-          "benchmark_value": 352.0
-        },
-        {
-          "date": "2026-03-26",
-          "value": 372.1,
-          "benchmark_value": 345.8
-        },
-        {
-          "date": "2026-03-27",
-          "value": 361.8,
-          "benchmark_value": 340.1
-        },
-        {
-          "date": "2026-03-30",
-          "value": 355.3,
-          "benchmark_value": 338.7
-        },
-        {
-          "date": "2026-03-31",
-          "value": 371.8,
-          "benchmark_value": 348.6
-        },
-        {
-          "date": "2026-04-01",
-          "value": 381.3,
-          "benchmark_value": 351.1
-        },
-        {
-          "date": "2026-04-02",
-          "value": 360.6,
-          "benchmark_value": 351.5
-        },
-        {
-          "date": "2026-04-06",
-          "value": 352.8,
-          "benchmark_value": 353.0
-        },
-        {
-          "date": "2026-04-07",
-          "value": 346.6,
-          "benchmark_value": 353.3
-        },
-        {
-          "date": "2026-04-08",
-          "value": 343.2,
-          "benchmark_value": 362.2
-        },
-        {
-          "date": "2026-04-09",
-          "value": 345.6,
-          "benchmark_value": 364.4
-        },
-        {
-          "date": "2026-04-10",
-          "value": 349.0,
-          "benchmark_value": 364.0
-        },
-        {
-          "date": "2026-04-13",
-          "value": 352.4,
-          "benchmark_value": 367.7
-        },
-        {
-          "date": "2026-04-14",
-          "value": 364.2,
-          "benchmark_value": 372.0
-        },
-        {
-          "date": "2026-04-15",
-          "value": 392.0,
-          "benchmark_value": 375.0
-        },
-        {
-          "date": "2026-04-16",
-          "value": 388.9,
-          "benchmark_value": 376.0
-        },
-        {
-          "date": "2026-04-17",
-          "value": 400.6,
-          "benchmark_value": 380.5
-        },
-        {
-          "date": "2026-04-20",
-          "value": 392.5,
-          "benchmark_value": 379.6
-        },
-        {
-          "date": "2026-04-21",
-          "value": 386.4,
-          "benchmark_value": 377.2
-        },
-        {
-          "date": "2026-04-22",
-          "value": 387.5,
-          "benchmark_value": 381.1
-        },
-        {
-          "date": "2026-04-23",
-          "value": 373.7,
-          "benchmark_value": 379.5
-        },
-        {
-          "date": "2026-04-24",
-          "value": 376.3,
-          "benchmark_value": 382.6
-        },
-        {
-          "date": "2026-04-27",
-          "value": 378.7,
-          "benchmark_value": 383.0
-        },
-        {
-          "date": "2026-04-28",
-          "value": 376.0,
-          "benchmark_value": 381.2
-        },
-        {
-          "date": "2026-04-29",
-          "value": 372.8,
-          "benchmark_value": 381.0
-        },
-        {
-          "date": "2026-04-30",
-          "value": 381.6,
-          "benchmark_value": 384.9
-        },
-        {
-          "date": "2026-05-01",
-          "value": 390.8,
-          "benchmark_value": 386.0
-        },
-        {
-          "date": "2026-05-04",
-          "value": 392.5,
-          "benchmark_value": 384.5
-        },
-        {
-          "date": "2026-05-05",
-          "value": 389.4,
-          "benchmark_value": 387.6
-        },
-        {
-          "date": "2026-05-06",
-          "value": 398.7,
-          "benchmark_value": 393.3
-        },
-        {
-          "date": "2026-05-07",
-          "value": 411.8,
-          "benchmark_value": 391.8
-        },
-        {
-          "date": "2026-05-08",
-          "value": 428.4,
-          "benchmark_value": 395.1
-        },
-        {
-          "date": "2026-05-11",
-          "value": 445.0,
-          "benchmark_value": 395.8
-        },
-        {
-          "date": "2026-05-12",
-          "value": 433.5,
-          "benchmark_value": 395.2
-        },
-        {
-          "date": "2026-05-13",
-          "value": 445.3,
-          "benchmark_value": 397.5
-        },
-        {
-          "date": "2026-05-14",
-          "value": 443.3,
-          "benchmark_value": 400.5
-        },
-        {
-          "date": "2026-05-15",
-          "value": 422.2,
-          "benchmark_value": 395.6
-        },
-        {
-          "date": "2026-05-18",
-          "value": 410.0,
-          "benchmark_value": 395.3
-        },
-        {
-          "date": "2026-05-19",
-          "value": 404.1,
-          "benchmark_value": 392.6
-        },
-        {
-          "date": "2026-05-20",
-          "value": 417.3,
-          "benchmark_value": 396.9
-        },
-        {
-          "date": "2026-05-21",
-          "value": 417.9,
-          "benchmark_value": 397.6
-        },
-        {
-          "date": "2026-05-22",
-          "value": 426.0,
-          "benchmark_value": 399.0
-        },
-        {
-          "date": "2026-05-26",
-          "value": 433.6,
-          "benchmark_value": 401.5
-        },
-        {
-          "date": "2026-05-27",
-          "value": 440.4,
-          "benchmark_value": 401.5
-        },
-        {
-          "date": "2026-05-28",
-          "value": 442.1,
-          "benchmark_value": 403.9
-        },
-        {
-          "date": "2026-05-29",
-          "value": 435.8,
-          "benchmark_value": 404.7
-        },
-        {
-          "date": "2026-06-01",
-          "value": 415.9,
-          "benchmark_value": 405.8
-        },
-        {
-          "date": "2026-06-02",
-          "value": 423.7,
-          "benchmark_value": 406.3
-        },
-        {
-          "date": "2026-06-03",
-          "value": 423.7,
-          "benchmark_value": 403.3
-        },
-        {
-          "date": "2026-06-04",
-          "value": 418.5,
-          "benchmark_value": 405.0
-        },
-        {
-          "date": "2026-06-05",
-          "value": 391.0,
-          "benchmark_value": 394.3
-        },
-        {
-          "date": "2026-06-08",
-          "value": 409.0,
-          "benchmark_value": 395.4
-        },
-        {
-          "date": "2026-06-09",
-          "value": 396.7,
-          "benchmark_value": 394.4
-        },
-        {
-          "date": "2026-06-10",
-          "value": 381.6,
-          "benchmark_value": 388.0
-        },
-        {
-          "date": "2026-06-11",
-          "value": 399.1,
-          "benchmark_value": 394.8
-        },
-        {
-          "date": "2026-06-12",
-          "value": 406.4,
-          "benchmark_value": 396.8
-        },
-        {
-          "date": "2026-06-15",
-          "value": 411.1,
-          "benchmark_value": 403.4
-        },
-        {
-          "date": "2026-06-16",
-          "value": 404.7,
-          "benchmark_value": 401.1
-        },
-        {
-          "date": "2026-06-17",
-          "value": 396.4,
-          "benchmark_value": 396.2
-        },
-        {
-          "date": "2026-06-18",
-          "value": 400.5,
-          "benchmark_value": 400.5
-        }
-      ]
-    },
-    {
-      "symbol": "AMZN",
-      "name": "亞馬遜 (Amazon)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+16.6% YoY",
-      "sitcaForce": "0.94% (券商融券比率)",
-      "chipConcentration": "68.0% (機構總持倉)",
-      "currentPrice": 244.39,
-      "targetPrice": 366.58,
-      "stopLoss": 207.73,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 3.0,
-          "type": "neutral"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 6.8,
-          "type": "positive"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 9.0,
-          "type": "positive"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 6.4,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 211.7,
-          "benchmark_value": 214.8
-        },
-        {
-          "date": "2026-03-26",
-          "value": 207.5,
-          "benchmark_value": 211.0
-        },
-        {
-          "date": "2026-03-27",
-          "value": 199.3,
-          "benchmark_value": 207.5
-        },
-        {
-          "date": "2026-03-30",
-          "value": 200.9,
-          "benchmark_value": 206.7
-        },
-        {
-          "date": "2026-03-31",
-          "value": 208.3,
-          "benchmark_value": 212.7
-        },
-        {
-          "date": "2026-04-01",
-          "value": 210.6,
-          "benchmark_value": 214.2
-        },
-        {
-          "date": "2026-04-02",
-          "value": 209.8,
-          "benchmark_value": 214.5
-        },
-        {
-          "date": "2026-04-06",
-          "value": 212.8,
-          "benchmark_value": 215.4
-        },
-        {
-          "date": "2026-04-07",
-          "value": 213.8,
-          "benchmark_value": 215.6
-        },
-        {
-          "date": "2026-04-08",
-          "value": 221.2,
-          "benchmark_value": 221.0
-        },
-        {
-          "date": "2026-04-09",
-          "value": 233.6,
-          "benchmark_value": 222.4
-        },
-        {
-          "date": "2026-04-10",
-          "value": 238.4,
-          "benchmark_value": 222.1
-        },
-        {
-          "date": "2026-04-13",
-          "value": 239.9,
-          "benchmark_value": 224.4
-        },
-        {
-          "date": "2026-04-14",
-          "value": 249.0,
-          "benchmark_value": 227.0
-        },
-        {
-          "date": "2026-04-15",
-          "value": 248.5,
-          "benchmark_value": 228.8
-        },
-        {
-          "date": "2026-04-16",
-          "value": 249.7,
-          "benchmark_value": 229.4
-        },
-        {
-          "date": "2026-04-17",
-          "value": 250.6,
-          "benchmark_value": 232.2
-        },
-        {
-          "date": "2026-04-20",
-          "value": 248.3,
-          "benchmark_value": 231.6
-        },
-        {
-          "date": "2026-04-21",
-          "value": 249.9,
-          "benchmark_value": 230.2
-        },
-        {
-          "date": "2026-04-22",
-          "value": 255.4,
-          "benchmark_value": 232.6
-        },
-        {
-          "date": "2026-04-23",
-          "value": 255.1,
-          "benchmark_value": 231.6
-        },
-        {
-          "date": "2026-04-24",
-          "value": 264.0,
-          "benchmark_value": 233.5
-        },
-        {
-          "date": "2026-04-27",
-          "value": 261.1,
-          "benchmark_value": 233.7
-        },
-        {
-          "date": "2026-04-28",
-          "value": 259.7,
-          "benchmark_value": 232.6
-        },
-        {
-          "date": "2026-04-29",
-          "value": 263.0,
-          "benchmark_value": 232.5
-        },
-        {
-          "date": "2026-04-30",
-          "value": 265.1,
-          "benchmark_value": 234.9
-        },
-        {
-          "date": "2026-05-01",
-          "value": 268.3,
-          "benchmark_value": 235.6
-        },
-        {
-          "date": "2026-05-04",
-          "value": 272.0,
-          "benchmark_value": 234.6
-        },
-        {
-          "date": "2026-05-05",
-          "value": 273.5,
-          "benchmark_value": 236.5
-        },
-        {
-          "date": "2026-05-06",
-          "value": 275.0,
-          "benchmark_value": 240.0
-        },
-        {
-          "date": "2026-05-07",
-          "value": 271.2,
-          "benchmark_value": 239.1
-        },
-        {
-          "date": "2026-05-08",
-          "value": 272.7,
-          "benchmark_value": 241.1
-        },
-        {
-          "date": "2026-05-11",
-          "value": 269.0,
-          "benchmark_value": 241.5
-        },
-        {
-          "date": "2026-05-12",
-          "value": 265.8,
-          "benchmark_value": 241.1
-        },
-        {
-          "date": "2026-05-13",
-          "value": 270.1,
-          "benchmark_value": 242.6
-        },
-        {
-          "date": "2026-05-14",
-          "value": 267.2,
-          "benchmark_value": 244.4
-        },
-        {
-          "date": "2026-05-15",
-          "value": 264.1,
-          "benchmark_value": 241.4
-        },
-        {
-          "date": "2026-05-18",
-          "value": 264.9,
-          "benchmark_value": 241.2
-        },
-        {
-          "date": "2026-05-19",
-          "value": 259.3,
-          "benchmark_value": 239.6
-        },
-        {
-          "date": "2026-05-20",
-          "value": 265.0,
-          "benchmark_value": 242.2
-        },
-        {
-          "date": "2026-05-21",
-          "value": 268.5,
-          "benchmark_value": 242.6
-        },
-        {
-          "date": "2026-05-22",
-          "value": 266.3,
-          "benchmark_value": 243.5
-        },
-        {
-          "date": "2026-05-26",
-          "value": 265.3,
-          "benchmark_value": 245.0
-        },
-        {
-          "date": "2026-05-27",
-          "value": 271.9,
-          "benchmark_value": 245.0
-        },
-        {
-          "date": "2026-05-28",
-          "value": 274.0,
-          "benchmark_value": 246.4
-        },
-        {
-          "date": "2026-05-29",
-          "value": 270.6,
-          "benchmark_value": 247.0
-        },
-        {
-          "date": "2026-06-01",
-          "value": 261.3,
-          "benchmark_value": 247.6
-        },
-        {
-          "date": "2026-06-02",
-          "value": 256.5,
-          "benchmark_value": 247.9
-        },
-        {
-          "date": "2026-06-03",
-          "value": 250.0,
-          "benchmark_value": 246.1
-        },
-        {
-          "date": "2026-06-04",
-          "value": 253.8,
-          "benchmark_value": 247.1
-        },
-        {
-          "date": "2026-06-05",
-          "value": 246.0,
-          "benchmark_value": 240.6
-        },
-        {
-          "date": "2026-06-08",
-          "value": 245.2,
-          "benchmark_value": 241.3
-        },
-        {
-          "date": "2026-06-09",
-          "value": 244.2,
-          "benchmark_value": 240.7
-        },
-        {
-          "date": "2026-06-10",
-          "value": 238.0,
-          "benchmark_value": 236.8
-        },
-        {
-          "date": "2026-06-11",
-          "value": 241.5,
-          "benchmark_value": 240.9
-        },
-        {
-          "date": "2026-06-12",
-          "value": 238.6,
-          "benchmark_value": 242.1
-        },
-        {
-          "date": "2026-06-15",
-          "value": 246.0,
-          "benchmark_value": 246.1
-        },
-        {
-          "date": "2026-06-16",
-          "value": 246.0,
-          "benchmark_value": 244.7
-        },
-        {
-          "date": "2026-06-17",
-          "value": 237.5,
-          "benchmark_value": 241.8
-        },
-        {
-          "date": "2026-06-18",
-          "value": 244.4,
-          "benchmark_value": 244.4
-        }
-      ]
-    },
-    {
       "symbol": "META",
       "name": "臉書 (Meta)",
-      "probability": 35.0,
+      "probability": 52.1,
       "triggerType": "高成長爆發 + 產業主流",
       "rsRating": 60,
       "epsAcceleration": "+33.1% YoY",
@@ -10635,9 +9606,1038 @@
       ]
     },
     {
+      "symbol": "DKNG",
+      "name": "選秀國王 (DraftKings)",
+      "probability": 51.8,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+16.8% YoY",
+      "sitcaForce": "8.79% (券商融券比率)",
+      "chipConcentration": "80.1% (機構總持倉)",
+      "currentPrice": 26.39,
+      "targetPrice": 39.58,
+      "stopLoss": 22.43,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 12.0,
+          "type": "positive"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 8.0,
+          "type": "positive"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 0.0,
+          "type": "negative"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 0.0,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 21.4,
+          "benchmark_value": 23.2
+        },
+        {
+          "date": "2026-03-26",
+          "value": 21.3,
+          "benchmark_value": 22.8
+        },
+        {
+          "date": "2026-03-27",
+          "value": 20.7,
+          "benchmark_value": 22.4
+        },
+        {
+          "date": "2026-03-30",
+          "value": 20.9,
+          "benchmark_value": 22.3
+        },
+        {
+          "date": "2026-03-31",
+          "value": 21.6,
+          "benchmark_value": 23.0
+        },
+        {
+          "date": "2026-04-01",
+          "value": 22.2,
+          "benchmark_value": 23.1
+        },
+        {
+          "date": "2026-04-02",
+          "value": 23.2,
+          "benchmark_value": 23.2
+        },
+        {
+          "date": "2026-04-06",
+          "value": 22.9,
+          "benchmark_value": 23.3
+        },
+        {
+          "date": "2026-04-07",
+          "value": 23.0,
+          "benchmark_value": 23.3
+        },
+        {
+          "date": "2026-04-08",
+          "value": 23.9,
+          "benchmark_value": 23.9
+        },
+        {
+          "date": "2026-04-09",
+          "value": 22.2,
+          "benchmark_value": 24.0
+        },
+        {
+          "date": "2026-04-10",
+          "value": 22.2,
+          "benchmark_value": 24.0
+        },
+        {
+          "date": "2026-04-13",
+          "value": 22.5,
+          "benchmark_value": 24.2
+        },
+        {
+          "date": "2026-04-14",
+          "value": 23.0,
+          "benchmark_value": 24.5
+        },
+        {
+          "date": "2026-04-15",
+          "value": 23.6,
+          "benchmark_value": 24.7
+        },
+        {
+          "date": "2026-04-16",
+          "value": 23.7,
+          "benchmark_value": 24.8
+        },
+        {
+          "date": "2026-04-17",
+          "value": 22.8,
+          "benchmark_value": 25.1
+        },
+        {
+          "date": "2026-04-20",
+          "value": 22.9,
+          "benchmark_value": 25.0
+        },
+        {
+          "date": "2026-04-21",
+          "value": 23.0,
+          "benchmark_value": 24.9
+        },
+        {
+          "date": "2026-04-22",
+          "value": 22.5,
+          "benchmark_value": 25.1
+        },
+        {
+          "date": "2026-04-23",
+          "value": 22.2,
+          "benchmark_value": 25.0
+        },
+        {
+          "date": "2026-04-24",
+          "value": 23.2,
+          "benchmark_value": 25.2
+        },
+        {
+          "date": "2026-04-27",
+          "value": 23.5,
+          "benchmark_value": 25.2
+        },
+        {
+          "date": "2026-04-28",
+          "value": 23.4,
+          "benchmark_value": 25.1
+        },
+        {
+          "date": "2026-04-29",
+          "value": 23.1,
+          "benchmark_value": 25.1
+        },
+        {
+          "date": "2026-04-30",
+          "value": 23.3,
+          "benchmark_value": 25.4
+        },
+        {
+          "date": "2026-05-01",
+          "value": 23.0,
+          "benchmark_value": 25.4
+        },
+        {
+          "date": "2026-05-04",
+          "value": 23.6,
+          "benchmark_value": 25.3
+        },
+        {
+          "date": "2026-05-05",
+          "value": 24.2,
+          "benchmark_value": 25.5
+        },
+        {
+          "date": "2026-05-06",
+          "value": 23.9,
+          "benchmark_value": 25.9
+        },
+        {
+          "date": "2026-05-07",
+          "value": 25.2,
+          "benchmark_value": 25.8
+        },
+        {
+          "date": "2026-05-08",
+          "value": 25.5,
+          "benchmark_value": 26.0
+        },
+        {
+          "date": "2026-05-11",
+          "value": 24.5,
+          "benchmark_value": 26.1
+        },
+        {
+          "date": "2026-05-12",
+          "value": 24.6,
+          "benchmark_value": 26.0
+        },
+        {
+          "date": "2026-05-13",
+          "value": 25.0,
+          "benchmark_value": 26.2
+        },
+        {
+          "date": "2026-05-14",
+          "value": 25.1,
+          "benchmark_value": 26.4
+        },
+        {
+          "date": "2026-05-15",
+          "value": 25.0,
+          "benchmark_value": 26.1
+        },
+        {
+          "date": "2026-05-18",
+          "value": 25.8,
+          "benchmark_value": 26.0
+        },
+        {
+          "date": "2026-05-19",
+          "value": 25.5,
+          "benchmark_value": 25.9
+        },
+        {
+          "date": "2026-05-20",
+          "value": 25.0,
+          "benchmark_value": 26.2
+        },
+        {
+          "date": "2026-05-21",
+          "value": 25.4,
+          "benchmark_value": 26.2
+        },
+        {
+          "date": "2026-05-22",
+          "value": 25.1,
+          "benchmark_value": 26.3
+        },
+        {
+          "date": "2026-05-26",
+          "value": 23.8,
+          "benchmark_value": 26.5
+        },
+        {
+          "date": "2026-05-27",
+          "value": 25.1,
+          "benchmark_value": 26.5
+        },
+        {
+          "date": "2026-05-28",
+          "value": 24.5,
+          "benchmark_value": 26.6
+        },
+        {
+          "date": "2026-05-29",
+          "value": 24.5,
+          "benchmark_value": 26.7
+        },
+        {
+          "date": "2026-06-01",
+          "value": 26.3,
+          "benchmark_value": 26.7
+        },
+        {
+          "date": "2026-06-02",
+          "value": 25.3,
+          "benchmark_value": 26.8
+        },
+        {
+          "date": "2026-06-03",
+          "value": 25.1,
+          "benchmark_value": 26.6
+        },
+        {
+          "date": "2026-06-04",
+          "value": 25.4,
+          "benchmark_value": 26.7
+        },
+        {
+          "date": "2026-06-05",
+          "value": 24.9,
+          "benchmark_value": 26.0
+        },
+        {
+          "date": "2026-06-08",
+          "value": 24.8,
+          "benchmark_value": 26.1
+        },
+        {
+          "date": "2026-06-09",
+          "value": 27.6,
+          "benchmark_value": 26.0
+        },
+        {
+          "date": "2026-06-10",
+          "value": 28.8,
+          "benchmark_value": 25.6
+        },
+        {
+          "date": "2026-06-11",
+          "value": 30.0,
+          "benchmark_value": 26.0
+        },
+        {
+          "date": "2026-06-12",
+          "value": 29.0,
+          "benchmark_value": 26.1
+        },
+        {
+          "date": "2026-06-15",
+          "value": 28.8,
+          "benchmark_value": 26.6
+        },
+        {
+          "date": "2026-06-16",
+          "value": 28.5,
+          "benchmark_value": 26.4
+        },
+        {
+          "date": "2026-06-17",
+          "value": 26.3,
+          "benchmark_value": 26.1
+        },
+        {
+          "date": "2026-06-18",
+          "value": 26.4,
+          "benchmark_value": 26.4
+        }
+      ]
+    },
+    {
+      "symbol": "AMZN",
+      "name": "亞馬遜 (Amazon)",
+      "probability": 51.4,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+16.6% YoY",
+      "sitcaForce": "0.94% (券商融券比率)",
+      "chipConcentration": "68.0% (機構總持倉)",
+      "currentPrice": 244.39,
+      "targetPrice": 366.58,
+      "stopLoss": 207.73,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 3.0,
+          "type": "neutral"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 6.8,
+          "type": "positive"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 9.0,
+          "type": "positive"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 6.4,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 211.7,
+          "benchmark_value": 214.8
+        },
+        {
+          "date": "2026-03-26",
+          "value": 207.5,
+          "benchmark_value": 211.0
+        },
+        {
+          "date": "2026-03-27",
+          "value": 199.3,
+          "benchmark_value": 207.5
+        },
+        {
+          "date": "2026-03-30",
+          "value": 200.9,
+          "benchmark_value": 206.7
+        },
+        {
+          "date": "2026-03-31",
+          "value": 208.3,
+          "benchmark_value": 212.7
+        },
+        {
+          "date": "2026-04-01",
+          "value": 210.6,
+          "benchmark_value": 214.2
+        },
+        {
+          "date": "2026-04-02",
+          "value": 209.8,
+          "benchmark_value": 214.5
+        },
+        {
+          "date": "2026-04-06",
+          "value": 212.8,
+          "benchmark_value": 215.4
+        },
+        {
+          "date": "2026-04-07",
+          "value": 213.8,
+          "benchmark_value": 215.6
+        },
+        {
+          "date": "2026-04-08",
+          "value": 221.2,
+          "benchmark_value": 221.0
+        },
+        {
+          "date": "2026-04-09",
+          "value": 233.6,
+          "benchmark_value": 222.4
+        },
+        {
+          "date": "2026-04-10",
+          "value": 238.4,
+          "benchmark_value": 222.1
+        },
+        {
+          "date": "2026-04-13",
+          "value": 239.9,
+          "benchmark_value": 224.4
+        },
+        {
+          "date": "2026-04-14",
+          "value": 249.0,
+          "benchmark_value": 227.0
+        },
+        {
+          "date": "2026-04-15",
+          "value": 248.5,
+          "benchmark_value": 228.8
+        },
+        {
+          "date": "2026-04-16",
+          "value": 249.7,
+          "benchmark_value": 229.4
+        },
+        {
+          "date": "2026-04-17",
+          "value": 250.6,
+          "benchmark_value": 232.2
+        },
+        {
+          "date": "2026-04-20",
+          "value": 248.3,
+          "benchmark_value": 231.6
+        },
+        {
+          "date": "2026-04-21",
+          "value": 249.9,
+          "benchmark_value": 230.2
+        },
+        {
+          "date": "2026-04-22",
+          "value": 255.4,
+          "benchmark_value": 232.6
+        },
+        {
+          "date": "2026-04-23",
+          "value": 255.1,
+          "benchmark_value": 231.6
+        },
+        {
+          "date": "2026-04-24",
+          "value": 264.0,
+          "benchmark_value": 233.5
+        },
+        {
+          "date": "2026-04-27",
+          "value": 261.1,
+          "benchmark_value": 233.7
+        },
+        {
+          "date": "2026-04-28",
+          "value": 259.7,
+          "benchmark_value": 232.6
+        },
+        {
+          "date": "2026-04-29",
+          "value": 263.0,
+          "benchmark_value": 232.5
+        },
+        {
+          "date": "2026-04-30",
+          "value": 265.1,
+          "benchmark_value": 234.9
+        },
+        {
+          "date": "2026-05-01",
+          "value": 268.3,
+          "benchmark_value": 235.6
+        },
+        {
+          "date": "2026-05-04",
+          "value": 272.0,
+          "benchmark_value": 234.6
+        },
+        {
+          "date": "2026-05-05",
+          "value": 273.5,
+          "benchmark_value": 236.5
+        },
+        {
+          "date": "2026-05-06",
+          "value": 275.0,
+          "benchmark_value": 240.0
+        },
+        {
+          "date": "2026-05-07",
+          "value": 271.2,
+          "benchmark_value": 239.1
+        },
+        {
+          "date": "2026-05-08",
+          "value": 272.7,
+          "benchmark_value": 241.1
+        },
+        {
+          "date": "2026-05-11",
+          "value": 269.0,
+          "benchmark_value": 241.5
+        },
+        {
+          "date": "2026-05-12",
+          "value": 265.8,
+          "benchmark_value": 241.1
+        },
+        {
+          "date": "2026-05-13",
+          "value": 270.1,
+          "benchmark_value": 242.6
+        },
+        {
+          "date": "2026-05-14",
+          "value": 267.2,
+          "benchmark_value": 244.4
+        },
+        {
+          "date": "2026-05-15",
+          "value": 264.1,
+          "benchmark_value": 241.4
+        },
+        {
+          "date": "2026-05-18",
+          "value": 264.9,
+          "benchmark_value": 241.2
+        },
+        {
+          "date": "2026-05-19",
+          "value": 259.3,
+          "benchmark_value": 239.6
+        },
+        {
+          "date": "2026-05-20",
+          "value": 265.0,
+          "benchmark_value": 242.2
+        },
+        {
+          "date": "2026-05-21",
+          "value": 268.5,
+          "benchmark_value": 242.6
+        },
+        {
+          "date": "2026-05-22",
+          "value": 266.3,
+          "benchmark_value": 243.5
+        },
+        {
+          "date": "2026-05-26",
+          "value": 265.3,
+          "benchmark_value": 245.0
+        },
+        {
+          "date": "2026-05-27",
+          "value": 271.9,
+          "benchmark_value": 245.0
+        },
+        {
+          "date": "2026-05-28",
+          "value": 274.0,
+          "benchmark_value": 246.4
+        },
+        {
+          "date": "2026-05-29",
+          "value": 270.6,
+          "benchmark_value": 247.0
+        },
+        {
+          "date": "2026-06-01",
+          "value": 261.3,
+          "benchmark_value": 247.6
+        },
+        {
+          "date": "2026-06-02",
+          "value": 256.5,
+          "benchmark_value": 247.9
+        },
+        {
+          "date": "2026-06-03",
+          "value": 250.0,
+          "benchmark_value": 246.1
+        },
+        {
+          "date": "2026-06-04",
+          "value": 253.8,
+          "benchmark_value": 247.1
+        },
+        {
+          "date": "2026-06-05",
+          "value": 246.0,
+          "benchmark_value": 240.6
+        },
+        {
+          "date": "2026-06-08",
+          "value": 245.2,
+          "benchmark_value": 241.3
+        },
+        {
+          "date": "2026-06-09",
+          "value": 244.2,
+          "benchmark_value": 240.7
+        },
+        {
+          "date": "2026-06-10",
+          "value": 238.0,
+          "benchmark_value": 236.8
+        },
+        {
+          "date": "2026-06-11",
+          "value": 241.5,
+          "benchmark_value": 240.9
+        },
+        {
+          "date": "2026-06-12",
+          "value": 238.6,
+          "benchmark_value": 242.1
+        },
+        {
+          "date": "2026-06-15",
+          "value": 246.0,
+          "benchmark_value": 246.1
+        },
+        {
+          "date": "2026-06-16",
+          "value": 246.0,
+          "benchmark_value": 244.7
+        },
+        {
+          "date": "2026-06-17",
+          "value": 237.5,
+          "benchmark_value": 241.8
+        },
+        {
+          "date": "2026-06-18",
+          "value": 244.4,
+          "benchmark_value": 244.4
+        }
+      ]
+    },
+    {
+      "symbol": "PATH",
+      "name": "路徑機器人 (UiPath)",
+      "probability": 47.0,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+17.3% YoY",
+      "sitcaForce": "30.98% (券商融券比率)",
+      "chipConcentration": "82.4% (機構總持倉)",
+      "currentPrice": 10.27,
+      "targetPrice": 15.41,
+      "stopLoss": 8.73,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 12.0,
+          "type": "positive"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 8.2,
+          "type": "positive"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 0.0,
+          "type": "negative"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 1.4,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 10.9,
+          "benchmark_value": 9.0
+        },
+        {
+          "date": "2026-03-26",
+          "value": 11.0,
+          "benchmark_value": 8.9
+        },
+        {
+          "date": "2026-03-27",
+          "value": 10.7,
+          "benchmark_value": 8.7
+        },
+        {
+          "date": "2026-03-30",
+          "value": 10.9,
+          "benchmark_value": 8.7
+        },
+        {
+          "date": "2026-03-31",
+          "value": 11.1,
+          "benchmark_value": 8.9
+        },
+        {
+          "date": "2026-04-01",
+          "value": 11.0,
+          "benchmark_value": 9.0
+        },
+        {
+          "date": "2026-04-02",
+          "value": 11.2,
+          "benchmark_value": 9.0
+        },
+        {
+          "date": "2026-04-06",
+          "value": 11.1,
+          "benchmark_value": 9.1
+        },
+        {
+          "date": "2026-04-07",
+          "value": 10.9,
+          "benchmark_value": 9.1
+        },
+        {
+          "date": "2026-04-08",
+          "value": 10.4,
+          "benchmark_value": 9.3
+        },
+        {
+          "date": "2026-04-09",
+          "value": 9.9,
+          "benchmark_value": 9.3
+        },
+        {
+          "date": "2026-04-10",
+          "value": 9.4,
+          "benchmark_value": 9.3
+        },
+        {
+          "date": "2026-04-13",
+          "value": 10.1,
+          "benchmark_value": 9.4
+        },
+        {
+          "date": "2026-04-14",
+          "value": 10.0,
+          "benchmark_value": 9.5
+        },
+        {
+          "date": "2026-04-15",
+          "value": 10.6,
+          "benchmark_value": 9.6
+        },
+        {
+          "date": "2026-04-16",
+          "value": 10.6,
+          "benchmark_value": 9.6
+        },
+        {
+          "date": "2026-04-17",
+          "value": 10.4,
+          "benchmark_value": 9.8
+        },
+        {
+          "date": "2026-04-20",
+          "value": 10.6,
+          "benchmark_value": 9.7
+        },
+        {
+          "date": "2026-04-21",
+          "value": 10.8,
+          "benchmark_value": 9.7
+        },
+        {
+          "date": "2026-04-22",
+          "value": 10.9,
+          "benchmark_value": 9.8
+        },
+        {
+          "date": "2026-04-23",
+          "value": 10.1,
+          "benchmark_value": 9.7
+        },
+        {
+          "date": "2026-04-24",
+          "value": 10.4,
+          "benchmark_value": 9.8
+        },
+        {
+          "date": "2026-04-27",
+          "value": 10.5,
+          "benchmark_value": 9.8
+        },
+        {
+          "date": "2026-04-28",
+          "value": 10.6,
+          "benchmark_value": 9.8
+        },
+        {
+          "date": "2026-04-29",
+          "value": 10.4,
+          "benchmark_value": 9.8
+        },
+        {
+          "date": "2026-04-30",
+          "value": 10.3,
+          "benchmark_value": 9.9
+        },
+        {
+          "date": "2026-05-01",
+          "value": 10.7,
+          "benchmark_value": 9.9
+        },
+        {
+          "date": "2026-05-04",
+          "value": 10.8,
+          "benchmark_value": 9.9
+        },
+        {
+          "date": "2026-05-05",
+          "value": 10.7,
+          "benchmark_value": 9.9
+        },
+        {
+          "date": "2026-05-06",
+          "value": 10.5,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-07",
+          "value": 10.9,
+          "benchmark_value": 10.0
+        },
+        {
+          "date": "2026-05-08",
+          "value": 10.8,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-11",
+          "value": 10.7,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-12",
+          "value": 10.0,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-13",
+          "value": 9.5,
+          "benchmark_value": 10.2
+        },
+        {
+          "date": "2026-05-14",
+          "value": 9.7,
+          "benchmark_value": 10.3
+        },
+        {
+          "date": "2026-05-15",
+          "value": 10.3,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-18",
+          "value": 10.6,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-19",
+          "value": 10.6,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-05-20",
+          "value": 10.8,
+          "benchmark_value": 10.2
+        },
+        {
+          "date": "2026-05-21",
+          "value": 10.6,
+          "benchmark_value": 10.2
+        },
+        {
+          "date": "2026-05-22",
+          "value": 10.9,
+          "benchmark_value": 10.2
+        },
+        {
+          "date": "2026-05-26",
+          "value": 11.1,
+          "benchmark_value": 10.3
+        },
+        {
+          "date": "2026-05-27",
+          "value": 11.2,
+          "benchmark_value": 10.3
+        },
+        {
+          "date": "2026-05-28",
+          "value": 11.6,
+          "benchmark_value": 10.4
+        },
+        {
+          "date": "2026-05-29",
+          "value": 11.7,
+          "benchmark_value": 10.4
+        },
+        {
+          "date": "2026-06-01",
+          "value": 13.1,
+          "benchmark_value": 10.4
+        },
+        {
+          "date": "2026-06-02",
+          "value": 12.2,
+          "benchmark_value": 10.4
+        },
+        {
+          "date": "2026-06-03",
+          "value": 11.7,
+          "benchmark_value": 10.3
+        },
+        {
+          "date": "2026-06-04",
+          "value": 11.7,
+          "benchmark_value": 10.4
+        },
+        {
+          "date": "2026-06-05",
+          "value": 11.2,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-06-08",
+          "value": 11.2,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-06-09",
+          "value": 10.8,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-06-10",
+          "value": 10.8,
+          "benchmark_value": 10.0
+        },
+        {
+          "date": "2026-06-11",
+          "value": 10.6,
+          "benchmark_value": 10.1
+        },
+        {
+          "date": "2026-06-12",
+          "value": 10.6,
+          "benchmark_value": 10.2
+        },
+        {
+          "date": "2026-06-15",
+          "value": 10.8,
+          "benchmark_value": 10.3
+        },
+        {
+          "date": "2026-06-16",
+          "value": 10.5,
+          "benchmark_value": 10.3
+        },
+        {
+          "date": "2026-06-17",
+          "value": 10.2,
+          "benchmark_value": 10.2
+        },
+        {
+          "date": "2026-06-18",
+          "value": 10.3,
+          "benchmark_value": 10.3
+        }
+      ]
+    },
+    {
       "symbol": "MSTR",
       "name": "微策投資 (MicroStrategy)",
-      "probability": 35.0,
+      "probability": 39.4,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 60,
       "epsAcceleration": "+11.9% YoY",
@@ -10980,7 +10980,7 @@
     {
       "symbol": "COIN",
       "name": "硬幣基地 (Coinbase)",
-      "probability": 35.0,
+      "probability": 38.0,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 60,
       "epsAcceleration": "高利潤擴張中",
@@ -11321,9 +11321,1381 @@
       ]
     },
     {
+      "symbol": "TSLA",
+      "name": "特斯拉 (Tesla)",
+      "probability": 37.0,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+15.8% YoY",
+      "sitcaForce": "2.3% (券商融券比率)",
+      "chipConcentration": "44.9% (機構總持倉)",
+      "currentPrice": 400.49,
+      "targetPrice": 600.73,
+      "stopLoss": 340.42,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 3.0,
+          "type": "neutral"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 4.5,
+          "type": "negative"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 3.0,
+          "type": "negative"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 6.1,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 386.0,
+          "benchmark_value": 352.0
+        },
+        {
+          "date": "2026-03-26",
+          "value": 372.1,
+          "benchmark_value": 345.8
+        },
+        {
+          "date": "2026-03-27",
+          "value": 361.8,
+          "benchmark_value": 340.1
+        },
+        {
+          "date": "2026-03-30",
+          "value": 355.3,
+          "benchmark_value": 338.7
+        },
+        {
+          "date": "2026-03-31",
+          "value": 371.8,
+          "benchmark_value": 348.6
+        },
+        {
+          "date": "2026-04-01",
+          "value": 381.3,
+          "benchmark_value": 351.1
+        },
+        {
+          "date": "2026-04-02",
+          "value": 360.6,
+          "benchmark_value": 351.5
+        },
+        {
+          "date": "2026-04-06",
+          "value": 352.8,
+          "benchmark_value": 353.0
+        },
+        {
+          "date": "2026-04-07",
+          "value": 346.6,
+          "benchmark_value": 353.3
+        },
+        {
+          "date": "2026-04-08",
+          "value": 343.2,
+          "benchmark_value": 362.2
+        },
+        {
+          "date": "2026-04-09",
+          "value": 345.6,
+          "benchmark_value": 364.4
+        },
+        {
+          "date": "2026-04-10",
+          "value": 349.0,
+          "benchmark_value": 364.0
+        },
+        {
+          "date": "2026-04-13",
+          "value": 352.4,
+          "benchmark_value": 367.7
+        },
+        {
+          "date": "2026-04-14",
+          "value": 364.2,
+          "benchmark_value": 372.0
+        },
+        {
+          "date": "2026-04-15",
+          "value": 392.0,
+          "benchmark_value": 375.0
+        },
+        {
+          "date": "2026-04-16",
+          "value": 388.9,
+          "benchmark_value": 376.0
+        },
+        {
+          "date": "2026-04-17",
+          "value": 400.6,
+          "benchmark_value": 380.5
+        },
+        {
+          "date": "2026-04-20",
+          "value": 392.5,
+          "benchmark_value": 379.6
+        },
+        {
+          "date": "2026-04-21",
+          "value": 386.4,
+          "benchmark_value": 377.2
+        },
+        {
+          "date": "2026-04-22",
+          "value": 387.5,
+          "benchmark_value": 381.1
+        },
+        {
+          "date": "2026-04-23",
+          "value": 373.7,
+          "benchmark_value": 379.5
+        },
+        {
+          "date": "2026-04-24",
+          "value": 376.3,
+          "benchmark_value": 382.6
+        },
+        {
+          "date": "2026-04-27",
+          "value": 378.7,
+          "benchmark_value": 383.0
+        },
+        {
+          "date": "2026-04-28",
+          "value": 376.0,
+          "benchmark_value": 381.2
+        },
+        {
+          "date": "2026-04-29",
+          "value": 372.8,
+          "benchmark_value": 381.0
+        },
+        {
+          "date": "2026-04-30",
+          "value": 381.6,
+          "benchmark_value": 384.9
+        },
+        {
+          "date": "2026-05-01",
+          "value": 390.8,
+          "benchmark_value": 386.0
+        },
+        {
+          "date": "2026-05-04",
+          "value": 392.5,
+          "benchmark_value": 384.5
+        },
+        {
+          "date": "2026-05-05",
+          "value": 389.4,
+          "benchmark_value": 387.6
+        },
+        {
+          "date": "2026-05-06",
+          "value": 398.7,
+          "benchmark_value": 393.3
+        },
+        {
+          "date": "2026-05-07",
+          "value": 411.8,
+          "benchmark_value": 391.8
+        },
+        {
+          "date": "2026-05-08",
+          "value": 428.4,
+          "benchmark_value": 395.1
+        },
+        {
+          "date": "2026-05-11",
+          "value": 445.0,
+          "benchmark_value": 395.8
+        },
+        {
+          "date": "2026-05-12",
+          "value": 433.5,
+          "benchmark_value": 395.2
+        },
+        {
+          "date": "2026-05-13",
+          "value": 445.3,
+          "benchmark_value": 397.5
+        },
+        {
+          "date": "2026-05-14",
+          "value": 443.3,
+          "benchmark_value": 400.5
+        },
+        {
+          "date": "2026-05-15",
+          "value": 422.2,
+          "benchmark_value": 395.6
+        },
+        {
+          "date": "2026-05-18",
+          "value": 410.0,
+          "benchmark_value": 395.3
+        },
+        {
+          "date": "2026-05-19",
+          "value": 404.1,
+          "benchmark_value": 392.6
+        },
+        {
+          "date": "2026-05-20",
+          "value": 417.3,
+          "benchmark_value": 396.9
+        },
+        {
+          "date": "2026-05-21",
+          "value": 417.9,
+          "benchmark_value": 397.6
+        },
+        {
+          "date": "2026-05-22",
+          "value": 426.0,
+          "benchmark_value": 399.0
+        },
+        {
+          "date": "2026-05-26",
+          "value": 433.6,
+          "benchmark_value": 401.5
+        },
+        {
+          "date": "2026-05-27",
+          "value": 440.4,
+          "benchmark_value": 401.5
+        },
+        {
+          "date": "2026-05-28",
+          "value": 442.1,
+          "benchmark_value": 403.9
+        },
+        {
+          "date": "2026-05-29",
+          "value": 435.8,
+          "benchmark_value": 404.7
+        },
+        {
+          "date": "2026-06-01",
+          "value": 415.9,
+          "benchmark_value": 405.8
+        },
+        {
+          "date": "2026-06-02",
+          "value": 423.7,
+          "benchmark_value": 406.3
+        },
+        {
+          "date": "2026-06-03",
+          "value": 423.7,
+          "benchmark_value": 403.3
+        },
+        {
+          "date": "2026-06-04",
+          "value": 418.5,
+          "benchmark_value": 405.0
+        },
+        {
+          "date": "2026-06-05",
+          "value": 391.0,
+          "benchmark_value": 394.3
+        },
+        {
+          "date": "2026-06-08",
+          "value": 409.0,
+          "benchmark_value": 395.4
+        },
+        {
+          "date": "2026-06-09",
+          "value": 396.7,
+          "benchmark_value": 394.4
+        },
+        {
+          "date": "2026-06-10",
+          "value": 381.6,
+          "benchmark_value": 388.0
+        },
+        {
+          "date": "2026-06-11",
+          "value": 399.1,
+          "benchmark_value": 394.8
+        },
+        {
+          "date": "2026-06-12",
+          "value": 406.4,
+          "benchmark_value": 396.8
+        },
+        {
+          "date": "2026-06-15",
+          "value": 411.1,
+          "benchmark_value": 403.4
+        },
+        {
+          "date": "2026-06-16",
+          "value": 404.7,
+          "benchmark_value": 401.1
+        },
+        {
+          "date": "2026-06-17",
+          "value": 396.4,
+          "benchmark_value": 396.2
+        },
+        {
+          "date": "2026-06-18",
+          "value": 400.5,
+          "benchmark_value": 400.5
+        }
+      ]
+    },
+    {
+      "symbol": "NOW",
+      "name": "服務現在 (ServiceNow)",
+      "probability": 36.4,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+22.1% YoY",
+      "sitcaForce": "5.93% (券商融券比率)",
+      "chipConcentration": "88.5% (機構總持倉)",
+      "currentPrice": 95.04,
+      "targetPrice": 142.56,
+      "stopLoss": 80.78,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 9.0,
+          "type": "positive"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 8.8,
+          "type": "positive"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 0.0,
+          "type": "negative"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 0.0,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 103.1,
+          "benchmark_value": 83.5
+        },
+        {
+          "date": "2026-03-26",
+          "value": 103.6,
+          "benchmark_value": 82.1
+        },
+        {
+          "date": "2026-03-27",
+          "value": 99.4,
+          "benchmark_value": 80.7
+        },
+        {
+          "date": "2026-03-30",
+          "value": 105.0,
+          "benchmark_value": 80.4
+        },
+        {
+          "date": "2026-03-31",
+          "value": 104.6,
+          "benchmark_value": 82.7
+        },
+        {
+          "date": "2026-04-01",
+          "value": 104.0,
+          "benchmark_value": 83.3
+        },
+        {
+          "date": "2026-04-02",
+          "value": 102.0,
+          "benchmark_value": 83.4
+        },
+        {
+          "date": "2026-04-06",
+          "value": 102.4,
+          "benchmark_value": 83.8
+        },
+        {
+          "date": "2026-04-07",
+          "value": 100.6,
+          "benchmark_value": 83.8
+        },
+        {
+          "date": "2026-04-08",
+          "value": 97.5,
+          "benchmark_value": 85.9
+        },
+        {
+          "date": "2026-04-09",
+          "value": 89.8,
+          "benchmark_value": 86.5
+        },
+        {
+          "date": "2026-04-10",
+          "value": 83.0,
+          "benchmark_value": 86.4
+        },
+        {
+          "date": "2026-04-13",
+          "value": 89.1,
+          "benchmark_value": 87.3
+        },
+        {
+          "date": "2026-04-14",
+          "value": 87.8,
+          "benchmark_value": 88.3
+        },
+        {
+          "date": "2026-04-15",
+          "value": 94.2,
+          "benchmark_value": 89.0
+        },
+        {
+          "date": "2026-04-16",
+          "value": 96.4,
+          "benchmark_value": 89.2
+        },
+        {
+          "date": "2026-04-17",
+          "value": 96.7,
+          "benchmark_value": 90.3
+        },
+        {
+          "date": "2026-04-20",
+          "value": 99.7,
+          "benchmark_value": 90.1
+        },
+        {
+          "date": "2026-04-21",
+          "value": 100.1,
+          "benchmark_value": 89.5
+        },
+        {
+          "date": "2026-04-22",
+          "value": 103.1,
+          "benchmark_value": 90.4
+        },
+        {
+          "date": "2026-04-23",
+          "value": 84.8,
+          "benchmark_value": 90.1
+        },
+        {
+          "date": "2026-04-24",
+          "value": 90.2,
+          "benchmark_value": 90.8
+        },
+        {
+          "date": "2026-04-27",
+          "value": 90.4,
+          "benchmark_value": 90.9
+        },
+        {
+          "date": "2026-04-28",
+          "value": 90.5,
+          "benchmark_value": 90.5
+        },
+        {
+          "date": "2026-04-29",
+          "value": 88.9,
+          "benchmark_value": 90.4
+        },
+        {
+          "date": "2026-04-30",
+          "value": 88.3,
+          "benchmark_value": 91.3
+        },
+        {
+          "date": "2026-05-01",
+          "value": 91.2,
+          "benchmark_value": 91.6
+        },
+        {
+          "date": "2026-05-04",
+          "value": 92.0,
+          "benchmark_value": 91.2
+        },
+        {
+          "date": "2026-05-05",
+          "value": 92.0,
+          "benchmark_value": 92.0
+        },
+        {
+          "date": "2026-05-06",
+          "value": 89.1,
+          "benchmark_value": 93.3
+        },
+        {
+          "date": "2026-05-07",
+          "value": 93.6,
+          "benchmark_value": 93.0
+        },
+        {
+          "date": "2026-05-08",
+          "value": 91.2,
+          "benchmark_value": 93.8
+        },
+        {
+          "date": "2026-05-11",
+          "value": 91.5,
+          "benchmark_value": 93.9
+        },
+        {
+          "date": "2026-05-12",
+          "value": 89.0,
+          "benchmark_value": 93.8
+        },
+        {
+          "date": "2026-05-13",
+          "value": 87.1,
+          "benchmark_value": 94.3
+        },
+        {
+          "date": "2026-05-14",
+          "value": 90.5,
+          "benchmark_value": 95.0
+        },
+        {
+          "date": "2026-05-15",
+          "value": 95.1,
+          "benchmark_value": 93.9
+        },
+        {
+          "date": "2026-05-18",
+          "value": 103.4,
+          "benchmark_value": 93.8
+        },
+        {
+          "date": "2026-05-19",
+          "value": 101.8,
+          "benchmark_value": 93.2
+        },
+        {
+          "date": "2026-05-20",
+          "value": 103.3,
+          "benchmark_value": 94.2
+        },
+        {
+          "date": "2026-05-21",
+          "value": 99.7,
+          "benchmark_value": 94.3
+        },
+        {
+          "date": "2026-05-22",
+          "value": 102.1,
+          "benchmark_value": 94.7
+        },
+        {
+          "date": "2026-05-26",
+          "value": 99.9,
+          "benchmark_value": 95.3
+        },
+        {
+          "date": "2026-05-27",
+          "value": 102.1,
+          "benchmark_value": 95.3
+        },
+        {
+          "date": "2026-05-28",
+          "value": 108.7,
+          "benchmark_value": 95.8
+        },
+        {
+          "date": "2026-05-29",
+          "value": 124.4,
+          "benchmark_value": 96.0
+        },
+        {
+          "date": "2026-06-01",
+          "value": 135.9,
+          "benchmark_value": 96.3
+        },
+        {
+          "date": "2026-06-02",
+          "value": 127.7,
+          "benchmark_value": 96.4
+        },
+        {
+          "date": "2026-06-03",
+          "value": 117.9,
+          "benchmark_value": 95.7
+        },
+        {
+          "date": "2026-06-04",
+          "value": 119.4,
+          "benchmark_value": 96.1
+        },
+        {
+          "date": "2026-06-05",
+          "value": 112.4,
+          "benchmark_value": 93.6
+        },
+        {
+          "date": "2026-06-08",
+          "value": 114.2,
+          "benchmark_value": 93.8
+        },
+        {
+          "date": "2026-06-09",
+          "value": 107.0,
+          "benchmark_value": 93.6
+        },
+        {
+          "date": "2026-06-10",
+          "value": 106.1,
+          "benchmark_value": 92.1
+        },
+        {
+          "date": "2026-06-11",
+          "value": 103.1,
+          "benchmark_value": 93.7
+        },
+        {
+          "date": "2026-06-12",
+          "value": 102.2,
+          "benchmark_value": 94.2
+        },
+        {
+          "date": "2026-06-15",
+          "value": 104.2,
+          "benchmark_value": 95.7
+        },
+        {
+          "date": "2026-06-16",
+          "value": 101.3,
+          "benchmark_value": 95.2
+        },
+        {
+          "date": "2026-06-17",
+          "value": 95.5,
+          "benchmark_value": 94.0
+        },
+        {
+          "date": "2026-06-18",
+          "value": 95.0,
+          "benchmark_value": 95.0
+        }
+      ]
+    },
+    {
+      "symbol": "MSFT",
+      "name": "微軟 (Microsoft)",
+      "probability": 32.8,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+18.3% YoY",
+      "sitcaForce": "1.19% (券商融券比率)",
+      "chipConcentration": "75.8% (機構總持倉)",
+      "currentPrice": 379.4,
+      "targetPrice": 569.1,
+      "stopLoss": 322.49,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 6.0,
+          "type": "neutral"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 7.6,
+          "type": "positive"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 0.0,
+          "type": "negative"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 0.6,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 370.2,
+          "benchmark_value": 333.4
+        },
+        {
+          "date": "2026-03-26",
+          "value": 365.2,
+          "benchmark_value": 327.6
+        },
+        {
+          "date": "2026-03-27",
+          "value": 356.0,
+          "benchmark_value": 322.2
+        },
+        {
+          "date": "2026-03-30",
+          "value": 358.2,
+          "benchmark_value": 320.9
+        },
+        {
+          "date": "2026-03-31",
+          "value": 369.4,
+          "benchmark_value": 330.2
+        },
+        {
+          "date": "2026-04-01",
+          "value": 368.6,
+          "benchmark_value": 332.6
+        },
+        {
+          "date": "2026-04-02",
+          "value": 372.7,
+          "benchmark_value": 333.0
+        },
+        {
+          "date": "2026-04-06",
+          "value": 372.1,
+          "benchmark_value": 334.4
+        },
+        {
+          "date": "2026-04-07",
+          "value": 371.5,
+          "benchmark_value": 334.7
+        },
+        {
+          "date": "2026-04-08",
+          "value": 373.5,
+          "benchmark_value": 343.1
+        },
+        {
+          "date": "2026-04-09",
+          "value": 372.3,
+          "benchmark_value": 345.2
+        },
+        {
+          "date": "2026-04-10",
+          "value": 370.1,
+          "benchmark_value": 344.8
+        },
+        {
+          "date": "2026-04-13",
+          "value": 383.5,
+          "benchmark_value": 348.3
+        },
+        {
+          "date": "2026-04-14",
+          "value": 392.3,
+          "benchmark_value": 352.4
+        },
+        {
+          "date": "2026-04-15",
+          "value": 410.3,
+          "benchmark_value": 355.2
+        },
+        {
+          "date": "2026-04-16",
+          "value": 419.4,
+          "benchmark_value": 356.2
+        },
+        {
+          "date": "2026-04-17",
+          "value": 421.9,
+          "benchmark_value": 360.5
+        },
+        {
+          "date": "2026-04-20",
+          "value": 417.2,
+          "benchmark_value": 359.6
+        },
+        {
+          "date": "2026-04-21",
+          "value": 423.2,
+          "benchmark_value": 357.3
+        },
+        {
+          "date": "2026-04-22",
+          "value": 432.0,
+          "benchmark_value": 361.1
+        },
+        {
+          "date": "2026-04-23",
+          "value": 414.9,
+          "benchmark_value": 359.6
+        },
+        {
+          "date": "2026-04-24",
+          "value": 423.7,
+          "benchmark_value": 362.4
+        },
+        {
+          "date": "2026-04-27",
+          "value": 423.9,
+          "benchmark_value": 362.9
+        },
+        {
+          "date": "2026-04-28",
+          "value": 428.3,
+          "benchmark_value": 361.1
+        },
+        {
+          "date": "2026-04-29",
+          "value": 423.5,
+          "benchmark_value": 361.0
+        },
+        {
+          "date": "2026-04-30",
+          "value": 406.9,
+          "benchmark_value": 364.7
+        },
+        {
+          "date": "2026-05-01",
+          "value": 413.5,
+          "benchmark_value": 365.7
+        },
+        {
+          "date": "2026-05-04",
+          "value": 412.7,
+          "benchmark_value": 364.2
+        },
+        {
+          "date": "2026-05-05",
+          "value": 410.5,
+          "benchmark_value": 367.2
+        },
+        {
+          "date": "2026-05-06",
+          "value": 413.1,
+          "benchmark_value": 372.5
+        },
+        {
+          "date": "2026-05-07",
+          "value": 419.9,
+          "benchmark_value": 371.1
+        },
+        {
+          "date": "2026-05-08",
+          "value": 414.2,
+          "benchmark_value": 374.3
+        },
+        {
+          "date": "2026-05-11",
+          "value": 411.8,
+          "benchmark_value": 375.0
+        },
+        {
+          "date": "2026-05-12",
+          "value": 406.9,
+          "benchmark_value": 374.4
+        },
+        {
+          "date": "2026-05-13",
+          "value": 404.3,
+          "benchmark_value": 376.6
+        },
+        {
+          "date": "2026-05-14",
+          "value": 408.5,
+          "benchmark_value": 379.4
+        },
+        {
+          "date": "2026-05-15",
+          "value": 421.0,
+          "benchmark_value": 374.7
+        },
+        {
+          "date": "2026-05-18",
+          "value": 422.6,
+          "benchmark_value": 374.5
+        },
+        {
+          "date": "2026-05-19",
+          "value": 416.5,
+          "benchmark_value": 372.0
+        },
+        {
+          "date": "2026-05-20",
+          "value": 420.1,
+          "benchmark_value": 376.0
+        },
+        {
+          "date": "2026-05-21",
+          "value": 419.1,
+          "benchmark_value": 376.6
+        },
+        {
+          "date": "2026-05-22",
+          "value": 418.6,
+          "benchmark_value": 378.0
+        },
+        {
+          "date": "2026-05-26",
+          "value": 416.0,
+          "benchmark_value": 380.3
+        },
+        {
+          "date": "2026-05-27",
+          "value": 412.7,
+          "benchmark_value": 380.4
+        },
+        {
+          "date": "2026-05-28",
+          "value": 427.0,
+          "benchmark_value": 382.6
+        },
+        {
+          "date": "2026-05-29",
+          "value": 450.2,
+          "benchmark_value": 383.4
+        },
+        {
+          "date": "2026-06-01",
+          "value": 460.5,
+          "benchmark_value": 384.4
+        },
+        {
+          "date": "2026-06-02",
+          "value": 441.3,
+          "benchmark_value": 384.9
+        },
+        {
+          "date": "2026-06-03",
+          "value": 427.3,
+          "benchmark_value": 382.1
+        },
+        {
+          "date": "2026-06-04",
+          "value": 428.0,
+          "benchmark_value": 383.6
+        },
+        {
+          "date": "2026-06-05",
+          "value": 416.7,
+          "benchmark_value": 373.5
+        },
+        {
+          "date": "2026-06-08",
+          "value": 411.7,
+          "benchmark_value": 374.6
+        },
+        {
+          "date": "2026-06-09",
+          "value": 403.4,
+          "benchmark_value": 373.6
+        },
+        {
+          "date": "2026-06-10",
+          "value": 397.4,
+          "benchmark_value": 367.6
+        },
+        {
+          "date": "2026-06-11",
+          "value": 390.3,
+          "benchmark_value": 374.0
+        },
+        {
+          "date": "2026-06-12",
+          "value": 390.7,
+          "benchmark_value": 375.9
+        },
+        {
+          "date": "2026-06-15",
+          "value": 399.8,
+          "benchmark_value": 382.1
+        },
+        {
+          "date": "2026-06-16",
+          "value": 393.8,
+          "benchmark_value": 379.9
+        },
+        {
+          "date": "2026-06-17",
+          "value": 378.9,
+          "benchmark_value": 375.3
+        },
+        {
+          "date": "2026-06-18",
+          "value": 379.4,
+          "benchmark_value": 379.4
+        }
+      ]
+    },
+    {
+      "symbol": "BABA",
+      "name": "阿里巴巴 (Alibaba)",
+      "probability": 28.6,
+      "triggerType": "大型權值 + 趨勢多頭",
+      "rsRating": 60,
+      "epsAcceleration": "+2.9% YoY",
+      "sitcaForce": "1.65% (券商融券比率)",
+      "chipConcentration": "11.4% (機構總持倉)",
+      "currentPrice": 107.1,
+      "targetPrice": 160.65,
+      "stopLoss": 91.03,
+      "theme": "AI 雲端計算與高成長半導體題材",
+      "features": [
+        {
+          "name": "空頭軋空回補潛力 (Short Squeeze)",
+          "value": 0.0,
+          "type": "neutral"
+        },
+        {
+          "name": "美股大咖機構持股 (Inst Ownership)",
+          "value": 1.1,
+          "type": "negative"
+        },
+        {
+          "name": "VCP 波動收縮突破 (VCP Setup)",
+          "value": 6.0,
+          "type": "negative"
+        },
+        {
+          "name": "相對標普500強度 (RS Rating)",
+          "value": 3.2,
+          "type": "negative"
+        },
+        {
+          "name": "美股大盤指數阻力 (S&P Drag)",
+          "value": -0.5,
+          "type": "negative"
+        }
+      ],
+      "chartData": [
+        {
+          "date": "2026-03-25",
+          "value": 128.7,
+          "benchmark_value": 94.1
+        },
+        {
+          "date": "2026-03-26",
+          "value": 124.3,
+          "benchmark_value": 92.5
+        },
+        {
+          "date": "2026-03-27",
+          "value": 121.6,
+          "benchmark_value": 90.9
+        },
+        {
+          "date": "2026-03-30",
+          "value": 120.9,
+          "benchmark_value": 90.6
+        },
+        {
+          "date": "2026-03-31",
+          "value": 124.3,
+          "benchmark_value": 93.2
+        },
+        {
+          "date": "2026-04-01",
+          "value": 122.6,
+          "benchmark_value": 93.9
+        },
+        {
+          "date": "2026-04-02",
+          "value": 120.9,
+          "benchmark_value": 94.0
+        },
+        {
+          "date": "2026-04-06",
+          "value": 121.2,
+          "benchmark_value": 94.4
+        },
+        {
+          "date": "2026-04-07",
+          "value": 118.6,
+          "benchmark_value": 94.5
+        },
+        {
+          "date": "2026-04-08",
+          "value": 124.2,
+          "benchmark_value": 96.9
+        },
+        {
+          "date": "2026-04-09",
+          "value": 126.5,
+          "benchmark_value": 97.4
+        },
+        {
+          "date": "2026-04-10",
+          "value": 126.2,
+          "benchmark_value": 97.3
+        },
+        {
+          "date": "2026-04-13",
+          "value": 126.8,
+          "benchmark_value": 98.3
+        },
+        {
+          "date": "2026-04-14",
+          "value": 130.2,
+          "benchmark_value": 99.5
+        },
+        {
+          "date": "2026-04-15",
+          "value": 132.1,
+          "benchmark_value": 100.3
+        },
+        {
+          "date": "2026-04-16",
+          "value": 137.3,
+          "benchmark_value": 100.5
+        },
+        {
+          "date": "2026-04-17",
+          "value": 139.7,
+          "benchmark_value": 101.8
+        },
+        {
+          "date": "2026-04-20",
+          "value": 138.9,
+          "benchmark_value": 101.5
+        },
+        {
+          "date": "2026-04-21",
+          "value": 134.1,
+          "benchmark_value": 100.9
+        },
+        {
+          "date": "2026-04-22",
+          "value": 135.2,
+          "benchmark_value": 101.9
+        },
+        {
+          "date": "2026-04-23",
+          "value": 130.5,
+          "benchmark_value": 101.5
+        },
+        {
+          "date": "2026-04-24",
+          "value": 134.6,
+          "benchmark_value": 102.3
+        },
+        {
+          "date": "2026-04-27",
+          "value": 131.3,
+          "benchmark_value": 102.4
+        },
+        {
+          "date": "2026-04-28",
+          "value": 129.7,
+          "benchmark_value": 101.9
+        },
+        {
+          "date": "2026-04-29",
+          "value": 129.2,
+          "benchmark_value": 101.9
+        },
+        {
+          "date": "2026-04-30",
+          "value": 130.7,
+          "benchmark_value": 102.9
+        },
+        {
+          "date": "2026-05-01",
+          "value": 130.3,
+          "benchmark_value": 103.2
+        },
+        {
+          "date": "2026-05-04",
+          "value": 132.1,
+          "benchmark_value": 102.8
+        },
+        {
+          "date": "2026-05-05",
+          "value": 131.1,
+          "benchmark_value": 103.7
+        },
+        {
+          "date": "2026-05-06",
+          "value": 140.2,
+          "benchmark_value": 105.2
+        },
+        {
+          "date": "2026-05-07",
+          "value": 139.7,
+          "benchmark_value": 104.8
+        },
+        {
+          "date": "2026-05-08",
+          "value": 138.8,
+          "benchmark_value": 105.6
+        },
+        {
+          "date": "2026-05-11",
+          "value": 136.1,
+          "benchmark_value": 105.8
+        },
+        {
+          "date": "2026-05-12",
+          "value": 133.6,
+          "benchmark_value": 105.7
+        },
+        {
+          "date": "2026-05-13",
+          "value": 144.5,
+          "benchmark_value": 106.3
+        },
+        {
+          "date": "2026-05-14",
+          "value": 139.8,
+          "benchmark_value": 107.1
+        },
+        {
+          "date": "2026-05-15",
+          "value": 131.4,
+          "benchmark_value": 105.8
+        },
+        {
+          "date": "2026-05-18",
+          "value": 132.0,
+          "benchmark_value": 105.7
+        },
+        {
+          "date": "2026-05-19",
+          "value": 134.4,
+          "benchmark_value": 105.0
+        },
+        {
+          "date": "2026-05-20",
+          "value": 133.2,
+          "benchmark_value": 106.1
+        },
+        {
+          "date": "2026-05-21",
+          "value": 130.3,
+          "benchmark_value": 106.3
+        },
+        {
+          "date": "2026-05-22",
+          "value": 128.8,
+          "benchmark_value": 106.7
+        },
+        {
+          "date": "2026-05-26",
+          "value": 128.3,
+          "benchmark_value": 107.4
+        },
+        {
+          "date": "2026-05-27",
+          "value": 126.6,
+          "benchmark_value": 107.4
+        },
+        {
+          "date": "2026-05-28",
+          "value": 125.0,
+          "benchmark_value": 108.0
+        },
+        {
+          "date": "2026-05-29",
+          "value": 123.1,
+          "benchmark_value": 108.2
+        },
+        {
+          "date": "2026-06-01",
+          "value": 124.3,
+          "benchmark_value": 108.5
+        },
+        {
+          "date": "2026-06-02",
+          "value": 129.6,
+          "benchmark_value": 108.7
+        },
+        {
+          "date": "2026-06-03",
+          "value": 126.1,
+          "benchmark_value": 107.9
+        },
+        {
+          "date": "2026-06-04",
+          "value": 124.8,
+          "benchmark_value": 108.3
+        },
+        {
+          "date": "2026-06-05",
+          "value": 120.0,
+          "benchmark_value": 105.4
+        },
+        {
+          "date": "2026-06-08",
+          "value": 119.0,
+          "benchmark_value": 105.7
+        },
+        {
+          "date": "2026-06-09",
+          "value": 118.6,
+          "benchmark_value": 105.5
+        },
+        {
+          "date": "2026-06-10",
+          "value": 114.3,
+          "benchmark_value": 103.8
+        },
+        {
+          "date": "2026-06-11",
+          "value": 112.7,
+          "benchmark_value": 105.6
+        },
+        {
+          "date": "2026-06-12",
+          "value": 112.8,
+          "benchmark_value": 106.1
+        },
+        {
+          "date": "2026-06-15",
+          "value": 112.6,
+          "benchmark_value": 107.9
+        },
+        {
+          "date": "2026-06-16",
+          "value": 111.0,
+          "benchmark_value": 107.3
+        },
+        {
+          "date": "2026-06-17",
+          "value": 107.4,
+          "benchmark_value": 106.0
+        },
+        {
+          "date": "2026-06-18",
+          "value": 107.1,
+          "benchmark_value": 107.1
+        }
+      ]
+    },
+    {
       "symbol": "NVO",
       "name": "諾和諾德 (Novo Nordisk)",
-      "probability": 35.0,
+      "probability": 23.7,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 60,
       "epsAcceleration": "+24.0% YoY",
@@ -11666,7 +13038,7 @@
     {
       "symbol": "PDD",
       "name": "拼多多 (PDD Holdings)",
-      "probability": 35.0,
+      "probability": 17.6,
       "triggerType": "大型權值 + 趨勢多頭",
       "rsRating": 60,
       "epsAcceleration": "+11.0% YoY",
@@ -12005,1382 +13377,10 @@
           "benchmark_value": 79.6
         }
       ]
-    },
-    {
-      "symbol": "DKNG",
-      "name": "選秀國王 (DraftKings)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+16.8% YoY",
-      "sitcaForce": "8.79% (券商融券比率)",
-      "chipConcentration": "80.1% (機構總持倉)",
-      "currentPrice": 26.39,
-      "targetPrice": 39.58,
-      "stopLoss": 22.43,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 12.0,
-          "type": "positive"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 8.0,
-          "type": "positive"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 0.0,
-          "type": "negative"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 0.0,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 21.4,
-          "benchmark_value": 23.2
-        },
-        {
-          "date": "2026-03-26",
-          "value": 21.3,
-          "benchmark_value": 22.8
-        },
-        {
-          "date": "2026-03-27",
-          "value": 20.7,
-          "benchmark_value": 22.4
-        },
-        {
-          "date": "2026-03-30",
-          "value": 20.9,
-          "benchmark_value": 22.3
-        },
-        {
-          "date": "2026-03-31",
-          "value": 21.6,
-          "benchmark_value": 23.0
-        },
-        {
-          "date": "2026-04-01",
-          "value": 22.2,
-          "benchmark_value": 23.1
-        },
-        {
-          "date": "2026-04-02",
-          "value": 23.2,
-          "benchmark_value": 23.2
-        },
-        {
-          "date": "2026-04-06",
-          "value": 22.9,
-          "benchmark_value": 23.3
-        },
-        {
-          "date": "2026-04-07",
-          "value": 23.0,
-          "benchmark_value": 23.3
-        },
-        {
-          "date": "2026-04-08",
-          "value": 23.9,
-          "benchmark_value": 23.9
-        },
-        {
-          "date": "2026-04-09",
-          "value": 22.2,
-          "benchmark_value": 24.0
-        },
-        {
-          "date": "2026-04-10",
-          "value": 22.2,
-          "benchmark_value": 24.0
-        },
-        {
-          "date": "2026-04-13",
-          "value": 22.5,
-          "benchmark_value": 24.2
-        },
-        {
-          "date": "2026-04-14",
-          "value": 23.0,
-          "benchmark_value": 24.5
-        },
-        {
-          "date": "2026-04-15",
-          "value": 23.6,
-          "benchmark_value": 24.7
-        },
-        {
-          "date": "2026-04-16",
-          "value": 23.7,
-          "benchmark_value": 24.8
-        },
-        {
-          "date": "2026-04-17",
-          "value": 22.8,
-          "benchmark_value": 25.1
-        },
-        {
-          "date": "2026-04-20",
-          "value": 22.9,
-          "benchmark_value": 25.0
-        },
-        {
-          "date": "2026-04-21",
-          "value": 23.0,
-          "benchmark_value": 24.9
-        },
-        {
-          "date": "2026-04-22",
-          "value": 22.5,
-          "benchmark_value": 25.1
-        },
-        {
-          "date": "2026-04-23",
-          "value": 22.2,
-          "benchmark_value": 25.0
-        },
-        {
-          "date": "2026-04-24",
-          "value": 23.2,
-          "benchmark_value": 25.2
-        },
-        {
-          "date": "2026-04-27",
-          "value": 23.5,
-          "benchmark_value": 25.2
-        },
-        {
-          "date": "2026-04-28",
-          "value": 23.4,
-          "benchmark_value": 25.1
-        },
-        {
-          "date": "2026-04-29",
-          "value": 23.1,
-          "benchmark_value": 25.1
-        },
-        {
-          "date": "2026-04-30",
-          "value": 23.3,
-          "benchmark_value": 25.4
-        },
-        {
-          "date": "2026-05-01",
-          "value": 23.0,
-          "benchmark_value": 25.4
-        },
-        {
-          "date": "2026-05-04",
-          "value": 23.6,
-          "benchmark_value": 25.3
-        },
-        {
-          "date": "2026-05-05",
-          "value": 24.2,
-          "benchmark_value": 25.5
-        },
-        {
-          "date": "2026-05-06",
-          "value": 23.9,
-          "benchmark_value": 25.9
-        },
-        {
-          "date": "2026-05-07",
-          "value": 25.2,
-          "benchmark_value": 25.8
-        },
-        {
-          "date": "2026-05-08",
-          "value": 25.5,
-          "benchmark_value": 26.0
-        },
-        {
-          "date": "2026-05-11",
-          "value": 24.5,
-          "benchmark_value": 26.1
-        },
-        {
-          "date": "2026-05-12",
-          "value": 24.6,
-          "benchmark_value": 26.0
-        },
-        {
-          "date": "2026-05-13",
-          "value": 25.0,
-          "benchmark_value": 26.2
-        },
-        {
-          "date": "2026-05-14",
-          "value": 25.1,
-          "benchmark_value": 26.4
-        },
-        {
-          "date": "2026-05-15",
-          "value": 25.0,
-          "benchmark_value": 26.1
-        },
-        {
-          "date": "2026-05-18",
-          "value": 25.8,
-          "benchmark_value": 26.0
-        },
-        {
-          "date": "2026-05-19",
-          "value": 25.5,
-          "benchmark_value": 25.9
-        },
-        {
-          "date": "2026-05-20",
-          "value": 25.0,
-          "benchmark_value": 26.2
-        },
-        {
-          "date": "2026-05-21",
-          "value": 25.4,
-          "benchmark_value": 26.2
-        },
-        {
-          "date": "2026-05-22",
-          "value": 25.1,
-          "benchmark_value": 26.3
-        },
-        {
-          "date": "2026-05-26",
-          "value": 23.8,
-          "benchmark_value": 26.5
-        },
-        {
-          "date": "2026-05-27",
-          "value": 25.1,
-          "benchmark_value": 26.5
-        },
-        {
-          "date": "2026-05-28",
-          "value": 24.5,
-          "benchmark_value": 26.6
-        },
-        {
-          "date": "2026-05-29",
-          "value": 24.5,
-          "benchmark_value": 26.7
-        },
-        {
-          "date": "2026-06-01",
-          "value": 26.3,
-          "benchmark_value": 26.7
-        },
-        {
-          "date": "2026-06-02",
-          "value": 25.3,
-          "benchmark_value": 26.8
-        },
-        {
-          "date": "2026-06-03",
-          "value": 25.1,
-          "benchmark_value": 26.6
-        },
-        {
-          "date": "2026-06-04",
-          "value": 25.4,
-          "benchmark_value": 26.7
-        },
-        {
-          "date": "2026-06-05",
-          "value": 24.9,
-          "benchmark_value": 26.0
-        },
-        {
-          "date": "2026-06-08",
-          "value": 24.8,
-          "benchmark_value": 26.1
-        },
-        {
-          "date": "2026-06-09",
-          "value": 27.6,
-          "benchmark_value": 26.0
-        },
-        {
-          "date": "2026-06-10",
-          "value": 28.8,
-          "benchmark_value": 25.6
-        },
-        {
-          "date": "2026-06-11",
-          "value": 30.0,
-          "benchmark_value": 26.0
-        },
-        {
-          "date": "2026-06-12",
-          "value": 29.0,
-          "benchmark_value": 26.1
-        },
-        {
-          "date": "2026-06-15",
-          "value": 28.8,
-          "benchmark_value": 26.6
-        },
-        {
-          "date": "2026-06-16",
-          "value": 28.5,
-          "benchmark_value": 26.4
-        },
-        {
-          "date": "2026-06-17",
-          "value": 26.3,
-          "benchmark_value": 26.1
-        },
-        {
-          "date": "2026-06-18",
-          "value": 26.4,
-          "benchmark_value": 26.4
-        }
-      ]
-    },
-    {
-      "symbol": "BABA",
-      "name": "阿里巴巴 (Alibaba)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+2.9% YoY",
-      "sitcaForce": "1.65% (券商融券比率)",
-      "chipConcentration": "11.4% (機構總持倉)",
-      "currentPrice": 107.1,
-      "targetPrice": 160.65,
-      "stopLoss": 91.03,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 0.0,
-          "type": "neutral"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 1.1,
-          "type": "negative"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 6.0,
-          "type": "negative"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 3.2,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 128.7,
-          "benchmark_value": 94.1
-        },
-        {
-          "date": "2026-03-26",
-          "value": 124.3,
-          "benchmark_value": 92.5
-        },
-        {
-          "date": "2026-03-27",
-          "value": 121.6,
-          "benchmark_value": 90.9
-        },
-        {
-          "date": "2026-03-30",
-          "value": 120.9,
-          "benchmark_value": 90.6
-        },
-        {
-          "date": "2026-03-31",
-          "value": 124.3,
-          "benchmark_value": 93.2
-        },
-        {
-          "date": "2026-04-01",
-          "value": 122.6,
-          "benchmark_value": 93.9
-        },
-        {
-          "date": "2026-04-02",
-          "value": 120.9,
-          "benchmark_value": 94.0
-        },
-        {
-          "date": "2026-04-06",
-          "value": 121.2,
-          "benchmark_value": 94.4
-        },
-        {
-          "date": "2026-04-07",
-          "value": 118.6,
-          "benchmark_value": 94.5
-        },
-        {
-          "date": "2026-04-08",
-          "value": 124.2,
-          "benchmark_value": 96.9
-        },
-        {
-          "date": "2026-04-09",
-          "value": 126.5,
-          "benchmark_value": 97.4
-        },
-        {
-          "date": "2026-04-10",
-          "value": 126.2,
-          "benchmark_value": 97.3
-        },
-        {
-          "date": "2026-04-13",
-          "value": 126.8,
-          "benchmark_value": 98.3
-        },
-        {
-          "date": "2026-04-14",
-          "value": 130.2,
-          "benchmark_value": 99.5
-        },
-        {
-          "date": "2026-04-15",
-          "value": 132.1,
-          "benchmark_value": 100.3
-        },
-        {
-          "date": "2026-04-16",
-          "value": 137.3,
-          "benchmark_value": 100.5
-        },
-        {
-          "date": "2026-04-17",
-          "value": 139.7,
-          "benchmark_value": 101.8
-        },
-        {
-          "date": "2026-04-20",
-          "value": 138.9,
-          "benchmark_value": 101.5
-        },
-        {
-          "date": "2026-04-21",
-          "value": 134.1,
-          "benchmark_value": 100.9
-        },
-        {
-          "date": "2026-04-22",
-          "value": 135.2,
-          "benchmark_value": 101.9
-        },
-        {
-          "date": "2026-04-23",
-          "value": 130.5,
-          "benchmark_value": 101.5
-        },
-        {
-          "date": "2026-04-24",
-          "value": 134.6,
-          "benchmark_value": 102.3
-        },
-        {
-          "date": "2026-04-27",
-          "value": 131.3,
-          "benchmark_value": 102.4
-        },
-        {
-          "date": "2026-04-28",
-          "value": 129.7,
-          "benchmark_value": 101.9
-        },
-        {
-          "date": "2026-04-29",
-          "value": 129.2,
-          "benchmark_value": 101.9
-        },
-        {
-          "date": "2026-04-30",
-          "value": 130.7,
-          "benchmark_value": 102.9
-        },
-        {
-          "date": "2026-05-01",
-          "value": 130.3,
-          "benchmark_value": 103.2
-        },
-        {
-          "date": "2026-05-04",
-          "value": 132.1,
-          "benchmark_value": 102.8
-        },
-        {
-          "date": "2026-05-05",
-          "value": 131.1,
-          "benchmark_value": 103.7
-        },
-        {
-          "date": "2026-05-06",
-          "value": 140.2,
-          "benchmark_value": 105.2
-        },
-        {
-          "date": "2026-05-07",
-          "value": 139.7,
-          "benchmark_value": 104.8
-        },
-        {
-          "date": "2026-05-08",
-          "value": 138.8,
-          "benchmark_value": 105.6
-        },
-        {
-          "date": "2026-05-11",
-          "value": 136.1,
-          "benchmark_value": 105.8
-        },
-        {
-          "date": "2026-05-12",
-          "value": 133.6,
-          "benchmark_value": 105.7
-        },
-        {
-          "date": "2026-05-13",
-          "value": 144.5,
-          "benchmark_value": 106.3
-        },
-        {
-          "date": "2026-05-14",
-          "value": 139.8,
-          "benchmark_value": 107.1
-        },
-        {
-          "date": "2026-05-15",
-          "value": 131.4,
-          "benchmark_value": 105.8
-        },
-        {
-          "date": "2026-05-18",
-          "value": 132.0,
-          "benchmark_value": 105.7
-        },
-        {
-          "date": "2026-05-19",
-          "value": 134.4,
-          "benchmark_value": 105.0
-        },
-        {
-          "date": "2026-05-20",
-          "value": 133.2,
-          "benchmark_value": 106.1
-        },
-        {
-          "date": "2026-05-21",
-          "value": 130.3,
-          "benchmark_value": 106.3
-        },
-        {
-          "date": "2026-05-22",
-          "value": 128.8,
-          "benchmark_value": 106.7
-        },
-        {
-          "date": "2026-05-26",
-          "value": 128.3,
-          "benchmark_value": 107.4
-        },
-        {
-          "date": "2026-05-27",
-          "value": 126.6,
-          "benchmark_value": 107.4
-        },
-        {
-          "date": "2026-05-28",
-          "value": 125.0,
-          "benchmark_value": 108.0
-        },
-        {
-          "date": "2026-05-29",
-          "value": 123.1,
-          "benchmark_value": 108.2
-        },
-        {
-          "date": "2026-06-01",
-          "value": 124.3,
-          "benchmark_value": 108.5
-        },
-        {
-          "date": "2026-06-02",
-          "value": 129.6,
-          "benchmark_value": 108.7
-        },
-        {
-          "date": "2026-06-03",
-          "value": 126.1,
-          "benchmark_value": 107.9
-        },
-        {
-          "date": "2026-06-04",
-          "value": 124.8,
-          "benchmark_value": 108.3
-        },
-        {
-          "date": "2026-06-05",
-          "value": 120.0,
-          "benchmark_value": 105.4
-        },
-        {
-          "date": "2026-06-08",
-          "value": 119.0,
-          "benchmark_value": 105.7
-        },
-        {
-          "date": "2026-06-09",
-          "value": 118.6,
-          "benchmark_value": 105.5
-        },
-        {
-          "date": "2026-06-10",
-          "value": 114.3,
-          "benchmark_value": 103.8
-        },
-        {
-          "date": "2026-06-11",
-          "value": 112.7,
-          "benchmark_value": 105.6
-        },
-        {
-          "date": "2026-06-12",
-          "value": 112.8,
-          "benchmark_value": 106.1
-        },
-        {
-          "date": "2026-06-15",
-          "value": 112.6,
-          "benchmark_value": 107.9
-        },
-        {
-          "date": "2026-06-16",
-          "value": 111.0,
-          "benchmark_value": 107.3
-        },
-        {
-          "date": "2026-06-17",
-          "value": 107.4,
-          "benchmark_value": 106.0
-        },
-        {
-          "date": "2026-06-18",
-          "value": 107.1,
-          "benchmark_value": 107.1
-        }
-      ]
-    },
-    {
-      "symbol": "PATH",
-      "name": "路徑機器人 (UiPath)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+17.3% YoY",
-      "sitcaForce": "30.98% (券商融券比率)",
-      "chipConcentration": "82.4% (機構總持倉)",
-      "currentPrice": 10.27,
-      "targetPrice": 15.41,
-      "stopLoss": 8.73,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 12.0,
-          "type": "positive"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 8.2,
-          "type": "positive"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 0.0,
-          "type": "negative"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 1.4,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 10.9,
-          "benchmark_value": 9.0
-        },
-        {
-          "date": "2026-03-26",
-          "value": 11.0,
-          "benchmark_value": 8.9
-        },
-        {
-          "date": "2026-03-27",
-          "value": 10.7,
-          "benchmark_value": 8.7
-        },
-        {
-          "date": "2026-03-30",
-          "value": 10.9,
-          "benchmark_value": 8.7
-        },
-        {
-          "date": "2026-03-31",
-          "value": 11.1,
-          "benchmark_value": 8.9
-        },
-        {
-          "date": "2026-04-01",
-          "value": 11.0,
-          "benchmark_value": 9.0
-        },
-        {
-          "date": "2026-04-02",
-          "value": 11.2,
-          "benchmark_value": 9.0
-        },
-        {
-          "date": "2026-04-06",
-          "value": 11.1,
-          "benchmark_value": 9.1
-        },
-        {
-          "date": "2026-04-07",
-          "value": 10.9,
-          "benchmark_value": 9.1
-        },
-        {
-          "date": "2026-04-08",
-          "value": 10.4,
-          "benchmark_value": 9.3
-        },
-        {
-          "date": "2026-04-09",
-          "value": 9.9,
-          "benchmark_value": 9.3
-        },
-        {
-          "date": "2026-04-10",
-          "value": 9.4,
-          "benchmark_value": 9.3
-        },
-        {
-          "date": "2026-04-13",
-          "value": 10.1,
-          "benchmark_value": 9.4
-        },
-        {
-          "date": "2026-04-14",
-          "value": 10.0,
-          "benchmark_value": 9.5
-        },
-        {
-          "date": "2026-04-15",
-          "value": 10.6,
-          "benchmark_value": 9.6
-        },
-        {
-          "date": "2026-04-16",
-          "value": 10.6,
-          "benchmark_value": 9.6
-        },
-        {
-          "date": "2026-04-17",
-          "value": 10.4,
-          "benchmark_value": 9.8
-        },
-        {
-          "date": "2026-04-20",
-          "value": 10.6,
-          "benchmark_value": 9.7
-        },
-        {
-          "date": "2026-04-21",
-          "value": 10.8,
-          "benchmark_value": 9.7
-        },
-        {
-          "date": "2026-04-22",
-          "value": 10.9,
-          "benchmark_value": 9.8
-        },
-        {
-          "date": "2026-04-23",
-          "value": 10.1,
-          "benchmark_value": 9.7
-        },
-        {
-          "date": "2026-04-24",
-          "value": 10.4,
-          "benchmark_value": 9.8
-        },
-        {
-          "date": "2026-04-27",
-          "value": 10.5,
-          "benchmark_value": 9.8
-        },
-        {
-          "date": "2026-04-28",
-          "value": 10.6,
-          "benchmark_value": 9.8
-        },
-        {
-          "date": "2026-04-29",
-          "value": 10.4,
-          "benchmark_value": 9.8
-        },
-        {
-          "date": "2026-04-30",
-          "value": 10.3,
-          "benchmark_value": 9.9
-        },
-        {
-          "date": "2026-05-01",
-          "value": 10.7,
-          "benchmark_value": 9.9
-        },
-        {
-          "date": "2026-05-04",
-          "value": 10.8,
-          "benchmark_value": 9.9
-        },
-        {
-          "date": "2026-05-05",
-          "value": 10.7,
-          "benchmark_value": 9.9
-        },
-        {
-          "date": "2026-05-06",
-          "value": 10.5,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-07",
-          "value": 10.9,
-          "benchmark_value": 10.0
-        },
-        {
-          "date": "2026-05-08",
-          "value": 10.8,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-11",
-          "value": 10.7,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-12",
-          "value": 10.0,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-13",
-          "value": 9.5,
-          "benchmark_value": 10.2
-        },
-        {
-          "date": "2026-05-14",
-          "value": 9.7,
-          "benchmark_value": 10.3
-        },
-        {
-          "date": "2026-05-15",
-          "value": 10.3,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-18",
-          "value": 10.6,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-19",
-          "value": 10.6,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-05-20",
-          "value": 10.8,
-          "benchmark_value": 10.2
-        },
-        {
-          "date": "2026-05-21",
-          "value": 10.6,
-          "benchmark_value": 10.2
-        },
-        {
-          "date": "2026-05-22",
-          "value": 10.9,
-          "benchmark_value": 10.2
-        },
-        {
-          "date": "2026-05-26",
-          "value": 11.1,
-          "benchmark_value": 10.3
-        },
-        {
-          "date": "2026-05-27",
-          "value": 11.2,
-          "benchmark_value": 10.3
-        },
-        {
-          "date": "2026-05-28",
-          "value": 11.6,
-          "benchmark_value": 10.4
-        },
-        {
-          "date": "2026-05-29",
-          "value": 11.7,
-          "benchmark_value": 10.4
-        },
-        {
-          "date": "2026-06-01",
-          "value": 13.1,
-          "benchmark_value": 10.4
-        },
-        {
-          "date": "2026-06-02",
-          "value": 12.2,
-          "benchmark_value": 10.4
-        },
-        {
-          "date": "2026-06-03",
-          "value": 11.7,
-          "benchmark_value": 10.3
-        },
-        {
-          "date": "2026-06-04",
-          "value": 11.7,
-          "benchmark_value": 10.4
-        },
-        {
-          "date": "2026-06-05",
-          "value": 11.2,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-06-08",
-          "value": 11.2,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-06-09",
-          "value": 10.8,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-06-10",
-          "value": 10.8,
-          "benchmark_value": 10.0
-        },
-        {
-          "date": "2026-06-11",
-          "value": 10.6,
-          "benchmark_value": 10.1
-        },
-        {
-          "date": "2026-06-12",
-          "value": 10.6,
-          "benchmark_value": 10.2
-        },
-        {
-          "date": "2026-06-15",
-          "value": 10.8,
-          "benchmark_value": 10.3
-        },
-        {
-          "date": "2026-06-16",
-          "value": 10.5,
-          "benchmark_value": 10.3
-        },
-        {
-          "date": "2026-06-17",
-          "value": 10.2,
-          "benchmark_value": 10.2
-        },
-        {
-          "date": "2026-06-18",
-          "value": 10.3,
-          "benchmark_value": 10.3
-        }
-      ]
-    },
-    {
-      "symbol": "NOW",
-      "name": "服務現在 (ServiceNow)",
-      "probability": 35.0,
-      "triggerType": "大型權值 + 趨勢多頭",
-      "rsRating": 60,
-      "epsAcceleration": "+22.1% YoY",
-      "sitcaForce": "5.93% (券商融券比率)",
-      "chipConcentration": "88.5% (機構總持倉)",
-      "currentPrice": 95.04,
-      "targetPrice": 142.56,
-      "stopLoss": 80.78,
-      "theme": "AI 雲端計算與高成長半導體題材",
-      "features": [
-        {
-          "name": "空頭軋空回補潛力 (Short Squeeze)",
-          "value": 9.0,
-          "type": "positive"
-        },
-        {
-          "name": "美股大咖機構持股 (Inst Ownership)",
-          "value": 8.8,
-          "type": "positive"
-        },
-        {
-          "name": "VCP 波動收縮突破 (VCP Setup)",
-          "value": 0.0,
-          "type": "negative"
-        },
-        {
-          "name": "相對標普500強度 (RS Rating)",
-          "value": 0.0,
-          "type": "negative"
-        },
-        {
-          "name": "美股大盤指數阻力 (S&P Drag)",
-          "value": -0.5,
-          "type": "negative"
-        }
-      ],
-      "chartData": [
-        {
-          "date": "2026-03-25",
-          "value": 103.1,
-          "benchmark_value": 83.5
-        },
-        {
-          "date": "2026-03-26",
-          "value": 103.6,
-          "benchmark_value": 82.1
-        },
-        {
-          "date": "2026-03-27",
-          "value": 99.4,
-          "benchmark_value": 80.7
-        },
-        {
-          "date": "2026-03-30",
-          "value": 105.0,
-          "benchmark_value": 80.4
-        },
-        {
-          "date": "2026-03-31",
-          "value": 104.6,
-          "benchmark_value": 82.7
-        },
-        {
-          "date": "2026-04-01",
-          "value": 104.0,
-          "benchmark_value": 83.3
-        },
-        {
-          "date": "2026-04-02",
-          "value": 102.0,
-          "benchmark_value": 83.4
-        },
-        {
-          "date": "2026-04-06",
-          "value": 102.4,
-          "benchmark_value": 83.8
-        },
-        {
-          "date": "2026-04-07",
-          "value": 100.6,
-          "benchmark_value": 83.8
-        },
-        {
-          "date": "2026-04-08",
-          "value": 97.5,
-          "benchmark_value": 85.9
-        },
-        {
-          "date": "2026-04-09",
-          "value": 89.8,
-          "benchmark_value": 86.5
-        },
-        {
-          "date": "2026-04-10",
-          "value": 83.0,
-          "benchmark_value": 86.4
-        },
-        {
-          "date": "2026-04-13",
-          "value": 89.1,
-          "benchmark_value": 87.3
-        },
-        {
-          "date": "2026-04-14",
-          "value": 87.8,
-          "benchmark_value": 88.3
-        },
-        {
-          "date": "2026-04-15",
-          "value": 94.2,
-          "benchmark_value": 89.0
-        },
-        {
-          "date": "2026-04-16",
-          "value": 96.4,
-          "benchmark_value": 89.2
-        },
-        {
-          "date": "2026-04-17",
-          "value": 96.7,
-          "benchmark_value": 90.3
-        },
-        {
-          "date": "2026-04-20",
-          "value": 99.7,
-          "benchmark_value": 90.1
-        },
-        {
-          "date": "2026-04-21",
-          "value": 100.1,
-          "benchmark_value": 89.5
-        },
-        {
-          "date": "2026-04-22",
-          "value": 103.1,
-          "benchmark_value": 90.4
-        },
-        {
-          "date": "2026-04-23",
-          "value": 84.8,
-          "benchmark_value": 90.1
-        },
-        {
-          "date": "2026-04-24",
-          "value": 90.2,
-          "benchmark_value": 90.8
-        },
-        {
-          "date": "2026-04-27",
-          "value": 90.4,
-          "benchmark_value": 90.9
-        },
-        {
-          "date": "2026-04-28",
-          "value": 90.5,
-          "benchmark_value": 90.5
-        },
-        {
-          "date": "2026-04-29",
-          "value": 88.9,
-          "benchmark_value": 90.4
-        },
-        {
-          "date": "2026-04-30",
-          "value": 88.3,
-          "benchmark_value": 91.3
-        },
-        {
-          "date": "2026-05-01",
-          "value": 91.2,
-          "benchmark_value": 91.6
-        },
-        {
-          "date": "2026-05-04",
-          "value": 92.0,
-          "benchmark_value": 91.2
-        },
-        {
-          "date": "2026-05-05",
-          "value": 92.0,
-          "benchmark_value": 92.0
-        },
-        {
-          "date": "2026-05-06",
-          "value": 89.1,
-          "benchmark_value": 93.3
-        },
-        {
-          "date": "2026-05-07",
-          "value": 93.6,
-          "benchmark_value": 93.0
-        },
-        {
-          "date": "2026-05-08",
-          "value": 91.2,
-          "benchmark_value": 93.8
-        },
-        {
-          "date": "2026-05-11",
-          "value": 91.5,
-          "benchmark_value": 93.9
-        },
-        {
-          "date": "2026-05-12",
-          "value": 89.0,
-          "benchmark_value": 93.8
-        },
-        {
-          "date": "2026-05-13",
-          "value": 87.1,
-          "benchmark_value": 94.3
-        },
-        {
-          "date": "2026-05-14",
-          "value": 90.5,
-          "benchmark_value": 95.0
-        },
-        {
-          "date": "2026-05-15",
-          "value": 95.1,
-          "benchmark_value": 93.9
-        },
-        {
-          "date": "2026-05-18",
-          "value": 103.4,
-          "benchmark_value": 93.8
-        },
-        {
-          "date": "2026-05-19",
-          "value": 101.8,
-          "benchmark_value": 93.2
-        },
-        {
-          "date": "2026-05-20",
-          "value": 103.3,
-          "benchmark_value": 94.2
-        },
-        {
-          "date": "2026-05-21",
-          "value": 99.7,
-          "benchmark_value": 94.3
-        },
-        {
-          "date": "2026-05-22",
-          "value": 102.1,
-          "benchmark_value": 94.7
-        },
-        {
-          "date": "2026-05-26",
-          "value": 99.9,
-          "benchmark_value": 95.3
-        },
-        {
-          "date": "2026-05-27",
-          "value": 102.1,
-          "benchmark_value": 95.3
-        },
-        {
-          "date": "2026-05-28",
-          "value": 108.7,
-          "benchmark_value": 95.8
-        },
-        {
-          "date": "2026-05-29",
-          "value": 124.4,
-          "benchmark_value": 96.0
-        },
-        {
-          "date": "2026-06-01",
-          "value": 135.9,
-          "benchmark_value": 96.3
-        },
-        {
-          "date": "2026-06-02",
-          "value": 127.7,
-          "benchmark_value": 96.4
-        },
-        {
-          "date": "2026-06-03",
-          "value": 117.9,
-          "benchmark_value": 95.7
-        },
-        {
-          "date": "2026-06-04",
-          "value": 119.4,
-          "benchmark_value": 96.1
-        },
-        {
-          "date": "2026-06-05",
-          "value": 112.4,
-          "benchmark_value": 93.6
-        },
-        {
-          "date": "2026-06-08",
-          "value": 114.2,
-          "benchmark_value": 93.8
-        },
-        {
-          "date": "2026-06-09",
-          "value": 107.0,
-          "benchmark_value": 93.6
-        },
-        {
-          "date": "2026-06-10",
-          "value": 106.1,
-          "benchmark_value": 92.1
-        },
-        {
-          "date": "2026-06-11",
-          "value": 103.1,
-          "benchmark_value": 93.7
-        },
-        {
-          "date": "2026-06-12",
-          "value": 102.2,
-          "benchmark_value": 94.2
-        },
-        {
-          "date": "2026-06-15",
-          "value": 104.2,
-          "benchmark_value": 95.7
-        },
-        {
-          "date": "2026-06-16",
-          "value": 101.3,
-          "benchmark_value": 95.2
-        },
-        {
-          "date": "2026-06-17",
-          "value": 95.5,
-          "benchmark_value": 94.0
-        },
-        {
-          "date": "2026-06-18",
-          "value": 95.0,
-          "benchmark_value": 95.0
-        }
-      ]
     }
   ],
   "meta": {
-    "scanTime": "2026-06-19 23:39",
+    "scanTime": "2026-06-20 07:58",
     "totalScanned": 40,
     "totalResults": 39,
     "modelType": "Heuristics-US (VCP + ShortInterest + RevenueGrowth)",
