@@ -1,5 +1,5 @@
 {
-  "scan_date": "2026-07-03",
+  "scan_date": "2026-07-06",
   "results": [
     {
       "symbol": "SNOW",
@@ -2753,7 +2753,7 @@
       "rsRating": 60,
       "epsAcceleration": "+16.8% YoY",
       "sitcaForce": "8.6% (券商融券比率)",
-      "chipConcentration": "81.8% (機構總持倉)",
+      "chipConcentration": "81.9% (機構總持倉)",
       "currentPrice": 29.32,
       "targetPrice": 43.98,
       "stopLoss": 24.92,
@@ -13380,7 +13380,7 @@
     }
   ],
   "meta": {
-    "scanTime": "2026-07-03 23:37",
+    "scanTime": "2026-07-06 23:41",
     "totalScanned": 40,
     "totalResults": 39,
     "modelType": "Heuristics-US (VCP + ShortInterest + RevenueGrowth)",
