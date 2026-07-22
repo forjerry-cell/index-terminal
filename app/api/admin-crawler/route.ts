@@ -76,7 +76,7 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
   const targetSet = new Set(displayNames);
 
   for (let pageNum = 1; pageNum <= 5; pageNum++) {
-    const pageResults = await page.evaluate(async () => {
+    const pageResults = await page.evaluate(async (targets) => {
       const scrollContainer =
         document.querySelector('.ant-table-body') ||
         document.querySelector('.ant-table-content') ||
@@ -90,6 +90,7 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
           (th) => th.textContent?.trim() || '',
         );
 
+        const idxDisplayName = headers.findIndex((h) => h.includes('顯示名稱'));
         const idxStrategyName = headers.findIndex((h) => h.includes('策略名稱'));
         const idxProduct = headers.findIndex((h) => h.includes('策略商品'));
         const idxPosition = headers.findIndex((h) => h.includes('目前部位'));
@@ -100,15 +101,34 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
           const cells = Array.from(row.querySelectorAll('td'));
           if (cells.length < 5) return;
 
-          const name =
+          const sName =
             idxStrategyName !== -1 && cells[idxStrategyName]
               ? cells[idxStrategyName].innerText?.trim() || ''
               : cells[2]?.innerText?.trim() || '';
+          
+          const dName = 
+            idxDisplayName !== -1 && cells[idxDisplayName]
+              ? cells[idxDisplayName].innerText?.trim() || ''
+              : '';
 
-          if (!name || name === '-') return;
+          if ((!sName || sName === '-') && (!dName || dName === '-')) return;
 
-          localMap.set(name, {
-            strategyName: name,
+          // 判斷是否符合使用者上傳的名單
+          const targetArray = targets || [];
+          let matchedName = sName;
+          
+          // 如果網頁上的 dName (顯示名稱) 或 sName (策略名稱) 有在名單內，就採用名單內的那個名字
+          if (targetArray.includes(dName)) {
+            matchedName = dName;
+          } else if (targetArray.includes(sName)) {
+            matchedName = sName;
+          } else {
+            // 如果都不在名單內，還是先暫存下來，後續 filter 會濾掉
+            matchedName = dName || sName;
+          }
+
+          localMap.set(matchedName, {
+            strategyName: matchedName,
             product:
               idxProduct !== -1 && cells[idxProduct]
                 ? cells[idxProduct].innerText?.trim() || ''
@@ -129,7 +149,7 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
       }
 
       return Array.from(localMap.values());
-    });
+    }, displayNames);
 
     pageResults.forEach((item) => allData.set(item.strategyName, item));
 
