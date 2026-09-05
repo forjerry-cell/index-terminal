@@ -78,11 +78,11 @@ function NavbarContent({ forceActive }: NavbarProps) {
             <Link href="/?index=taiwan" style={getNavStyle('taiwan')}>
               台股領航強勢指數
             </Link>
-            <Link href="/taiwan-momentum" style={getNavStyle('momentum')}>
-              台股強勢動能指數
-            </Link>
             <Link href="/?index=nasdaq" style={getNavStyle('nasdaq')}>
               那指領航強勢指數
+            </Link>
+            <Link href="/taiwan-momentum" style={getNavStyle('momentum')}>
+              台股強勢動能指數
             </Link>
             <Link href="/alphafalcon" style={getNavStyle('alphafalcon')}>
               AlphaFalcon 飆股預測

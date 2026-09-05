@@ -246,7 +246,7 @@ export default function TaiwanMomentumPage() {
               </span>
             </div>
 
-            <div className="table-container" style={{ maxHeight: '680px', overflowY: 'auto' }}>
+            <div className="table-container">
               <table>
                 <thead>
                   <tr>
