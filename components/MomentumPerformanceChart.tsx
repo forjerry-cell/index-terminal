@@ -139,7 +139,7 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               <Line
                 type="monotone"
                 dataKey={timeRange === 'MAX' ? 'original_value' : 'norm_orig'}
-                name="原版 FTHB003V02 (50檔被動)"
+                name="原版 FTHB (50檔)"
                 stroke="#6366f1"
                 strokeWidth={2}
                 strokeDasharray="6 6"

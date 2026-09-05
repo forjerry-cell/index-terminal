@@ -3,7 +3,7 @@
     "id": "taiwan_momentum_30",
     "name": "台股強勢動能指數",
     "subtitle": "Taiwan High Beta Momentum Top 30 Index",
-    "description": "以台灣高波動指數 (FTHB003) 官方成分股為母體，每半年精選過去 126 日累積報酬領先的前 60%（30 檔）動能龍頭，剔除後段鈍化標的並等比例放大至 100% 滿倉。在不承擔額外暴跌風險的條件下，極大化多頭爆發力與超額 Alpha。",
+    "description": "以台灣高波動指數 (FTHB003V02) 官方成分股為母體，每半年精選過去 126 日累積報酬領先的前 60%（30 檔）動能龍頭，剔除後段鈍化標的並等比例放大至 100% 滿倉。在不承擔額外暴跌風險的條件下，極大化多頭爆發力與超額 Alpha。",
     "base_date": "2018-12-18",
     "base_value": 1.0,
     "benchmark_name": "加權指數 TAIEX (TR)",
