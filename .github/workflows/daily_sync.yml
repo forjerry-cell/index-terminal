@@ -26,7 +26,17 @@ jobs:
         env:
           SUPABASE_URL: "https://nnoazshcucwjlccjqtkl.supabase.co"
           SUPABASE_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ub2F6c2hjdWN3amxjY2pxdGtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDgzNzYsImV4cCI6MjA5MjI4NDM3Nn0.FE-onwhqZNBWWdUBoqD1lR-n5So9PbQ9BvjB9pWCz6g"
-        run: python scripts/sync_to_supabase.py
+        run: |
+          python scripts/sync_to_supabase.py
+          python scripts/update_taiwan_momentum_daily.py
+
+      - name: Commit & Push updated JSON
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/taiwan_momentum_30.json
+          git commit -m "data: Auto-update Taiwan Momentum 30 daily NAV" || echo "No changes to commit"
+          git push origin main
 
       - name: Send Daily Report Email
         env:

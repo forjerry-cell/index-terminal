@@ -6,7 +6,7 @@ import { LogOut, Settings, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-type NavbarTab = 'taiwan' | 'nasdaq' | 'system' | 'alphafalcon';
+type NavbarTab = 'taiwan' | 'momentum' | 'nasdaq' | 'system' | 'alphafalcon';
 
 interface NavbarProps {
   forceActive?: NavbarTab;
@@ -21,6 +21,7 @@ function NavbarContent({ forceActive }: NavbarProps) {
 
   const isSystemPage = pathname === '/system' || pathname.startsWith('/system/');
   const isAlphaFalconPage = pathname === '/alphafalcon' || pathname.startsWith('/alphafalcon/');
+  const isMomentumPage = pathname === '/taiwan-momentum' || pathname.startsWith('/taiwan-momentum/');
   const indexParam = searchParams.get('index');
   
   const activeTab: NavbarTab = forceActive
@@ -29,9 +30,11 @@ function NavbarContent({ forceActive }: NavbarProps) {
       ? 'system'
       : isAlphaFalconPage
         ? 'alphafalcon'
-        : indexParam === 'nasdaq' || indexParam === 'nasdaq_high_beta'
-          ? 'nasdaq'
-          : 'taiwan';
+        : isMomentumPage
+          ? 'momentum'
+          : indexParam === 'nasdaq' || indexParam === 'nasdaq_high_beta'
+            ? 'nasdaq'
+            : 'taiwan';
 
   useEffect(() => {
     async function loadProfile() {
@@ -74,6 +77,9 @@ function NavbarContent({ forceActive }: NavbarProps) {
           <div className="flex gap-4 nav-links">
             <Link href="/?index=taiwan" style={getNavStyle('taiwan')}>
               台股領航強勢指數
+            </Link>
+            <Link href="/taiwan-momentum" style={getNavStyle('momentum')}>
+              台股強勢動能指數
             </Link>
             <Link href="/?index=nasdaq" style={getNavStyle('nasdaq')}>
               那指領航強勢指數
