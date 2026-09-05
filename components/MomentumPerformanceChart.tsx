@@ -11,7 +11,6 @@ type TimeRange = '1M' | '3M' | '6M' | '1Y' | '3Y' | 'MAX';
 
 export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>('MAX');
-  const [includePostFee, setIncludePostFee] = useState<boolean>(true);
   const [showOriginal, setShowOriginal] = useState<boolean>(true);
   const [showTW50, setShowTW50] = useState<boolean>(true);
   const [showTAIEX, setShowTAIEX] = useState<boolean>(true);
@@ -57,21 +56,17 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
     <div className="flex flex-col w-full">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
         <div className="flex flex-wrap items-center gap-4">
-          <label style={{ fontSize: '0.8125rem', color: '#f43f5e', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontWeight: 600 }}>
-            <input type="checkbox" checked={includePostFee} onChange={(e) => setIncludePostFee(e.target.checked)} />
-            顯示扣費後 (Top 30)
-          </label>
           <label style={{ fontSize: '0.8125rem', color: '#818cf8', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontWeight: 500 }}>
             <input type="checkbox" checked={showOriginal} onChange={(e) => setShowOriginal(e.target.checked)} />
             原版 FTHB (50檔)
           </label>
           <label style={{ fontSize: '0.8125rem', color: '#2dd4bf', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontWeight: 500 }}>
             <input type="checkbox" checked={showTW50} onChange={(e) => setShowTW50(e.target.checked)} />
-            台灣50 (TR)
+            台灣50
           </label>
           <label style={{ fontSize: '0.8125rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontWeight: 500 }}>
             <input type="checkbox" checked={showTAIEX} onChange={(e) => setShowTAIEX(e.target.checked)} />
-            加權指數 (TR)
+            加權指數
           </label>
         </div>
 
@@ -140,18 +135,6 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               activeDot={{ r: 6, fill: '#e11d48' }}
             />
 
-            {includePostFee && (
-              <Line
-                type="monotone"
-                dataKey={timeRange === 'MAX' ? 'value_post' : 'norm_value_post'}
-                name="台股強勢動能指數 (扣費後)"
-                stroke="#fb7185"
-                strokeWidth={2}
-                strokeDasharray="4 4"
-                dot={false}
-              />
-            )}
-
             {showOriginal && (
               <Line
                 type="monotone"
@@ -168,7 +151,7 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               <Line
                 type="monotone"
                 dataKey={timeRange === 'MAX' ? 'tw50_value' : 'norm_tw50'}
-                name="台灣50 TW50 (TR)"
+                name="台灣50"
                 stroke="#14b8a6"
                 strokeWidth={1.8}
                 strokeDasharray="3 3"
@@ -180,7 +163,7 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               <Line
                 type="monotone"
                 dataKey={timeRange === 'MAX' ? 'benchmark_value' : 'norm_bm'}
-                name="加權指數 TAIEX (TR)"
+                name="加權指數"
                 stroke="#9ca3af"
                 strokeWidth={1.6}
                 strokeDasharray="2 2"

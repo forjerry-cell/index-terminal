@@ -135,12 +135,12 @@ export default function TaiwanMomentumPage() {
           </div>
 
           <div className="card animate-fade" style={{ animationDelay: '0.05s' }}>
-            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 600 }}>累積總報酬 (未扣費 / 扣費後)</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 600 }}>累積總報酬率</span>
             <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent)', marginTop: '0.5rem' }}>
               +{(stats.totalReturn * 100).toFixed(1)}%
             </div>
-            <p style={{ fontSize: '0.8125rem', color: '#fb7185', marginTop: '0.25rem' }}>
-              法人扣費後：+{(stats.totalReturnPost * 100).toFixed(1)}%
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+              原版 FTHB (50檔)：+{(stats.totalReturnOrig * 100).toFixed(1)}%
             </p>
           </div>
 
