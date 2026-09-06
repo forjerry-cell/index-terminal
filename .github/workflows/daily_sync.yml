@@ -9,18 +9,26 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
-          pip install yfinance pandas numpy supabase
+          pip install --upgrade pip
+          pip install yfinance pandas numpy supabase requests
 
       - name: Run sync script
         env:
@@ -35,10 +43,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add public/taiwan_momentum_30.json
-          git commit -m "data: Auto-update Taiwan Momentum 30 daily NAV" || echo "No changes to commit"
-          git push origin main
+          if ! git diff --cached --quiet; then
+            git commit -m "data: Auto-update Taiwan Momentum 30 daily NAV"
+            git push origin main
+          else
+            echo "No changes to commit, skipping push."
+          fi
 
       - name: Send Daily Report Email
+        if: always()
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
