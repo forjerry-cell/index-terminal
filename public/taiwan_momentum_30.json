@@ -81,18 +81,18 @@
       "market": "上市"
     },
     {
-      "symbol": "6274O",
+      "symbol": "6274",
       "name": "台燿",
       "weight": 4.19,
       "momentum_126d": "300.8%",
-      "market": "上市"
+      "market": "上櫃"
     },
     {
-      "symbol": "8299O",
+      "symbol": "8299",
       "name": "群聯",
       "weight": 3.98,
       "momentum_126d": "116.9%",
-      "market": "上市"
+      "market": "上櫃"
     },
     {
       "symbol": "2344",
@@ -116,11 +116,11 @@
       "market": "上市"
     },
     {
-      "symbol": "5274O",
+      "symbol": "5274",
       "name": "信驊",
       "weight": 3.52,
       "momentum_126d": "181.4%",
-      "market": "上市"
+      "market": "上櫃"
     },
     {
       "symbol": "2368",
@@ -130,11 +130,11 @@
       "market": "上市"
     },
     {
-      "symbol": "6223O",
+      "symbol": "6223",
       "name": "旺矽",
       "weight": 3.19,
       "momentum_126d": "187.9%",
-      "market": "上市"
+      "market": "上櫃"
     },
     {
       "symbol": "3189",
@@ -151,18 +151,18 @@
       "market": "上市"
     },
     {
-      "symbol": "6488O",
+      "symbol": "6488",
       "name": "環球晶",
       "weight": 2.34,
       "momentum_126d": "188.2%",
-      "market": "上市"
+      "market": "上櫃"
     },
     {
-      "symbol": "3529O",
+      "symbol": "3529",
       "name": "力旺",
       "weight": 2.21,
       "momentum_126d": "58.1%",
-      "market": "上市"
+      "market": "上櫃"
     },
     {
       "symbol": "4958",
