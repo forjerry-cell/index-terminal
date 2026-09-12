@@ -21,7 +21,9 @@ import {
   RefreshCw, 
   LineChart as LineIcon,
   Globe,
-  Layers
+  Layers,
+  BookOpen,
+  ChevronDown
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -379,6 +381,7 @@ export default function AlphaFalconPage() {
   const [backtestData, setBacktestData] = useState<any>(null);
   const [stockCount, setStockCount] = useState<number>(STOCKS_DATABASE_TW.length);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showQuantTheory, setShowQuantTheory] = useState<boolean>(false);
 
   // 當市場類型 (TW/US) 或初始載入時，動態從 Supabase 讀取對應的日報表結果
   useEffect(() => {
@@ -753,7 +756,7 @@ export default function AlphaFalconPage() {
                   </p>
                 </div>
                 <span className="tag" style={{ background: 'rgba(0, 242, 254, 0.1)', color: '#00F2FE', border: '1px solid rgba(0, 242, 254, 0.25)', padding: '6px 12px', fontSize: '0.8125rem' }}>
-                  8 大核心模型指標
+                  8 大核心模型指標 ({marketType === 'TW' ? '台股模組' : '美股模組'})
                 </span>
               </div>
 
@@ -775,7 +778,9 @@ export default function AlphaFalconPage() {
                     </div>
                     <div>
                       <div style={{ fontWeight: 600, color: '#f3f4f6' }}>2. 相對強度 Rating (RS_Rating)</div>
-                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>相對加權指數 / QQQ 大盤之相對表現強弱百分位。</div>
+                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>
+                        {marketType === 'TW' ? '相對加權指數 (^TWII) 之相對表現強弱百分位。' : '相對標普 500 (^GSPC) / QQQ 大盤之相對表現強弱百分位。'}
+                      </div>
                     </div>
                     <div>
                       <div style={{ fontWeight: 600, color: '#f3f4f6' }}>3. 52週高點距離 (Dist_To_52W_High)</div>
@@ -799,14 +804,29 @@ export default function AlphaFalconPage() {
                     </h4>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
-                    <div>
-                      <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 投信鎖碼力道 (Inst_Buy_5D_Ratio)</div>
-                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>近 5 日投信買超張數佔發行總股本比例，鎖定法人建倉標的。</div>
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 投信連續買超天數 (Inst_Continuous_Buy)</div>
-                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>法人連續買超天數與籌碼集中度續航力指標。</div>
-                    </div>
+                    {marketType === 'TW' ? (
+                      <>
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 投信鎖碼力道 (Inst_Buy_5D_Ratio)</div>
+                          <div style={{ color: '#9ca3af', marginTop: '2px' }}>近 5 日投信買超張數佔發行總股本比例，鎖定法人建倉標的。</div>
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 投信連續買超天數 (Inst_Continuous_Buy)</div>
+                          <div style={{ color: '#9ca3af', marginTop: '2px' }}>法人連續買超天數與籌碼集中度續航力指標。</div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 機構持倉與 13F 變動 (Inst_Ownership_13F)</div>
+                          <div style={{ color: '#9ca3af', marginTop: '2px' }}>華爾街對沖基金與機構大戶持股比例及 13F 季報買超加碼趨勢。</div>
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 軋空天數與空頭回補比率 (Short_Squeeze_Ratio)</div>
+                          <div style={{ color: '#9ca3af', marginTop: '2px' }}>空頭餘額 (Short Interest) 佔比與融券回補天數 (Days to Cover) 軋空潛力。</div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -823,14 +843,99 @@ export default function AlphaFalconPage() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
                     <div>
                       <div style={{ fontWeight: 600, color: '#f3f4f6' }}>7. 營收年增率 (Revenue_YoY)</div>
-                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>最新單月營收較去年同期之年成長幅度。</div>
+                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>{marketType === 'TW' ? '最新單月營收較去年同期之年成長幅度。' : '最新單季營收較去年同期之年成長幅度。'}</div>
                     </div>
                     <div>
                       <div style={{ fontWeight: 600, color: '#f3f4f6' }}>8. 營收動能加速度 (Revenue_MoM_Accel)</div>
-                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>當月營收年增率較上月之加速度差值，捕捉營利爆發拐點。</div>
+                      <div style={{ color: '#9ca3af', marginTop: '2px' }}>{marketType === 'TW' ? '當月營收年增率較上月之加速度差值，捕捉營利爆發拐點。' : '當季營收年增率較上季之加速度差值，捕捉營利爆發拐點。'}</div>
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* 💡 點擊展開 8 大因子之金融學原理與量化學術依據 */}
+              <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px dashed rgba(255, 255, 255, 0.1)' }}>
+                <button
+                  onClick={() => setShowQuantTheory(!showQuantTheory)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justify: 'space-between',
+                    width: '100%',
+                    background: 'rgba(0, 242, 254, 0.05)',
+                    border: '1px solid rgba(0, 242, 254, 0.2)',
+                    padding: '0.75rem 1.25rem',
+                    borderRadius: '10px',
+                    color: '#00F2FE',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <BookOpen size={16} />
+                    💡 點擊{showQuantTheory ? '收起' : '展開'} 8 大因子之金融學原理與量化學術依據
+                  </span>
+                  <ChevronDown 
+                    size={18} 
+                    style={{ 
+                      transform: showQuantTheory ? 'rotate(180deg)' : 'rotate(0deg)', 
+                      transition: 'transform 0.3s ease' 
+                    }} 
+                  />
+                </button>
+
+                {showQuantTheory && (
+                  <div className="animate-fade" style={{ marginTop: '1rem', background: 'rgba(10, 15, 26, 0.85)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', padding: '1.5rem', fontSize: '0.8125rem', lineHeight: '1.7', color: '#d1d5db' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                      
+                      {/* 技術面學術依據 */}
+                      <div style={{ background: 'rgba(255,255,255,0.01)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid #00F2FE' }}>
+                        <h5 style={{ color: '#00F2FE', fontWeight: 700, fontSize: '0.875rem', marginTop: 0, marginBottom: '0.5rem' }}>
+                          📈 1-4. 技術面動能與波動收縮學術原理
+                        </h5>
+                        <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <li><strong>動能效應 (Momentum Effect)</strong>：源自 Jegadeesh & Titman (1993) 經典文獻，證實過去強勢股在未來 3~12 個月具有顯著正向超額報酬延續性。</li>
+                          <li><strong>相對強度與創高效應 (52-Week High Breakout)</strong>：George & Kwan (2004) 研究指出，越接近 52 週新高的個股，投資人心理錨定效應越容易被突破，引發聚光燈效應與急速主升段。</li>
+                          <li><strong>VCP 波動收縮 (Volatility Contraction Pattern)</strong>：借鑑 Mark Minervini 華爾街冠軍交易法則與量化幾何級數收縮理論，當籌碼供給在低波動區被完全吸納時，流動性缺口將引爆暴漲。</li>
+                        </ul>
+                      </div>
+
+                      {/* 籌碼面學術依據 */}
+                      <div style={{ background: 'rgba(255,255,255,0.01)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid #a855f7' }}>
+                        <h5 style={{ color: '#a855f7', fontWeight: 700, fontSize: '0.875rem', marginTop: 0, marginBottom: '0.5rem' }}>
+                          🏛️ 5-6. 法人籌碼鎖碼與軋空機制 (TW/US 差異)
+                        </h5>
+                        <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          {marketType === 'TW' ? (
+                            <>
+                              <li><strong>投信中小型股鎖碼效應</strong>：台灣投信基金受限於單一持股 10% 上限與季末績效作帳壓力，連續買超中小型股時，會造成自由流通股數 (Free Float) 急速稀缺。</li>
+                              <li><strong>法人籌碼集中度</strong>：當投信近 5 日買超張數佔發行總股本 > 0.5% 時，代表內資主力法人已形成一致性多頭共識，價格具極高推升續航力。</li>
+                            </>
+                          ) : (
+                            <>
+                              <li><strong>13F 機構大戶與 Smart Money 追蹤</strong>：華爾街對沖基金與養老基金 (Institutional Investors) 控制美股逾 70% 交易量。13F 季報持續加碼標的代表聰明錢進駐。</li>
+                              <li><strong>Short Squeeze 軋空幾何效應</strong>：當 Short Interest (空頭餘額) 居高且 Days to Cover (回補天數) > 5 天時，價格一旦突破技術關鍵點，空頭被迫不計價回補融券，引發暴漲。</li>
+                            </>
+                          )}
+                        </ul>
+                      </div>
+
+                      {/* 基本面學術依據 */}
+                      <div style={{ background: 'rgba(255,255,255,0.01)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid #10b981' }}>
+                        <h5 style={{ color: '#10b981', fontWeight: 700, fontSize: '0.875rem', marginTop: 0, marginBottom: '0.5rem' }}>
+                          ⚡ 7-8. 戴維斯雙擊與營收加速度 (Davis Double Play)
+                        </h5>
+                        <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <li><strong>營收年增率 (Revenue YoY)</strong>：驗證企業基本面營運成長之硬指標，排除季節性因素影響。</li>
+                          <li><strong>營收動能加速度 (Revenue MoM/QoQ Acceleration)</strong>：經典的「戴維斯雙擊」前兆。當營收成長率呈現二階導數正向加速 (Acceleration) 時，市場會同步給予「盈餘增長 (EPS ↑)」與「本益比本估值提升 (P/E Expansion)」，帶動股價乘數效應暴漲。</li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -1083,7 +1188,7 @@ export default function AlphaFalconPage() {
                     </p>
                   </div>
                   <span className="tag" style={{ background: 'rgba(0, 242, 254, 0.1)', color: '#00F2FE', border: '1px solid rgba(0, 242, 254, 0.25)', padding: '6px 12px', fontSize: '0.8125rem' }}>
-                    8 大核心模型指標
+                    8 大核心模型指標 ({marketType === 'TW' ? '台股模組' : '美股模組'})
                   </span>
                 </div>
 
@@ -1105,7 +1210,9 @@ export default function AlphaFalconPage() {
                       </div>
                       <div>
                         <div style={{ fontWeight: 600, color: '#f3f4f6' }}>2. 相對強度 Rating (RS_Rating)</div>
-                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>相對加權指數 / QQQ 大盤之相對表現強弱百分位。</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>
+                          {marketType === 'TW' ? '相對加權指數 (^TWII) 之相對表現強弱百分位。' : '相對標普 500 (^GSPC) / QQQ 大盤之相對表現強弱百分位。'}
+                        </div>
                       </div>
                       <div>
                         <div style={{ fontWeight: 600, color: '#f3f4f6' }}>3. 52週高點距離 (Dist_To_52W_High)</div>
@@ -1129,14 +1236,29 @@ export default function AlphaFalconPage() {
                       </h4>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
-                      <div>
-                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 投信鎖碼力道 (Inst_Buy_5D_Ratio)</div>
-                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>近 5 日投信買超張數佔發行總股本比例，鎖定法人建倉標的。</div>
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 投信連續買超天數 (Inst_Continuous_Buy)</div>
-                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>法人連續買超天數與籌碼集中度續航力指標。</div>
-                      </div>
+                      {marketType === 'TW' ? (
+                        <>
+                          <div>
+                            <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 投信鎖碼力道 (Inst_Buy_5D_Ratio)</div>
+                            <div style={{ color: '#9ca3af', marginTop: '2px' }}>近 5 日投信買超張數佔發行總股本比例，鎖定法人建倉標的。</div>
+                          </div>
+                          <div>
+                            <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 投信連續買超天數 (Inst_Continuous_Buy)</div>
+                            <div style={{ color: '#9ca3af', marginTop: '2px' }}>法人連續買超天數與籌碼集中度續航力指標。</div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div>
+                            <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 機構持倉與 13F 變動 (Inst_Ownership_13F)</div>
+                            <div style={{ color: '#9ca3af', marginTop: '2px' }}>華爾街對沖基金與機構大戶持股比例及 13F 季報買超加碼趨勢。</div>
+                          </div>
+                          <div>
+                            <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 軋空天數與空頭回補比率 (Short_Squeeze_Ratio)</div>
+                            <div style={{ color: '#9ca3af', marginTop: '2px' }}>空頭餘額 (Short Interest) 佔比與融券回補天數 (Days to Cover) 軋空潛力。</div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -1153,14 +1275,99 @@ export default function AlphaFalconPage() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
                       <div>
                         <div style={{ fontWeight: 600, color: '#f3f4f6' }}>7. 營收年增率 (Revenue_YoY)</div>
-                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>最新單月營收較去年同期之年成長幅度。</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>{marketType === 'TW' ? '最新單月營收較去年同期之年成長幅度。' : '最新單季營收較去年同期之年成長幅度。'}</div>
                       </div>
                       <div>
                         <div style={{ fontWeight: 600, color: '#f3f4f6' }}>8. 營收動能加速度 (Revenue_MoM_Accel)</div>
-                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>當月營收年增率較上月之加速度差值，捕捉營利爆發拐點。</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>{marketType === 'TW' ? '當月營收年增率較上月之加速度差值，捕捉營利爆發拐點。' : '當季營收年增率較上季之加速度差值，捕捉營利爆發拐點。'}</div>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* 💡 點擊展開 8 大因子之金融學原理與量化學術依據 */}
+                <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px dashed rgba(255, 255, 255, 0.1)' }}>
+                  <button
+                    onClick={() => setShowQuantTheory(!showQuantTheory)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justify: 'space-between',
+                      width: '100%',
+                      background: 'rgba(0, 242, 254, 0.05)',
+                      border: '1px solid rgba(0, 242, 254, 0.2)',
+                      padding: '0.75rem 1.25rem',
+                      borderRadius: '10px',
+                      color: '#00F2FE',
+                      fontSize: '0.875rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <BookOpen size={16} />
+                      💡 點擊{showQuantTheory ? '收起' : '展開'} 8 大因子之金融學原理與量化學術依據
+                    </span>
+                    <ChevronDown 
+                      size={18} 
+                      style={{ 
+                        transform: showQuantTheory ? 'rotate(180deg)' : 'rotate(0deg)', 
+                        transition: 'transform 0.3s ease' 
+                      }} 
+                    />
+                  </button>
+
+                  {showQuantTheory && (
+                    <div className="animate-fade" style={{ marginTop: '1rem', background: 'rgba(10, 15, 26, 0.85)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', padding: '1.5rem', fontSize: '0.8125rem', lineHeight: '1.7', color: '#d1d5db' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                        
+                        {/* 技術面學術依據 */}
+                        <div style={{ background: 'rgba(255,255,255,0.01)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid #00F2FE' }}>
+                          <h5 style={{ color: '#00F2FE', fontWeight: 700, fontSize: '0.875rem', marginTop: 0, marginBottom: '0.5rem' }}>
+                            📈 1-4. 技術面動能與波動收縮學術原理
+                          </h5>
+                          <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <li><strong>動能效應 (Momentum Effect)</strong>：源自 Jegadeesh & Titman (1993) 經典文獻，證實過去強勢股在未來 3~12 個月具有顯著正向超額報酬延續性。</li>
+                            <li><strong>相對強度與創高效應 (52-Week High Breakout)</strong>：George & Kwan (2004) 研究指出，越接近 52 週新高的個股，投資人心理錨定效應越容易被突破，引發聚光燈效應與急速主升段。</li>
+                            <li><strong>VCP 波動收縮 (Volatility Contraction Pattern)</strong>：借鑑 Mark Minervini 華爾街冠軍交易法則與量化幾何級數收縮理論，當籌碼供給在低波動區被完全吸納時，流動性缺口將引爆暴漲。</li>
+                          </ul>
+                        </div>
+
+                        {/* 籌碼面學術依據 */}
+                        <div style={{ background: 'rgba(255,255,255,0.01)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid #a855f7' }}>
+                          <h5 style={{ color: '#a855f7', fontWeight: 700, fontSize: '0.875rem', marginTop: 0, marginBottom: '0.5rem' }}>
+                            🏛️ 5-6. 法人籌碼鎖碼與軋空機制 (TW/US 差異)
+                          </h5>
+                          <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            {marketType === 'TW' ? (
+                              <>
+                                <li><strong>投信中小型股鎖碼效應</strong>：台灣投信基金受限於單一持股 10% 上限與季末績效作帳壓力，連續買超中小型股時，會造成自由流通股數 (Free Float) 急速稀缺。</li>
+                                <li><strong>法人籌碼集中度</strong>：當投信近 5 日買超張數佔發行總股本 > 0.5% 時，代表內資主力法人已形成一致性多頭共識，價格具極高推升續航力。</li>
+                              </>
+                            ) : (
+                              <>
+                                <li><strong>13F 機構大戶與 Smart Money 追蹤</strong>：華爾街對沖基金與養老基金 (Institutional Investors) 控制美股逾 70% 交易量。13F 季報持續加碼標的代表聰明錢進駐。</li>
+                                <li><strong>Short Squeeze 軋空幾何效應</strong>：當 Short Interest (空頭餘額) 居高且 Days to Cover (回補天數) > 5 天時，價格一旦突破技術關鍵點，空頭被迫不計價回補融券，引發暴漲。</li>
+                              </>
+                            )}
+                          </ul>
+                        </div>
+
+                        {/* 基本面學術依據 */}
+                        <div style={{ background: 'rgba(255,255,255,0.01)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid #10b981' }}>
+                          <h5 style={{ color: '#10b981', fontWeight: 700, fontSize: '0.875rem', marginTop: 0, marginBottom: '0.5rem' }}>
+                            ⚡ 7-8. 戴維斯雙擊與營收加速度 (Davis Double Play)
+                          </h5>
+                          <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <li><strong>營收年增率 (Revenue YoY)</strong>：驗證企業基本面營運成長之硬指標，排除季節性因素影響。</li>
+                            <li><strong>營收動能加速度 (Revenue MoM/QoQ Acceleration)</strong>：經典的「戴維斯雙擊」前兆。當營收成長率呈現二階導數正向加速 (Acceleration) 時，市場會同步給予「盈餘增長 (EPS ↑)」與「本益比本估值提升 (P/E Expansion)」，帶動股價乘數效應暴漲。</li>
+                          </ul>
+                        </div>
+
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
