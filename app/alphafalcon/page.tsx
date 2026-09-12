@@ -660,7 +660,7 @@ export default function AlphaFalconPage() {
                       </div>
                       <div className="probability-badge">
                         <span className="probability-num">{stock.probability}%</span>
-                        <span className="probability-label">50% 暴漲機率</span>
+                        <span className="probability-label">目標 +50% 勝率</span>
                       </div>
                     </div>
 
@@ -918,6 +918,112 @@ export default function AlphaFalconPage() {
                       </defs>
                     </BarChart>
                   </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* 三維特徵矩陣工程 (Feature Engineering) 說明卡片 */}
+              <div 
+                className="glass-card animate-fade" 
+                style={{ 
+                  marginTop: '2.5rem', 
+                  padding: '2rem', 
+                  background: 'linear-gradient(135deg, rgba(13, 19, 31, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%)', 
+                  border: '1px solid rgba(0, 242, 254, 0.2)',
+                  borderRadius: '16px' 
+                }}
+              >
+                <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '1rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#00F2FE', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.05em' }}>
+                      <Layers size={16} />
+                      <span>FEATURE ENGINEERING · QUANT SPACE</span>
+                    </div>
+                    <h3 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#f9fafb', marginTop: '0.25rem', margin: 0 }}>
+                      三維特徵矩陣工程 (Feature Engineering)
+                    </h3>
+                    <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+                      模型實時動態抓取並計算全市場個股之 8 大關鍵因子，構建隨機森林 (Random Forest) 特徵空間
+                    </p>
+                  </div>
+                  <span className="tag" style={{ background: 'rgba(0, 242, 254, 0.1)', color: '#00F2FE', border: '1px solid rgba(0, 242, 254, 0.25)', padding: '6px 12px', fontSize: '0.8125rem' }}>
+                    8 大核心模型指標
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+                  {/* 1. 技術面維度 */}
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(0, 242, 254, 0.12)', borderRadius: '12px', padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                      <div style={{ padding: '6px', background: 'rgba(0, 242, 254, 0.15)', borderRadius: '6px', color: '#00F2FE' }}>
+                        <TrendingUp size={16} />
+                      </div>
+                      <h4 style={{ margin: 0, fontSize: '0.9375rem', color: '#00F2FE', fontWeight: 700 }}>
+                        技術面維度 (Technical)
+                      </h4>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>1. 技術面動能 (Momentum_3M)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>近 60 日累積報酬率，衡量個股中短期強勢爆發力。</div>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>2. 相對強度 Rating (RS_Rating)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>相對加權指數 / QQQ 大盤之相對表現強弱百分位。</div>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>3. 52週高點距離 (Dist_To_52W_High)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>最新收盤價與近 52 週最高價之距離，判斷創高突破型態。</div>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>4. 20日波動率百分位 (Volatility_20D_Percentile)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>過去 240 日波動率百分位，精準偵測 VCP (Volatility Contraction Pattern) 波動收縮。</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. 籌碼面維度 */}
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(168, 85, 247, 0.15)', borderRadius: '12px', padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                      <div style={{ padding: '6px', background: 'rgba(168, 85, 247, 0.15)', borderRadius: '6px', color: '#a855f7' }}>
+                        <ShieldAlert size={16} />
+                      </div>
+                      <h4 style={{ margin: 0, fontSize: '0.9375rem', color: '#a855f7', fontWeight: 700 }}>
+                        籌碼面維度 (Chip & Institutional)
+                      </h4>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>5. 投信鎖碼力道 (Inst_Buy_5D_Ratio)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>近 5 日投信買超張數佔發行總股本比例，鎖定法人建倉標的。</div>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>6. 投信連續買超天數 (Inst_Continuous_Buy)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>法人連續買超天數與籌碼集中度續航力指標。</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. 基本面維度 */}
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: '12px', padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                      <div style={{ padding: '6px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '6px', color: '#10b981' }}>
+                        <Activity size={16} />
+                      </div>
+                      <h4 style={{ margin: 0, fontSize: '0.9375rem', color: '#10b981', fontWeight: 700 }}>
+                        基本面維度 (Fundamental)
+                      </h4>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', fontSize: '0.8125rem' }}>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>7. 營收年增率 (Revenue_YoY)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>最新單月營收較去年同期之年成長幅度。</div>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#f3f4f6' }}>8. 營收動能加速度 (Revenue_MoM_Accel)</div>
+                        <div style={{ color: '#9ca3af', marginTop: '2px' }}>當月營收年增率較上月之加速度差值，捕捉營利爆發拐點。</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
