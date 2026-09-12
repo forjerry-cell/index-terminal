@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import { Upload, Loader2, AlertCircle, Shield } from 'lucide-react';
+import { getStrategyProduct } from '@/lib/strategy-products';
 
 interface ScrapedData {
   strategyName: string;
@@ -45,8 +46,9 @@ function parseNames(raw: string | null | undefined): string[] {
 function computeSummary(data: ScrapedData[]): SummaryData[] {
   const summaryMap: Record<string, number> = {};
   data.forEach((item) => {
-    if (!summaryMap[item.product]) summaryMap[item.product] = 0;
-    summaryMap[item.product] += Number(item.position || 0);
+    const assignedProduct = getStrategyProduct(item.strategyName, item.product) || '其他';
+    if (!summaryMap[assignedProduct]) summaryMap[assignedProduct] = 0;
+    summaryMap[assignedProduct] += Number(item.position || 0);
   });
 
   return Object.keys(summaryMap).map((product) => ({
@@ -138,7 +140,10 @@ export default function SystemManagementPage() {
         throw new Error(result.error || 'Crawler failed');
       }
 
-      const data: ScrapedData[] = result.data;
+      const data: ScrapedData[] = result.data.map((item: ScrapedData) => ({
+        ...item,
+        product: getStrategyProduct(item.strategyName, item.product),
+      }));
       const summary = computeSummary(data);
       const updatedAt = new Date().toLocaleString('zh-TW', { hour12: false });
 
@@ -190,10 +195,15 @@ export default function SystemManagementPage() {
       const localSummaryRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.summary);
       const localUpdatedAt = localStorage.getItem(LOCAL_STORAGE_KEYS.updatedAt) || '';
 
-      if (localDetailRaw && localSummaryRaw) {
+      if (localDetailRaw) {
         try {
-          setDetailData(JSON.parse(localDetailRaw));
-          setSummaryData(JSON.parse(localSummaryRaw));
+          const parsedDetail: ScrapedData[] = JSON.parse(localDetailRaw).map((item: ScrapedData) => ({
+            ...item,
+            product: getStrategyProduct(item.strategyName, item.product),
+          }));
+          const recomputedSummary = computeSummary(parsedDetail);
+          setDetailData(parsedDetail);
+          setSummaryData(recomputedSummary);
           setLastUpdated(localUpdatedAt);
         } catch {
           // Ignore malformed local cache
@@ -213,12 +223,16 @@ export default function SystemManagementPage() {
         }
 
         if (cloudDetail.length > 0) {
-          const finalSummary = cloudSummary.length > 0 ? cloudSummary : computeSummary(cloudDetail);
-          setDetailData(cloudDetail);
+          const normalizedDetail: ScrapedData[] = cloudDetail.map((item: ScrapedData) => ({
+            ...item,
+            product: getStrategyProduct(item.strategyName, item.product),
+          }));
+          const finalSummary = computeSummary(normalizedDetail);
+          setDetailData(normalizedDetail);
           setSummaryData(finalSummary);
           setLastUpdated(cloudUpdatedAt || localUpdatedAt);
 
-          localStorage.setItem(LOCAL_STORAGE_KEYS.detail, JSON.stringify(cloudDetail));
+          localStorage.setItem(LOCAL_STORAGE_KEYS.detail, JSON.stringify(normalizedDetail));
           localStorage.setItem(LOCAL_STORAGE_KEYS.summary, JSON.stringify(finalSummary));
           if (cloudUpdatedAt) {
             localStorage.setItem(LOCAL_STORAGE_KEYS.updatedAt, cloudUpdatedAt);
@@ -404,7 +418,7 @@ export default function SystemManagementPage() {
                     {detailData.map((row, idx) => (
                       <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                         <td style={{ padding: '12px', fontWeight: 600, color: 'var(--accent)' }}>{row.strategyName}</td>
-                        <td style={{ padding: '12px' }}>{row.product}</td>
+                        <td style={{ padding: '12px' }}>{getStrategyProduct(row.strategyName, row.product)}</td>
                         <td
                           style={{
                             padding: '12px',

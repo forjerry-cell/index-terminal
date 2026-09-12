@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer';
+import { getStrategyProduct } from '@/lib/strategy-products';
 
 export const maxDuration = 60;
 
@@ -174,7 +175,12 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
     if (!clicked) break;
   }
 
-  return Array.from(allData.values()).filter((row) => targetSet.has(row.strategyName));
+  return Array.from(allData.values())
+    .filter((row) => targetSet.has(row.strategyName))
+    .map((row) => ({
+      ...row,
+      product: getStrategyProduct(row.strategyName, row.product),
+    }));
 }
 
 export async function POST(req: Request) {
