@@ -1,15 +1,17 @@
 import { Resend } from 'resend';
 import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
-const RESEND_KEY = process.env.RESEND_API_KEY || 're_dWBAYs26_EihDSQjyKXpaKhfpSh7BnDVn';
+const RESEND_KEY = process.env.RESEND_API_KEY || '';
 const resend = new Resend(RESEND_KEY);
 
 export async function POST(req: Request) {
   // 無須身份驗證：此 API 僅發送公開指數數據給已訂閱的會員
 
   try {
-    // 2. 抓取最新數據（最後一個交易日，兩個指數）
+    // 1. 抓取台股領航強勢指數與那指領航強勢指數數據
     const { data: performance } = await supabase
       .from('index_performance')
       .select('*')
@@ -19,10 +21,8 @@ export async function POST(req: Request) {
 
     const latestDate = performance?.[0]?.date || new Date().toISOString().split('T')[0];
 
-    // 每個 index_id 只取最新一筆
-    const latestPerf = ['taiwan_high_beta', 'nasdaq_high_beta'].map(id =>
-      performance?.find(p => p.index_id === id)
-    ).filter(Boolean);
+    const twPerf = performance?.find(p => p.index_id === 'taiwan_high_beta');
+    const usPerf = performance?.find(p => p.index_id === 'nasdaq_high_beta');
 
     // 抓取成分股資訊
     const { data: constituents } = await supabase
@@ -32,10 +32,70 @@ export async function POST(req: Request) {
       .eq('date', latestDate)
       .order('weight', { ascending: false });
 
-    const twConstituents = constituents?.filter(c => c.index_id === 'taiwan_high_beta').slice(0, 5) || [];
-    const usConstituents = constituents?.filter(c => c.index_id === 'nasdaq_high_beta').slice(0, 5) || [];
+    const twConstituents = (constituents?.filter(c => c.index_id === 'taiwan_high_beta').slice(0, 5) || []).map(c => ({
+      name: c.name,
+      symbol: String(c.symbol || '').replace(/\.TW|\.TWO/g, ''),
+      weight: c.weight
+    }));
 
-    // 抓取 AlphaFalcon 台股最新結果
+    const usConstituents = (constituents?.filter(c => c.index_id === 'nasdaq_high_beta').slice(0, 5) || []).map(c => ({
+      name: c.name,
+      symbol: String(c.symbol || '').replace(/\.TW|\.TWO/g, ''),
+      weight: c.weight
+    }));
+
+    // 2. 抓取台股強勢動能指數 (Top 30 精選動能) 最新數據
+    let momentumItem: any = null;
+    try {
+      const jsonPath = path.join(process.cwd(), 'public', 'taiwan_momentum_30.json');
+      if (fs.existsSync(jsonPath)) {
+        const rawJson = fs.readFileSync(jsonPath, 'utf-8');
+        const mData = JSON.parse(rawJson);
+        if (mData.performance && mData.performance.length > 0) {
+          const latestM = mData.performance[mData.performance.length - 1];
+          const top5M = (mData.constituents || []).slice(0, 5).map((c: any) => ({
+            name: c.name,
+            symbol: String(c.symbol || '').replace(/\.TW|\.TWO/g, ''),
+            weight: c.weight
+          }));
+          momentumItem = {
+            name: '台股強勢動能指數',
+            value: latestM.value,
+            change_percent: latestM.change_percent,
+            constituents: top5M
+          };
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load taiwan_momentum_30.json in send-report API:', e);
+    }
+
+    // 組裝三大旗艦指數清單 (無英文前綴)
+    const allIndexReports: any[] = [];
+
+    if (twPerf) {
+      allIndexReports.push({
+        name: '台股領航強勢指數',
+        value: twPerf.value,
+        change_percent: twPerf.change_percent,
+        constituents: twConstituents
+      });
+    }
+
+    if (momentumItem) {
+      allIndexReports.push(momentumItem);
+    }
+
+    if (usPerf) {
+      allIndexReports.push({
+        name: '那指領航強勢指數',
+        value: usPerf.value,
+        change_percent: usPerf.change_percent,
+        constituents: usConstituents
+      });
+    }
+
+    // 3. 抓取 AlphaFalcon 台股最新結果
     const { data: alphaTw } = await supabase
       .from('alphafalcon_daily_results')
       .select('results')
@@ -61,7 +121,7 @@ export async function POST(req: Request) {
       usTopStocks = usResults.slice(0, 3);
     }
 
-    // 2b. 抓取訂閱名單
+    // 4. 抓取訂閱名單
     const { data: subscribers } = await supabase
       .from('profiles')
       .select('full_name, notification_email')
@@ -73,7 +133,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: '目前沒有訂閱者', count: 0 });
     }
 
-    // 4. 生成漂亮的 HTML 報告
+    // 5. 生成漂亮的 HTML 報告
     const buildHtml = (name: string) => `
       <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: auto; background: #0d0f14; color: #e2e8f0; border: 1px solid #1f2228; border-radius: 12px; overflow: hidden;">
         <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0d0f14 100%); padding: 32px;">
@@ -85,36 +145,32 @@ export async function POST(req: Request) {
         </div>
         <div style="padding: 32px;">
           <p style="margin-top: 0;">親愛的 <strong>${name || '會員'}</strong>，</p>
-          <p style="color: #94a3b8; font-size: 0.875rem;">為您統整今日領航強勢指數表現、成分股權重，以及 AlphaFalcon 雙市場飆股 AI 預測結果。</p>
+          <p style="color: #94a3b8; font-size: 0.875rem;">為您統整今日各大旗艦強勢指數表現、核心成分股權重，以及 AlphaFalcon 雙市場飆股 AI 預測結果。</p>
 
-          <h2 style="color: #60a5fa; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 24px;">📈 領航指數總覽與成分股 (Top 5)</h2>
-          ${latestPerf.map((p: any) => {
-            const isTw = p.index_id.includes('taiwan');
-            const constList = isTw ? twConstituents : usConstituents;
-            return `
-            <div style="background: #1a1d24; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <h2 style="color: #60a5fa; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 24px;">📈 旗艦指數總覽與核心成分股 (Top 5)</h2>
+          ${allIndexReports.map((idxItem: any) => `
+            <div style="background: #1a1d24; border-radius: 8px; padding: 16px; margin-bottom: 16px; border: 1px solid #2d3139;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span style="font-weight: 600; font-size: 0.9rem;">${isTw ? '🇹🇼 台股領航強勢指數' : '🇺🇸 那指領航強勢指數'}</span>
+                <span style="font-weight: 700; font-size: 0.95rem; color: #f8fafc;">${idxItem.name}</span>
                 <div style="text-align: right;">
-                  <span style="font-size: 1.1rem; font-weight: 800;">${p.value?.toFixed(2)}</span>
-                  <span style="color: ${(p.change_percent || 0) >= 0 ? '#10b981' : '#ef4444'}; font-size: 0.8rem; margin-left: 8px;">
-                    ${(p.change_percent || 0) >= 0 ? '▲' : '▼'} ${Math.abs(p.change_percent || 0).toFixed(2)}%
+                  <span style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">${idxItem.value?.toFixed(2)}</span>
+                  <span style="color: ${(idxItem.change_percent || 0) >= 0 ? '#10b981' : '#ef4444'}; font-size: 0.85rem; font-weight: 700; margin-left: 8px;">
+                    ${(idxItem.change_percent || 0) >= 0 ? '▲' : '▼'} ${Math.abs(idxItem.change_percent || 0).toFixed(2)}%
                   </span>
                 </div>
               </div>
-              <div style="font-size: 0.8rem; color: #94a3b8;">
-                <strong>核心成分股：</strong>
-                ${constList.length > 0 
-                  ? constList.map(c => `${c.name} (${c.symbol}) ${c.weight}%`).join('、') 
-                  : '成分股資料尚未更新'}
+              <div style="font-size: 0.8rem; color: #94a3b8; line-height: 1.5;">
+                <strong style="color: #cbd5e1;">核心成分股：</strong>
+                ${idxItem.constituents && idxItem.constituents.length > 0 
+                  ? idxItem.constituents.map((c: any) => `${c.name} (${c.symbol}) ${Number(c.weight).toFixed(1)}%`).join('、') 
+                  : '成分股資料同步中'}
               </div>
             </div>
-            `;
-          }).join('')}
+          `).join('')}
 
           <h2 style="color: #00F2FE; font-size: 1rem; border-bottom: 1px solid #1f2228; padding-bottom: 10px; margin-top: 32px;">🦅 AlphaFalcon AI 飆股雷達 (Top 3 預測)</h2>
           
-          <h3 style="color: #e2e8f0; font-size: 0.9rem; margin-top: 16px;">🇹🇼 台股強勢主升段標的</h3>
+          <h3 style="color: #e2e8f0; font-size: 0.9rem; margin-top: 16px;">台股強勢主升段標的</h3>
           <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px;">
             <tr style="border-bottom: 1px solid #333; color: #9ca3af; text-align: left;">
               <th style="padding: 8px 4px;">代號名稱</th>
@@ -130,7 +186,7 @@ export async function POST(req: Request) {
             `).join('')}
           </table>
 
-          <h3 style="color: #e2e8f0; font-size: 0.9rem; margin-top: 16px;">🇺🇸 美股科技巨頭與高爆發標的</h3>
+          <h3 style="color: #e2e8f0; font-size: 0.9rem; margin-top: 16px;">美股科技巨頭與高爆發標的</h3>
           <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px;">
             <tr style="border-bottom: 1px solid #333; color: #9ca3af; text-align: left;">
               <th style="padding: 8px 4px;">代號名稱</th>
@@ -147,8 +203,8 @@ export async function POST(req: Request) {
           </table>
 
           <div style="margin-top: 32px; text-align: center;">
-            <a href="https://index-terminal.vercel.app/alphafalcon" style="background: #00F2FE; color: #0d0f14; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
-              🔗 登入終端查看完整深度診斷報告
+            <a href="https://index-terminal.vercel.app" style="background: #00F2FE; color: #0d0f14; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; display: inline-block;">
+              🔗 登入數據終端查看完整分析
             </a>
           </div>
 
@@ -159,7 +215,7 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    // 5. 批次發送給所有訂閱者
+    // 6. 批次發送給所有訂閱者
     const results = await Promise.allSettled(
       validSubscribers.map((sub: any) =>
         resend.emails.send({
