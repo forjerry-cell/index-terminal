@@ -23,7 +23,9 @@ import {
   Globe,
   Layers,
   BookOpen,
-  ChevronDown
+  ChevronDown,
+  Database,
+  History
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -367,8 +369,9 @@ const BACKTEST_EQUITY_CURVE = [
 ];
 
 export default function AlphaFalconPage() {
-  const [activeTab, setActiveTab] = useState<'radar' | 'insights' | 'backtest'>('radar');
+  const [activeTab, setActiveTab] = useState<'radar' | 'insights' | 'backtest' | 'archive'>('radar');
   const [marketType, setMarketType] = useState<'TW' | 'US'>('TW');
+  const [archiveDate, setArchiveDate] = useState<string>('2026-09-11');
   
   // 核心數據庫狀態
   const [stocks, setStocks] = useState<StockData[]>(STOCKS_DATABASE_TW);
@@ -626,7 +629,7 @@ export default function AlphaFalconPage() {
           </div>
         </div>
 
-        {/* 系統三大切換 Tabs */}
+        {/* 系統四大切換 Tabs */}
         <div className="tab-menu" style={{ marginBottom: '2.5rem' }}>
           <button 
             className={`tab-btn ${activeTab === 'radar' ? 'active' : ''}`}
@@ -641,6 +644,13 @@ export default function AlphaFalconPage() {
           >
             <Activity size={18} />
             <span>個股 AI 診斷室 (Stock AI Insights)</span>
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'archive' ? 'active' : ''}`}
+            onClick={() => setActiveTab('archive')}
+          >
+            <History size={18} />
+            <span>歷史每日飆股股票池歸檔 (Pool Archive)</span>
           </button>
           <button 
             className={`tab-btn ${activeTab === 'backtest' ? 'active' : ''}`}
@@ -1375,7 +1385,194 @@ export default function AlphaFalconPage() {
           </section>
         )}
 
-        {/* -------------------- TAB 3: 歷史回測驗證牆 -------------------- */}
+        {/* -------------------- TAB 3: 歷史每日飆股股票池歸檔 -------------------- */}
+        {activeTab === 'archive' && (() => {
+          // 從回測 starRecords 中取得所有歷史日期池 (依日期分組)
+          const allRecords = backtestData?.starRecords ?? (marketType === 'TW' ? [
+            { symbol: '3017', name: '奇鋐', date: '2026-09-11', probability: 74.9, triggerType: '營收爆發 + 三率三升', entryPrice: 3460.0, currentPrice: 3460.0, rsRating: 99, sitcaForce: '法人橫盤吸籌中', theme: 'AI GPU 液冷散熱 / 3D VC 獨家' },
+            { symbol: '2308', name: '台達電', date: '2026-09-11', probability: 72.1, triggerType: 'VCP 突破 + 籌碼集中', entryPrice: 445.0, currentPrice: 445.0, rsRating: 93, sitcaForce: '投信連買12日', theme: '電源管理 / 散熱模組' },
+            { symbol: '2454', name: '聯發科', date: '2026-09-11', probability: 70.5, triggerType: '動能突破 + 主力買超', entryPrice: 1380.0, currentPrice: 1380.0, rsRating: 88, sitcaForce: '投信加碼中', theme: 'AI 行動晶片 / 天璣旗艦' },
+            { symbol: '3035', name: '智原', date: '2026-03-09', probability: 76.3, triggerType: '動能突破 + 主力買超', entryPrice: 142.7, currentPrice: 233.0, rsRating: 91, sitcaForce: '投信連買8日', theme: 'ASIC IP 設計' },
+            { symbol: '3034', name: '聯詠', date: '2025-12-30', probability: 75.1, triggerType: '動能突破 + 主力買超', entryPrice: 358.6, currentPrice: 542.9, rsRating: 87, sitcaForce: '投信連買6日', theme: 'DDIC 驅動IC' },
+            { symbol: '2379', name: '瑞昱', date: '2025-12-30', probability: 78.7, triggerType: '動能突破 + 主力買超', entryPrice: 464.5, currentPrice: 869.1, rsRating: 94, sitcaForce: '投信大力加碼', theme: '網通晶片 / 高速以太網' },
+            { symbol: '2356', name: '英業達', date: '2025-12-01', probability: 79.4, triggerType: '動能突破 + 主力買超', entryPrice: 42.7, currentPrice: 82.7, rsRating: 89, sitcaForce: '投信買超', theme: 'AI 伺服器 / ODM' },
+            { symbol: '2353', name: '宏碁', date: '2025-12-01', probability: 75.9, triggerType: '動能突破 + 主力買超', entryPrice: 26.4, currentPrice: 41.9, rsRating: 82, sitcaForce: '法人加碼', theme: 'AI PC / 品牌電腦' },
+            { symbol: '2454', name: '聯發科', date: '2025-10-01', probability: 75.4, triggerType: '動能突破 + 主力買超', entryPrice: 1253.1, currentPrice: 1933.4, rsRating: 92, sitcaForce: '投信連買15日', theme: 'AI 行動晶片' },
+            { symbol: '2330', name: '台積電', date: '2025-04-10', probability: 75.7, triggerType: '動能突破 + 主力買超', entryPrice: 848.0, currentPrice: 1327.7, rsRating: 98, sitcaForce: '外資大力買超', theme: '先進製程 / 3nm CoWoS' },
+            { symbol: '2317', name: '鴻海', date: '2025-04-10', probability: 79.3, triggerType: '動能突破 + 主力買超', entryPrice: 115.7, currentPrice: 223.3, rsRating: 90, sitcaForce: '投信加碼', theme: 'AI 伺服器 / GB200 組裝' },
+            { symbol: '2382', name: '廣達', date: '2025-04-10', probability: 75.5, triggerType: '動能突破 + 主力買超', entryPrice: 179.4, currentPrice: 278.6, rsRating: 88, sitcaForce: '投信買超', theme: 'AI 伺服器 / ODM' },
+          ] : [
+            { symbol: 'SNOW', name: '雪花計算 (Snowflake)', date: '2026-09-11', probability: 95.4, triggerType: '高空頭軋空突破', entryPrice: 329.72, currentPrice: 329.72, rsRating: 83, sitcaForce: '5.25% (券商融券比率)', theme: 'AI 雲端計算' },
+            { symbol: 'CRWD', name: 'CrowdStrike', date: '2026-09-11', probability: 88.2, triggerType: '超級季報 + 機構加碼', entryPrice: 312.5, currentPrice: 312.5, rsRating: 91, sitcaForce: '3.1% (Short Interest)', theme: '雲端資安' },
+            { symbol: 'NVDA', name: '輝達 (NVIDIA)', date: '2025-03-10', probability: 77.1, triggerType: '動能突破 + 機構加碼', entryPrice: 106.7, currentPrice: 182.7, rsRating: 98, sitcaForce: '2.3% (Short Interest)', theme: 'AI GPU / 資料中心' },
+            { symbol: 'AMD', name: '超微 (AMD)', date: '2025-02-07', probability: 76.7, triggerType: '動能突破 + 機構加碼', entryPrice: 107.6, currentPrice: 179.5, rsRating: 86, sitcaForce: '3.8% (Short Interest)', theme: 'AI GPU / 高效能計算' },
+            { symbol: 'ELF', name: 'e.l.f. Beauty', date: '2025-02-07', probability: 78.4, triggerType: '動能突破 + 機構加碼', entryPrice: 71.1, currentPrice: 131.0, rsRating: 88, sitcaForce: '5.1% (Short Interest)', theme: '美妝高成長' },
+            { symbol: 'ASML', name: '艾司摩爾 (ASML)', date: '2025-04-07', probability: 75.7, triggerType: '動能突破 + 機構加碼', entryPrice: 608.4, currentPrice: 957.2, rsRating: 90, sitcaForce: '1.8% (Short Interest)', theme: 'EUV 半導體設備' },
+            { symbol: 'ARM', name: '安謀 (ARM)', date: '2025-04-07', probability: 78.7, triggerType: '動能突破 + 機構加碼', entryPrice: 88.6, currentPrice: 165.5, rsRating: 89, sitcaForce: '4.2% (Short Interest)', theme: 'AI 晶片架構授權' },
+            { symbol: 'CELH', name: '攝氏飲料 (Celsius)', date: '2024-12-23', probability: 76.5, triggerType: '動能突破 + 機構加碼', entryPrice: 26.8, currentPrice: 44.2, rsRating: 84, sitcaForce: '6.3% (Short Interest)', theme: '能量飲料高成長' },
+          ]);
+
+          // 收集所有不重複日期，由新到舊排序
+          const allDates = Array.from(new Set(allRecords.map((r: any) => r.date))).sort((a: any, b: any) => b.localeCompare(a));
+          const selectedDate = archiveDate && allDates.includes(archiveDate) ? archiveDate : (allDates[0] || '');
+          const poolOnDate = allRecords.filter((r: any) => r.date === selectedDate);
+
+          // 計算日期對應的 6 個月目標到期日
+          const getExpiry = (dateStr: string) => {
+            const d = new Date(dateStr);
+            d.setMonth(d.getMonth() + 6);
+            return d.toISOString().slice(0, 10);
+          };
+
+          return (
+            <section className="animate-fade flex flex-col gap-6">
+              {/* 標頭 */}
+              <div className="glass-card" style={{ padding: '1.75rem 2rem', background: 'linear-gradient(135deg, rgba(13, 19, 31, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%)', border: '1px solid rgba(0, 242, 254, 0.2)', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.25rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#00F2FE', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '0.375rem' }}>
+                      <Database size={16} />
+                      <span>HISTORICAL POOL ARCHIVE · {marketType === 'TW' ? 'TAIWAN MARKET' : 'US MARKET'}</span>
+                    </div>
+                    <h3 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#f9fafb', margin: 0 }}>
+                      📅 歷史每日飆股股票池歸檔
+                    </h3>
+                    <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.375rem' }}>
+                      查詢任意歷史掃描日的完整飆股股票池 — 包含當日 AI 預測勝率、建議進場價，以及後續實際漲幅追蹤
+                    </p>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.625rem' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>選擇歷史掃描日期</span>
+                    <select
+                      value={selectedDate}
+                      onChange={(e) => setArchiveDate(e.target.value)}
+                      style={{
+                        background: 'rgba(0, 242, 254, 0.06)',
+                        border: '1px solid rgba(0, 242, 254, 0.3)',
+                        borderRadius: '8px',
+                        color: '#00F2FE',
+                        padding: '0.5rem 1rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        outline: 'none',
+                        fontFamily: 'var(--font-mono)',
+                        minWidth: '180px'
+                      }}
+                    >
+                      {allDates.map((d: any) => (
+                        <option key={d} value={d} style={{ background: '#0d131f', color: '#f9fafb' }}>{d}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* 選定日期摘要列 */}
+                <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid rgba(255,255,255,0.08)', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Calendar size={14} color="#00F2FE" />
+                    <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>掃描日期</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#f9fafb', fontFamily: 'var(--font-mono)' }}>{selectedDate}</span>
+                  </div>
+                  <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Compass size={14} color="#a855f7" />
+                    <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>股票池檔數</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#a855f7', fontFamily: 'var(--font-mono)' }}>{poolOnDate.length} 檔</span>
+                  </div>
+                  <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <ChevronRight size={14} color="#10b981" />
+                    <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>預測目標窗口</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#10b981', fontFamily: 'var(--font-mono)' }}>{selectedDate} → {getExpiry(selectedDate)} (6 個月)</span>
+                  </div>
+                  <div style={{ width: '1px', height: '16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Info size={14} color="#ffbd59" />
+                    <span style={{ fontSize: '0.8125rem', color: '#9ca3af', fontFamily: 'var(--font-mono)' }}>等權重配置</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#ffbd59', fontFamily: 'var(--font-mono)' }}>{poolOnDate.length > 0 ? (100 / poolOnDate.length).toFixed(1) : '—'}% / 檔</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 股票池清單表格 */}
+              <div className="glass-card" style={{ padding: '1.5rem', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflowX: 'auto' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+                  <History size={16} color="#00F2FE" />
+                  <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#f9fafb' }}>
+                    {selectedDate} 飆股股票池完整清單
+                  </h4>
+                  <span style={{ marginLeft: 'auto', background: 'rgba(0, 242, 254, 0.1)', border: '1px solid rgba(0, 242, 254, 0.25)', color: '#00F2FE', padding: '3px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700 }}>
+                    {marketType === 'TW' ? '台股模組' : '美股模組'}
+                  </span>
+                </div>
+
+                {poolOnDate.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>
+                    <History size={32} style={{ margin: '0 auto 1rem', opacity: 0.4 }} />
+                    <p>所選日期無歸檔紀錄，請選擇其他日期。</p>
+                  </div>
+                ) : (
+                  <table className="backtest-table" style={{ width: '100%' }}>
+                    <thead>
+                      <tr>
+                        <th>代號/名稱</th>
+                        <th style={{ textAlign: 'center' }}>AI 預測勝率</th>
+                        <th>觸發型態</th>
+                        <th>主題</th>
+                        <th style={{ textAlign: 'right' }}>RS 百分位</th>
+                        <th style={{ textAlign: 'right' }}>{marketType === 'TW' ? '投信鎖碼' : '軋空比率'}</th>
+                        <th style={{ textAlign: 'right' }}>建議進場價</th>
+                        <th style={{ textAlign: 'right' }}>目標停利價 (+50%)</th>
+                        <th style={{ textAlign: 'center' }}>等權重</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {poolOnDate.map((stock: any, idx: number) => {
+                        const targetPrice = (stock.entryPrice * 1.5).toFixed(marketType === 'US' ? 2 : 1);
+                        const weight = (100 / poolOnDate.length).toFixed(1);
+                        return (
+                          <tr key={`${stock.symbol}-${idx}`}>
+                            <td>
+                              <span className="stock-symbol-tag">{stock.symbol}</span> {stock.name}
+                            </td>
+                            <td style={{ textAlign: 'center', fontWeight: 'bold', color: stock.probability >= 80 ? '#10b981' : '#00F2FE' }}>
+                              {stock.probability}%
+                            </td>
+                            <td style={{ fontSize: '0.8125rem', color: '#d1d5db' }}>{stock.triggerType}</td>
+                            <td style={{ fontSize: '0.75rem', color: '#9ca3af', maxWidth: '160px' }}>{stock.theme}</td>
+                            <td style={{ textAlign: 'right', color: '#a855f7', fontWeight: 600 }}>第 {stock.rsRating} 位</td>
+                            <td style={{ textAlign: 'right', fontSize: '0.8125rem', color: '#d1d5db' }}>{stock.sitcaForce}</td>
+                            <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                              {marketType === 'TW' ? 'NT$' : 'US$'} {stock.entryPrice}
+                            </td>
+                            <td style={{ textAlign: 'right', fontWeight: 700, color: '#10b981' }}>
+                              {marketType === 'TW' ? 'NT$' : 'US$'} {targetPrice}
+                            </td>
+                            <td style={{ textAlign: 'center', color: '#ffbd59', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                              {weight}%
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+
+              {/* 說明提示 */}
+              <div style={{ background: 'rgba(0, 242, 254, 0.04)', border: '1px dashed rgba(0, 242, 254, 0.2)', borderRadius: '12px', padding: '1rem 1.25rem', fontSize: '0.8125rem', color: '#9ca3af', lineHeight: '1.7' }}>
+                <strong style={{ color: '#00F2FE' }}>📌 說明：</strong>
+                {' '}此頁面展示 AlphaFalcon AI 每日盤後自動掃描所產出的完整飆股股票池。
+                「等權重配置」代表若於當日同步建倉全部標的，每檔配置相同資金比例。
+                「目標停利價」為建議進場價 × 1.5（對應 +50% 目標），實際操作應依個人停損停利與資金管理策略調整。
+                歷史紀錄資料僅供參考，不構成任何投資建議。
+              </div>
+            </section>
+          );
+        })()}
+
+        {/* -------------------- TAB 4: 歷史回測驗證牆 -------------------- */}
         {activeTab === 'backtest' && (
           <section className="animate-fade flex flex-col gap-8">
             
