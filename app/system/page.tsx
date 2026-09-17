@@ -398,7 +398,7 @@ export default function SystemManagementPage() {
               <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
                 <h3 style={{ margin: 0, color: 'var(--accent)' }}>策略商品部位總計</h3>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  * 加權平均訊號價依各策略之非零持倉口數進行加權計算
+                  * 平均訊號價依各策略之非零持倉口數計算簡單平均
                 </span>
               </div>
               <div style={{ overflowX: 'auto' }}>
@@ -407,8 +407,7 @@ export default function SystemManagementPage() {
                     <tr style={{ borderBottom: '1px solid var(--panel-border)' }}>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略商品</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>合計部位</th>
-                      <th style={{ padding: '12px', color: 'var(--text-muted)' }}>持倉狀態</th>
-                      <th style={{ padding: '12px', color: 'var(--text-muted)', textAlign: 'right' }}>加權平均訊號價</th>
+                      <th style={{ padding: '12px', color: 'var(--text-muted)' }}>平均訊號價</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -430,25 +429,9 @@ export default function SystemManagementPage() {
                         >
                           {row.totalPosition > 0 ? `+${row.totalPosition}` : row.totalPosition} 口
                         </td>
-                        <td style={{ padding: '12px' }}>
-                          {row.totalPosition > 0 ? (
-                            <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-secondary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
-                              多方持倉 ({row.activeCount} 策略)
-                            </span>
-                          ) : row.totalPosition < 0 ? (
-                            <span style={{ background: 'rgba(239, 68, 68, 0.15)', color: 'var(--error)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
-                              空方持倉 ({row.activeCount} 策略)
-                            </span>
-                          ) : (
-                            <span style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-muted)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>
-                              無部位 (空手)
-                            </span>
-                          )}
-                        </td>
                         <td
                           style={{
                             padding: '12px',
-                            textAlign: 'right',
                             fontWeight: 700,
                             fontFamily: 'var(--font-mono)',
                             color: row.avgPrice !== null ? 'var(--accent)' : 'var(--text-muted)',

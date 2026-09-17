@@ -29,26 +29,6 @@ function DashboardContent() {
   const [performanceData, setPerformanceData] = useState<any[]>([]);
   const [constituents, setConstituents] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [availableDates, setAvailableDates] = useState<string[]>([]);
-  const [selectedConstituentDate, setSelectedConstituentDate] = useState<string>('');
-  const [constLoading, setConstLoading] = useState(false);
-
-  // 抓取指定日期的成分股
-  const handleDateChange = async (targetDate: string) => {
-    setSelectedConstituentDate(targetDate);
-    setConstLoading(true);
-    const { data: consts } = await supabase
-      .from('index_constituents')
-      .select('*')
-      .eq('index_id', currentIndex)
-      .eq('date', targetDate)
-      .order('weight', { ascending: false });
-    
-    if (consts && consts.length > 0) {
-      setConstituents(consts);
-    }
-    setConstLoading(false);
-  };
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -128,31 +108,20 @@ function DashboardContent() {
         setStats(null);
       }
 
-      // 2. 抓取所有有審核記錄的歷史日期清單
-      const { data: dateRows } = await supabase
+
+      // 2. 抓取最新成分股
+      const { data: consts } = await supabase
         .from('index_constituents')
-        .select('date')
+        .select('*')
         .eq('index_id', currentIndex)
-        .order('date', { ascending: false });
+        .order('date', { ascending: false })
+        .order('weight', { ascending: false })
+        .limit(100);
 
-      const uniqueDates = Array.from(
-        new Set((dateRows || []).map((r: any) => r.date))
-      ).filter(Boolean) as string[];
-
-      setAvailableDates(uniqueDates);
-
-      const defaultDate = uniqueDates.length > 0 ? uniqueDates[0] : '';
-      setSelectedConstituentDate(defaultDate);
-
-      if (defaultDate) {
-        const { data: consts } = await supabase
-          .from('index_constituents')
-          .select('*')
-          .eq('index_id', currentIndex)
-          .eq('date', defaultDate)
-          .order('weight', { ascending: false });
-        
-        if (consts) setConstituents(consts);
+      if (consts && consts.length > 0) {
+        // 只取最新日期的資料
+        const latestDate = consts[0].date;
+        setConstituents(consts.filter((c: any) => c.date === latestDate));
       } else {
         setConstituents([]);
       }
@@ -336,78 +305,48 @@ function DashboardContent() {
               <div>
                 <h3 style={{ margin: 0 }}>成分股明細與權重</h3>
                 <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                  {selectedConstituentDate ? `生效基準日：${selectedConstituentDate}` : '依最新審核權重排序'} · 滿倉 100.0%
+                  依最新審核權重排序 · 滿倉 100.0%
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                {availableDates.length > 1 && (
-                  <select
-                    value={selectedConstituentDate}
-                    onChange={(e) => handleDateChange(e.target.value)}
-                    style={{
-                      background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid var(--panel-border)',
-                      borderRadius: '8px',
-                      color: isNasdaq ? '#22d3ee' : '#818cf8',
-                      padding: '4px 8px',
-                      fontSize: '0.8125rem',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      outline: 'none',
-                    }}
-                  >
-                    {availableDates.map((d, i) => (
-                      <option key={d} value={d} style={{ background: '#111317', color: '#f9fafb' }}>
-                        {i === 0 ? `最新 (${d})` : `歷史 (${d})`}
-                      </option>
-                    ))}
-                  </select>
-                )}
                 <span className="tag" style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--foreground)' }}>
                   {constituents.length} 檔標的
                 </span>
               </div>
             </div>
 
-            {constLoading ? (
-              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                <Loader2 className="animate-spin" size={24} style={{ margin: '0 auto 0.5rem' }} />
-                <p style={{ fontSize: '0.8125rem' }}>載入成分股中...</p>
-              </div>
-            ) : (
-              <div className="table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th style={{ width: '40px' }}>#</th>
-                      <th>名稱 / 代號</th>
-                      <th style={{ textAlign: 'right' }}>權重 (%)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {constituents.map((item, idx) => {
-                      const cleanSymbol = String(item.symbol || '').replace(/\.TW|\.TWO/g, '');
-                      return (
-                        <tr key={item.symbol}>
-                          <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600 }}>
-                            {idx + 1}
-                          </td>
-                          <td>
-                            <div className="flex flex-col">
-                              <span style={{ color: 'var(--foreground)', fontWeight: 600 }}>{item.name}</span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{cleanSymbol}</span>
-                            </div>
-                          </td>
-                          <td style={{ textAlign: 'right', fontWeight: 'bold', color: isNasdaq ? '#22d3ee' : '#818cf8', fontSize: '1.0625rem' }}>
-                            {(item.weight).toFixed(2)}%
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th style={{ width: '40px' }}>#</th>
+                    <th>名稱 / 代號</th>
+                    <th style={{ textAlign: 'right' }}>權重 (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {constituents.map((item, idx) => {
+                    const cleanSymbol = String(item.symbol || '').replace(/\.TW|\.TWO/g, '');
+                    return (
+                      <tr key={item.symbol}>
+                        <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600 }}>
+                          {idx + 1}
+                        </td>
+                        <td>
+                          <div className="flex flex-col">
+                            <span style={{ color: 'var(--foreground)', fontWeight: 600 }}>{item.name}</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{cleanSymbol}</span>
+                          </div>
+                        </td>
+                        <td style={{ textAlign: 'right', fontWeight: 'bold', color: isNasdaq ? '#22d3ee' : '#818cf8', fontSize: '1.0625rem' }}>
+                          {(item.weight).toFixed(2)}%
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
 
