@@ -42,17 +42,23 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login');
+  const pathname = request.nextUrl.pathname;
+  const isLoginPage = pathname.startsWith('/login');
+  // 僅系統管理頁面（/system）、管理後台（/admin）、個人設定（/profile）需要登入權限
+  const isProtectedPage =
+    pathname.startsWith('/system') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/profile');
 
-  // 若未登入且不是登入頁，強制跳轉至 /login
-  if (!session && !isLoginPage) {
+  // 若未登入且訪問需保護的頁面，跳轉至登入頁
+  if (!session && isProtectedPage) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/login';
-    redirectUrl.searchParams.set('redirectedFrom', request.nextUrl.pathname);
+    redirectUrl.searchParams.set('redirectedFrom', pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
-  // 若已登入但訪問登入頁，直接導向首頁
+  // 若已登入且訪問登入頁，直接導回首頁或目標頁
   if (session && isLoginPage) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/';
@@ -64,15 +70,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * 匹配所有路徑，排除：
-     * - _next/static (靜態檔案)
-     * - _next/image (圖片優化檔案)
-     * - favicon.ico (網站圖示)
-     * - api/ (公開後端 API，如爬蟲排程與雲端同步)
-     * - data/ (靜態 json 數據)
-     * - 所有靜態資源檔案 (.svg, .png, .jpg, .jpeg, .gif, .webp)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|api/|data/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/system/:path*',
+    '/admin/:path*',
+    '/profile/:path*',
+    '/login',
   ],
 };
+
