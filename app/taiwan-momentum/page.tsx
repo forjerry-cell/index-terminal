@@ -89,7 +89,7 @@ export default function TaiwanMomentumPage() {
   }, [indexData]);
 
   if (loading) return <div className="auth-container"><Loader2 className="animate-spin" /></div>;
-  if (!indexData) return <div className="auth-container">數據載入失敗</div>;
+  if (!indexData || !stats) return <div className="auth-container">數據載入失敗</div>;
 
   const { index_info, constituents, performance } = indexData;
 

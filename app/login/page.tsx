@@ -1,16 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Lock, Mail, Loader2 } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectedFrom = searchParams.get('redirectedFrom') || '/';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ export default function LoginPage() {
       setError('帳號或密碼錯誤，請聯繫管理員。');
       setLoading(false);
     } else {
-      router.push('/');
+      router.push(redirectedFrom);
       router.refresh();
     }
   };
@@ -116,5 +118,13 @@ export default function LoginPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="auth-container"><Loader2 className="animate-spin" /></div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

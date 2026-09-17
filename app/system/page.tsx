@@ -17,6 +17,8 @@ interface ScrapedData {
 interface SummaryData {
   product: string;
   totalPosition: number;
+  avgPrice: number | null;
+  activeCount: number;
 }
 
 interface CloudSyncPayload {
@@ -44,17 +46,45 @@ function parseNames(raw: string | null | undefined): string[] {
 }
 
 function computeSummary(data: ScrapedData[]): SummaryData[] {
-  const summaryMap: Record<string, number> = {};
+  const summaryMap: Record<
+    string,
+    { totalPos: number; totalWeightedPrice: number; totalAbsPos: number; activeCount: number }
+  > = {};
+
   data.forEach((item) => {
     const assignedProduct = getStrategyProduct(item.strategyName, item.product) || '其他';
-    if (!summaryMap[assignedProduct]) summaryMap[assignedProduct] = 0;
-    summaryMap[assignedProduct] += Number(item.position || 0);
+    const pos = Number(item.position || 0);
+    const rawPrice =
+      typeof item.price === 'string'
+        ? parseFloat(item.price.replace(/,/g, '').trim())
+        : Number(item.price);
+    const price = !isNaN(rawPrice) && rawPrice > 0 ? rawPrice : 0;
+
+    if (!summaryMap[assignedProduct]) {
+      summaryMap[assignedProduct] = { totalPos: 0, totalWeightedPrice: 0, totalAbsPos: 0, activeCount: 0 };
+    }
+
+    summaryMap[assignedProduct].totalPos += pos;
+
+    // 針對有持倉部位（非 0 口）且有有效訊號價格的策略進行口數加權計算
+    if (pos !== 0 && price > 0) {
+      const absPos = Math.abs(pos);
+      summaryMap[assignedProduct].totalWeightedPrice += absPos * price;
+      summaryMap[assignedProduct].totalAbsPos += absPos;
+      summaryMap[assignedProduct].activeCount += 1;
+    }
   });
 
-  return Object.keys(summaryMap).map((product) => ({
-    product,
-    totalPosition: summaryMap[product],
-  }));
+  return Object.keys(summaryMap).map((product) => {
+    const info = summaryMap[product];
+    const avgPrice = info.totalAbsPos > 0 ? info.totalWeightedPrice / info.totalAbsPos : null;
+    return {
+      product,
+      totalPosition: info.totalPos,
+      avgPrice: avgPrice !== null ? Number(avgPrice.toFixed(2)) : null,
+      activeCount: info.activeCount,
+    };
+  });
 }
 
 function saveCacheToLocal(names: string[], detail: ScrapedData[], summary: SummaryData[], lastUpdated: string) {
@@ -365,13 +395,20 @@ export default function SystemManagementPage() {
         {detailData.length > 0 && (
           <div className="flex flex-col gap-8 animate-fade">
             <div className="card">
-              <h3 style={{ marginBottom: '1rem', color: 'var(--accent)' }}>策略商品部位總計</h3>
+              <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
+                <h3 style={{ margin: 0, color: 'var(--accent)' }}>策略商品部位總計</h3>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  * 加權平均訊號價依各策略之非零持倉口數進行加權計算
+                </span>
+              </div>
               <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', minWidth: '400px', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <table style={{ width: '100%', minWidth: '500px', borderCollapse: 'collapse', textAlign: 'left' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--panel-border)' }}>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略商品</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>合計部位</th>
+                      <th style={{ padding: '12px', color: 'var(--text-muted)' }}>持倉狀態</th>
+                      <th style={{ padding: '12px', color: 'var(--text-muted)', textAlign: 'right' }}>加權平均訊號價</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -382,6 +419,7 @@ export default function SystemManagementPage() {
                           style={{
                             padding: '12px',
                             fontWeight: 700,
+                            fontFamily: 'var(--font-mono)',
                             color:
                               row.totalPosition > 0
                                 ? 'var(--accent-secondary)'
@@ -390,7 +428,35 @@ export default function SystemManagementPage() {
                                   : 'var(--foreground)',
                           }}
                         >
-                          {row.totalPosition}
+                          {row.totalPosition > 0 ? `+${row.totalPosition}` : row.totalPosition} 口
+                        </td>
+                        <td style={{ padding: '12px' }}>
+                          {row.totalPosition > 0 ? (
+                            <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-secondary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
+                              多方持倉 ({row.activeCount} 策略)
+                            </span>
+                          ) : row.totalPosition < 0 ? (
+                            <span style={{ background: 'rgba(239, 68, 68, 0.15)', color: 'var(--error)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
+                              空方持倉 ({row.activeCount} 策略)
+                            </span>
+                          ) : (
+                            <span style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-muted)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>
+                              無部位 (空手)
+                            </span>
+                          )}
+                        </td>
+                        <td
+                          style={{
+                            padding: '12px',
+                            textAlign: 'right',
+                            fontWeight: 700,
+                            fontFamily: 'var(--font-mono)',
+                            color: row.avgPrice !== null ? 'var(--accent)' : 'var(--text-muted)',
+                          }}
+                        >
+                          {row.avgPrice !== null
+                            ? row.avgPrice.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 })
+                            : '—'}
                         </td>
                       </tr>
                     ))}
