@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import { Upload, Loader2, AlertCircle, Shield } from 'lucide-react';
-import { getStrategyProduct } from '@/lib/strategy-products';
+import { getStrategyProduct, WantgooMarketPrices, getCurrentMarketPrice } from '@/lib/strategy-products';
 
 interface ScrapedData {
   strategyName: string;
@@ -26,6 +26,7 @@ interface CloudSyncPayload {
   strategy_data?: ScrapedData[];
   strategy_summary?: SummaryData[];
   strategy_last_updated?: string;
+  market_prices?: WantgooMarketPrices | null;
 }
 
 const LOCAL_STORAGE_KEYS = {
@@ -33,6 +34,7 @@ const LOCAL_STORAGE_KEYS = {
   detail: 'system_detail_data',
   summary: 'system_summary_data',
   updatedAt: 'system_last_updated',
+  marketPrices: 'system_market_prices',
 } as const;
 
 const ADMIN_EMAILS = ['forjerry@gmail.com', 'yichun0515@gmail.com'];
@@ -87,11 +89,14 @@ function computeSummary(data: ScrapedData[]): SummaryData[] {
   });
 }
 
-function saveCacheToLocal(names: string[], detail: ScrapedData[], summary: SummaryData[], lastUpdated: string) {
+function saveCacheToLocal(names: string[], detail: ScrapedData[], summary: SummaryData[], lastUpdated: string, marketPrices?: WantgooMarketPrices | null) {
   localStorage.setItem(LOCAL_STORAGE_KEYS.names, JSON.stringify(names));
   localStorage.setItem(LOCAL_STORAGE_KEYS.detail, JSON.stringify(detail));
   localStorage.setItem(LOCAL_STORAGE_KEYS.summary, JSON.stringify(summary));
   localStorage.setItem(LOCAL_STORAGE_KEYS.updatedAt, lastUpdated);
+  if (marketPrices) {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.marketPrices, JSON.stringify(marketPrices));
+  }
 }
 
 async function callSystemCacheApi(method: 'GET' | 'POST', payload?: CloudSyncPayload) {
@@ -112,6 +117,7 @@ async function callSystemCacheApi(method: 'GET' | 'POST', payload?: CloudSyncPay
       strategy_data: Array.isArray(metadata.strategy_data) ? metadata.strategy_data : [],
       strategy_summary: Array.isArray(metadata.strategy_summary) ? metadata.strategy_summary : [],
       strategy_last_updated: typeof metadata.strategy_last_updated === 'string' ? metadata.strategy_last_updated : '',
+      market_prices: (metadata.market_prices as WantgooMarketPrices) || null,
     };
   }
 
@@ -123,6 +129,7 @@ async function callSystemCacheApi(method: 'GET' | 'POST', payload?: CloudSyncPay
     strategy_data: Array.isArray(metadata.strategy_data) ? metadata.strategy_data : [],
     strategy_summary: Array.isArray(metadata.strategy_summary) ? metadata.strategy_summary : [],
     strategy_last_updated: typeof metadata.strategy_last_updated === 'string' ? metadata.strategy_last_updated : '',
+    market_prices: (metadata.market_prices as WantgooMarketPrices) || null,
   };
 }
 
@@ -135,6 +142,7 @@ export default function SystemManagementPage() {
   const [strategyNames, setStrategyNames] = useState<string[]>([]);
   const [detailData, setDetailData] = useState<ScrapedData[]>([]);
   const [summaryData, setSummaryData] = useState<SummaryData[]>([]);
+  const [marketPrices, setMarketPrices] = useState<WantgooMarketPrices | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>('');
 
   const isFetchingRef = useRef(false);
@@ -176,17 +184,22 @@ export default function SystemManagementPage() {
       }));
       const summary = computeSummary(data);
       const updatedAt = new Date().toLocaleString('zh-TW', { hour12: false });
+      const fetchedMarketPrices: WantgooMarketPrices | null = result.marketPrices || null;
 
       setDetailData(data);
       setSummaryData(summary);
+      if (fetchedMarketPrices) {
+        setMarketPrices(fetchedMarketPrices);
+      }
       setLastUpdated(updatedAt);
-      saveCacheToLocal(names, data, summary, updatedAt);
+      saveCacheToLocal(names, data, summary, updatedAt, fetchedMarketPrices);
 
       await syncToCloud({
         strategy_list: names.join(','),
         strategy_data: data,
         strategy_summary: summary,
         strategy_last_updated: updatedAt,
+        market_prices: fetchedMarketPrices,
       });
     } catch (err) {
       console.error('Fetch error:', err);
@@ -224,6 +237,14 @@ export default function SystemManagementPage() {
       const localDetailRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.detail);
       const localSummaryRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.summary);
       const localUpdatedAt = localStorage.getItem(LOCAL_STORAGE_KEYS.updatedAt) || '';
+      const localPricesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.marketPrices);
+
+      if (localPricesRaw) {
+        try {
+          const parsedPrices = JSON.parse(localPricesRaw);
+          if (parsedPrices) setMarketPrices(parsedPrices);
+        } catch {}
+      }
 
       if (localDetailRaw) {
         try {
@@ -246,10 +267,16 @@ export default function SystemManagementPage() {
         const cloudDetail = Array.isArray(cloud.strategy_data) ? cloud.strategy_data : [];
         const cloudSummary = Array.isArray(cloud.strategy_summary) ? cloud.strategy_summary : [];
         const cloudUpdatedAt = typeof cloud.strategy_last_updated === 'string' ? cloud.strategy_last_updated : '';
+        const cloudPrices = cloud.market_prices;
 
         if (cloudNames.length > 0) {
           names = cloudNames;
           localStorage.setItem(LOCAL_STORAGE_KEYS.names, JSON.stringify(cloudNames));
+        }
+
+        if (cloudPrices) {
+          setMarketPrices(cloudPrices);
+          localStorage.setItem(LOCAL_STORAGE_KEYS.marketPrices, JSON.stringify(cloudPrices));
         }
 
         if (cloudDetail.length > 0) {
@@ -398,7 +425,7 @@ export default function SystemManagementPage() {
               <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
                 <h3 style={{ margin: 0, color: 'var(--accent)' }}>策略商品部位總計</h3>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  * 平均訊號價依各策略之非零持倉口數計算簡單平均
+                  * 平均訊號價依各策略之非零持倉口數計算簡單平均 · 現價即時對應玩股網行情
                 </span>
               </div>
               <div style={{ overflowX: 'auto' }}>
@@ -408,41 +435,57 @@ export default function SystemManagementPage() {
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>策略商品</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>合計部位</th>
                       <th style={{ padding: '12px', color: 'var(--text-muted)' }}>平均訊號價</th>
+                      <th style={{ padding: '12px', color: 'var(--text-muted)' }}>現價</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {summaryData.map((row, idx) => (
-                      <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td style={{ padding: '12px', fontWeight: 500 }}>{row.product}</td>
-                        <td
-                          style={{
-                            padding: '12px',
-                            fontWeight: 700,
-                            fontFamily: 'var(--font-mono)',
-                            color:
-                              row.totalPosition > 0
-                                ? 'var(--accent-secondary)'
-                                : row.totalPosition < 0
-                                  ? 'var(--error)'
-                                  : 'var(--foreground)',
-                          }}
-                        >
-                          {row.totalPosition > 0 ? `+${row.totalPosition}` : row.totalPosition} 口
-                        </td>
-                        <td
-                          style={{
-                            padding: '12px',
-                            fontWeight: 700,
-                            fontFamily: 'var(--font-mono)',
-                            color: row.avgPrice !== null ? 'var(--accent)' : 'var(--text-muted)',
-                          }}
-                        >
-                          {row.avgPrice !== null
-                            ? row.avgPrice.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 })
-                            : '—'}
-                        </td>
-                      </tr>
-                    ))}
+                    {summaryData.map((row, idx) => {
+                      const currentPrice = getCurrentMarketPrice(row.product, marketPrices);
+                      return (
+                        <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                          <td style={{ padding: '12px', fontWeight: 500 }}>{row.product}</td>
+                          <td
+                            style={{
+                              padding: '12px',
+                              fontWeight: 700,
+                              fontFamily: 'var(--font-mono)',
+                              color:
+                                row.totalPosition > 0
+                                  ? 'var(--accent-secondary)'
+                                  : row.totalPosition < 0
+                                    ? 'var(--error)'
+                                    : 'var(--foreground)',
+                            }}
+                          >
+                            {row.totalPosition > 0 ? `+${row.totalPosition}` : row.totalPosition} 口
+                          </td>
+                          <td
+                            style={{
+                              padding: '12px',
+                              fontWeight: 700,
+                              fontFamily: 'var(--font-mono)',
+                              color: row.avgPrice !== null ? 'var(--accent)' : 'var(--text-muted)',
+                            }}
+                          >
+                            {row.avgPrice !== null
+                              ? row.avgPrice.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 })
+                              : '—'}
+                          </td>
+                          <td
+                            style={{
+                              padding: '12px',
+                              fontWeight: 700,
+                              fontFamily: 'var(--font-mono)',
+                              color: currentPrice !== null ? 'var(--accent-secondary)' : 'var(--text-muted)',
+                            }}
+                          >
+                            {currentPrice !== null
+                              ? currentPrice.toLocaleString(undefined, { minimumFractionDigits: row.product.includes('富台') ? 2 : 0, maximumFractionDigits: 2 })
+                              : '—'}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

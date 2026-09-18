@@ -183,8 +183,94 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
     }));
 }
 
+async function scrapeWantgooMarketPrices(browser: import('puppeteer').Browser | import('puppeteer-core').Browser) {
+  try {
+    const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36');
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => false });
+    });
+
+    let dayDeal: number | null = null;
+    let nightDeal: number | null = null;
+    let stwnDeal: number | null = null;
+
+    page.on('response', async (res) => {
+      const url = res.url();
+      if (url.includes('investrue/wtx&/daily-candlestick')) {
+        try {
+          const json = await res.json();
+          if (json && typeof json.close === 'number') dayDeal = json.close;
+        } catch {}
+      }
+      if (url.includes('investrue/wtxp&/daily-candlestick')) {
+        try {
+          const json = await res.json();
+          if (json && typeof json.close === 'number') nightDeal = json.close;
+        } catch {}
+      }
+    });
+
+    // 1. 台指期與盤後頁面
+    try {
+      await page.goto('https://www.wantgoo.com/futures', { waitUntil: 'networkidle2', timeout: 20000 });
+      await sleep(2500);
+
+      // 備援：若 response 攔截未取得，從 DOM 抓取
+      if (dayDeal === null || nightDeal === null) {
+        const domPrices = await page.evaluate(() => {
+          const res: { day?: number; night?: number } = {};
+          const items = document.querySelectorAll('#mainFutures .futures-index-item');
+          items.forEach((el) => {
+            const id = el.getAttribute('investrueid') || '';
+            const dealTxt = el.querySelector('.deal')?.textContent?.replace(/,/g, '').trim();
+            const val = dealTxt ? parseFloat(dealTxt) : NaN;
+            if (!isNaN(val) && val > 0) {
+              if (id.includes('WTXP')) res.night = val;
+              else if (id.includes('WTX')) res.day = val;
+            }
+          });
+          return res;
+        });
+        if (dayDeal === null && domPrices.day) dayDeal = domPrices.day;
+        if (nightDeal === null && domPrices.night) nightDeal = domPrices.night;
+      }
+    } catch (err) {
+      console.error('Failed to scrape futures page:', err);
+    }
+
+    // 2. 富台指頁面
+    try {
+      await page.goto('https://www.wantgoo.com/global/stwn&', { waitUntil: 'networkidle2', timeout: 20000 });
+      await sleep(2500);
+
+      const stwnTxt = await page.evaluate(() => {
+        const el = document.querySelector('.lasty-trade .deal, .deal');
+        return el?.textContent?.replace(/,/g, '').trim() || null;
+      });
+      if (stwnTxt) {
+        const val = parseFloat(stwnTxt);
+        if (!isNaN(val) && val > 0) stwnDeal = val;
+      }
+    } catch (err) {
+      console.error('Failed to scrape stwn page:', err);
+    }
+
+    await page.close();
+    return {
+      dayDeal,
+      nightDeal,
+      stwnDeal,
+      updatedAt: new Date().toLocaleString('zh-TW', { hour12: false, timeZone: 'Asia/Taipei' }),
+    };
+  } catch (err) {
+    console.error('scrapeWantgooMarketPrices Error:', err);
+    return null;
+  }
+}
+
 export async function POST(req: Request) {
-  let browser: import('puppeteer').Browser | null = null;
+  let browser: import('puppeteer').Browser | import('puppeteer-core').Browser | null = null;
 
   try {
     const { displayNames } = await req.json();
@@ -201,8 +287,12 @@ export async function POST(req: Request) {
 
     await login(page);
     const data = await scrapeData(page, displayNames);
+    await page.close();
 
-    return NextResponse.json({ success: true, data });
+    // 同步爬取玩股網即時現價
+    const marketPrices = await scrapeWantgooMarketPrices(browser);
+
+    return NextResponse.json({ success: true, data, marketPrices });
   } catch (error: any) {
     console.error('Crawler Error:', error);
     return NextResponse.json({ success: false, error: error.message || 'Crawler failed' }, { status: 500 });

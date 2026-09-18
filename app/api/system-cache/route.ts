@@ -6,6 +6,7 @@ type SystemCachePayload = {
   strategy_data?: unknown[];
   strategy_summary?: unknown[];
   strategy_last_updated?: string;
+  market_prices?: unknown;
 };
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -72,6 +73,7 @@ export async function GET(req: Request) {
         strategy_data: Array.isArray(metadata.strategy_data) ? metadata.strategy_data : [],
         strategy_summary: Array.isArray(metadata.strategy_summary) ? metadata.strategy_summary : [],
         strategy_last_updated: typeof metadata.strategy_last_updated === 'string' ? metadata.strategy_last_updated : '',
+        market_prices: metadata.market_prices || null,
       },
     });
   } catch (error: any) {
@@ -100,6 +102,7 @@ export async function POST(req: Request) {
     if (Array.isArray(body.strategy_data)) nextMeta.strategy_data = body.strategy_data;
     if (Array.isArray(body.strategy_summary)) nextMeta.strategy_summary = body.strategy_summary;
     if (typeof body.strategy_last_updated === 'string') nextMeta.strategy_last_updated = body.strategy_last_updated;
+    if (body.market_prices !== undefined) nextMeta.market_prices = body.market_prices;
 
     const adminClient = getAdminClient();
 
@@ -118,6 +121,7 @@ export async function POST(req: Request) {
         strategy_data: Array.isArray(nextMeta.strategy_data) ? nextMeta.strategy_data : [],
         strategy_summary: Array.isArray(nextMeta.strategy_summary) ? nextMeta.strategy_summary : [],
         strategy_last_updated: typeof nextMeta.strategy_last_updated === 'string' ? nextMeta.strategy_last_updated : '',
+        market_prices: nextMeta.market_prices || null,
       },
     });
   } catch (error: any) {
