@@ -425,7 +425,7 @@ export default function SystemManagementPage() {
               <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
                 <h3 style={{ margin: 0, color: 'var(--accent)' }}>策略商品部位總計</h3>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  * 平均訊號價依各策略之非零持倉口數計算簡單平均 · 現價即時對應玩股網行情
+                  * 平均訊號價依各策略之非零持倉口數計算簡單平均
                 </span>
               </div>
               <div style={{ overflowX: 'auto' }}>

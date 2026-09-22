@@ -4,7 +4,14 @@ import { NextResponse } from 'next/server';
 import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer';
+import { createClient } from '@supabase/supabase-js';
 import { getStrategyProduct } from '@/lib/strategy-products';
+
+// Supabase Client（從 futures_prices 讀取 MC 推送的行情作為備援）
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 export const maxDuration = 60;
 
@@ -183,88 +190,36 @@ async function scrapeData(page: import('puppeteer').Page, displayNames: string[]
     }));
 }
 
-async function scrapeWantgooMarketPrices(browser: import('puppeteer').Browser | import('puppeteer-core').Browser) {
+/**
+ * 從 Supabase futures_prices 讀取 MC (MultiCharts) 推送的即時行情
+ * 相容新欄位 (day_deal/night_deal/stwn_deal) 與舊欄位 (tx_price/sgx_price)
+ */
+async function fetchMarketPricesFromDB() {
   try {
-    const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36');
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, 'webdriver', { get: () => false });
-    });
+    const { data: dbRows, error: dbError } = await supabase
+      .from('futures_prices')
+      .select('day_deal, night_deal, stwn_deal, tx_price, sgx_price, updated_at, session')
+      .eq('id', 1)
+      .single();
 
-    let dayDeal: number | null = null;
-    let nightDeal: number | null = null;
-    let stwnDeal: number | null = null;
-
-    page.on('response', async (res) => {
-      const url = res.url();
-      if (url.includes('investrue/wtx&/daily-candlestick')) {
-        try {
-          const json = await res.json();
-          if (json && typeof json.close === 'number') dayDeal = json.close;
-        } catch {}
-      }
-      if (url.includes('investrue/wtxp&/daily-candlestick')) {
-        try {
-          const json = await res.json();
-          if (json && typeof json.close === 'number') nightDeal = json.close;
-        } catch {}
-      }
-    });
-
-    // 1. 台指期與盤後頁面
-    try {
-      await page.goto('https://www.wantgoo.com/futures', { waitUntil: 'networkidle2', timeout: 20000 });
-      await sleep(2500);
-
-      // 備援：若 response 攔截未取得，從 DOM 抓取
-      if (dayDeal === null || nightDeal === null) {
-        const domPrices = await page.evaluate(() => {
-          const res: { day?: number; night?: number } = {};
-          const items = document.querySelectorAll('#mainFutures .futures-index-item');
-          items.forEach((el) => {
-            const id = el.getAttribute('investrueid') || '';
-            const dealTxt = el.querySelector('.deal')?.textContent?.replace(/,/g, '').trim();
-            const val = dealTxt ? parseFloat(dealTxt) : NaN;
-            if (!isNaN(val) && val > 0) {
-              if (id.includes('WTXP')) res.night = val;
-              else if (id.includes('WTX')) res.day = val;
-            }
-          });
-          return res;
-        });
-        if (dayDeal === null && domPrices.day) dayDeal = domPrices.day;
-        if (nightDeal === null && domPrices.night) nightDeal = domPrices.night;
-      }
-    } catch (err) {
-      console.error('Failed to scrape futures page:', err);
+    if (dbError || !dbRows) {
+      console.error('[admin-crawler] 讀取 Supabase 行情失敗:', dbError?.message);
+      return null;
     }
 
-    // 2. 富台指頁面
-    try {
-      await page.goto('https://www.wantgoo.com/global/stwn&', { waitUntil: 'networkidle2', timeout: 20000 });
-      await sleep(2500);
+    // 優先使用新欄位，若不存在則 fallback 到舊欄位
+    const rawDay = dbRows.day_deal ?? (dbRows.session === '日盤' ? dbRows.tx_price : null);
+    const rawNight = dbRows.night_deal ?? (dbRows.session === '夜盤' ? dbRows.tx_price : null);
+    const rawStwn = dbRows.stwn_deal ?? dbRows.sgx_price;
 
-      const stwnTxt = await page.evaluate(() => {
-        const el = document.querySelector('.lasty-trade .deal, .deal');
-        return el?.textContent?.replace(/,/g, '').trim() || null;
-      });
-      if (stwnTxt) {
-        const val = parseFloat(stwnTxt);
-        if (!isNaN(val) && val > 0) stwnDeal = val;
-      }
-    } catch (err) {
-      console.error('Failed to scrape stwn page:', err);
-    }
-
-    await page.close();
     return {
-      dayDeal,
-      nightDeal,
-      stwnDeal,
-      updatedAt: new Date().toLocaleString('zh-TW', { hour12: false, timeZone: 'Asia/Taipei' }),
+      dayDeal: typeof rawDay === 'number' ? rawDay : null,
+      nightDeal: typeof rawNight === 'number' ? rawNight : null,
+      stwnDeal: typeof rawStwn === 'number' ? rawStwn : null,
+      updatedAt: dbRows.updated_at || new Date().toISOString(),
     };
   } catch (err) {
-    console.error('scrapeWantgooMarketPrices Error:', err);
+    console.error('[admin-crawler] fetchMarketPricesFromDB 例外:', err);
     return null;
   }
 }
@@ -281,7 +236,7 @@ export async function POST(req: Request) {
 
     browser = await launchBrowser();
     const page = await browser.newPage();
-    
+
     // 強制設定為台灣時區，確保爬取的觸發時間為台北時間
     await page.emulateTimezone('Asia/Taipei');
 
@@ -289,8 +244,8 @@ export async function POST(req: Request) {
     const data = await scrapeData(page, displayNames);
     await page.close();
 
-    // 同步爬取玩股網即時現價
-    const marketPrices = await scrapeWantgooMarketPrices(browser);
+    // 從 Supabase 讀取 MC 推送的即時行情（唯一行情來源）
+    const marketPrices = await fetchMarketPricesFromDB();
 
     return NextResponse.json({ success: true, data, marketPrices });
   } catch (error: any) {
