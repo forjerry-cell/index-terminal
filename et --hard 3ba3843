@@ -1,0 +1,10 @@
+[33m190101e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Revert "chore: remove market price source note from system page"
+[33m5014dde[m chore: remove market price source note from system page
+[33m367c6af[m data: Auto-update Taiwan Momentum 30 daily NAV
+[33m0896a52[m fix: remove timestamp field in update-futures api
+[33m6b6b96c[m feat: add futures price tracking and API update
+[33m3ba3843[m data: Auto-update Taiwan Momentum 30 daily NAV
+[33maaba002[m data: Auto-update AlphaFalcon-US daily scan results
+[33m44d9ef6[m feat: add real-time market price column in strategy summary table with session switching logic
+[33m2d12bd4[m data: Auto-update Taiwan Momentum 30 daily NAV
+[33m2d44d73[m data: Auto-update AlphaFalcon daily scan results

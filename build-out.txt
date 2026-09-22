@@ -1,0 +1,8 @@
+
+> web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.1.11
+   - Environments: .env
+
+   Creating an optimized production build ...

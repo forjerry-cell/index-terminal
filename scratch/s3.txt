@@ -1,0 +1,6 @@
+﻿44d9ef6 (HEAD -> main) feat: add real-time market price column in strategy summary table with session switching logic
+2d12bd4 data: Auto-update Taiwan Momentum 30 daily NAV
+2d44d73 data: Auto-update AlphaFalcon daily scan results
+f2cfa7f data: Auto-update AlphaFalcon-US daily scan results
+8ec9655 fix: restrict auth requirement strictly to system and admin routes
+

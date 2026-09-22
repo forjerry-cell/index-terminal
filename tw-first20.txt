@@ -1,0 +1,20 @@
+﻿{
+  "index_info": {
+    "id": "taiwan_momentum_30",
+    "name": "?啗撘瑕??",
+    "subtitle": "Taiwan High Beta Momentum Top 30 Index",
+    "description": "隞亙???瘜Ｗ?? (FTHB003V02) 摰???∠瘥?嚗??僑蝎暸? 126 ?亦敞蝛?祇?????60%嚗?0 瑼??樴嚗??文?畾菟????蒂蝑?靘憭扯 100% 皛踹銝??憭頝◢?芰?璇辣銝?璆萄之???剔??澆???憿?Alpha??,
+    "base_date": "2018-12-18",
+    "base_value": 1.0,
+    "benchmark_name": "??? TAIEX (TR)",
+    "rebalance_freq": "瘥?撟游???撟唾﹛ (6??2??"
+  },
+  "constituents": [
+    {
+      "symbol": "2308",
+      "name": "?圈???,
+      "weight": 5.51,
+      "momentum_126d": "121.3%",
+      "market": "銝?"
+    },
+    {

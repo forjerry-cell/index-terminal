@@ -1,0 +1,34 @@
+﻿diff --git a/app/system/page.tsx b/app/system/page.tsx
+index 3843507..796046a 100644
+--- a/app/system/page.tsx
++++ b/app/system/page.tsx
+@@ -194,13 +194,17 @@ export default function SystemManagementPage() {
+       setLastUpdated(updatedAt);
+       saveCacheToLocal(names, data, summary, updatedAt, fetchedMarketPrices);
+ 
+-      await syncToCloud({
++      const cloudPayload: CloudSyncPayload = {
+         strategy_list: names.join(','),
+         strategy_data: data,
+         strategy_summary: summary,
+         strategy_last_updated: updatedAt,
+-        market_prices: fetchedMarketPrices,
+-      });
++      };
++      // 蝛箏?嫣??航?撖恍蝡臭葉?餈?甈⊥????曉
++      if (fetchedMarketPrices) {
++        cloudPayload.market_prices = fetchedMarketPrices;
++      }
++      await syncToCloud(cloudPayload);
+     } catch (err) {
+       console.error('Fetch error:', err);
+       setSyncStatus('error');
+@@ -425,7 +429,9 @@ export default function SystemManagementPage() {
+               <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
+                 <h3 style={{ margin: 0, color: 'var(--accent)' }}>蝑???其?蝮質?</h3>
+                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+-                  * 撟喳?閮??嫣????乩????貉?蝞陛?桀像??繚 ?曉?單?撠??抵蝬脰???+                  * 撟喳?閮??嫣????乩????貉?蝞陛?桀像??+                  {marketPrices?.updatedAt ? ` 繚 ?曉?湔 ${marketPrices.updatedAt}` : ''}
++                  {' '}繚 ?曉靘??亙????芸??抵蝬脣????蝻箸???冽?鈭斗??餈?鈭文
+                 </span>
+               </div>
+               <div style={{ overflowX: 'auto' }}>

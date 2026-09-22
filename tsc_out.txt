@@ -1,0 +1,2 @@
+app/api/admin-crawler/route.ts(393,59): error TS2345: Argument of type 'Pick<MarketPrices, "dayDeal" | "nightDeal">' is not assignable to parameter of type 'Pick<WantgooMarketPrices, "dayDeal" | "nightDeal" | "stwnDeal">'.
+  Property 'stwnDeal' is missing in type 'Pick<MarketPrices, "dayDeal" | "nightDeal">' but required in type 'Pick<WantgooMarketPrices, "dayDeal" | "nightDeal" | "stwnDeal">'.

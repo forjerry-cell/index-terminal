@@ -1,0 +1,47 @@
+﻿
+Name                        PSIsContainer
+----                        -------------
+.git                                 True
+.github                              True
+.next                                True
+.vercel                              True
+app                                  True
+components                           True
+docs                                 True
+Index                                True
+lib                                  True
+node_modules                         True
+public                               True
+scratch                              True
+scripts                              True
+.env                                False
+.env.example                        False
+.env.vercel                         False
+.gitignore                          False
+.vercelignore                       False
+AGENTS.md                           False
+build_out.txt                       False
+build_verify.txt                    False
+CLAUDE.md                           False
+eslint.config.mjs                   False
+git_status_scratch.txt              False
+middleware.ts                       False
+next-env.d.ts                       False
+next.config.ts                      False
+package-lock.json                   False
+package.json                        False
+README.md                           False
+scratch_all.txt                     False
+scratch_tree.txt                    False
+supabase_alphafalcon.sql            False
+supabase_alphafalcon_us.sql         False
+supabase_init.sql                   False
+tsconfig.json                       False
+tsconfig.tsbuildinfo                False
+tsc_out.txt                         False
+tsc_out2.txt                        False
+tsc_verify.txt                      False
+tsc_verify2.txt                     False
+tsc_verify3.txt                     False
+
+

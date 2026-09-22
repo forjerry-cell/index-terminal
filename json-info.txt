@@ -1,0 +1,7 @@
+﻿
+Name                     Length
+----                     ------
+alphafalcon_results.json      2
+taiwan_momentum_30.json  424904
+
+

@@ -1,0 +1,49 @@
+﻿diff --git a/lib/strategy-products.ts b/lib/strategy-products.ts
+index d09a875..8192456 100644
+--- a/lib/strategy-products.ts
++++ b/lib/strategy-products.ts
+@@ -90,14 +90,42 @@ export function getCurrentMarketPrice(product: string, prices: WantgooMarketPric
+     txPrice = prices.nightDeal ?? prices.dayDeal;
+   }
+ 
++  // 敹???瑕??堆??踹??凝???啜◤???摮葡隤日??啣???寞
++  if (product === '敺桀?撖' || product.includes('撖')) {
++    return prices.stwnDeal;
++  }
++
+   if (product === '撠??唳?' || product === '敺桀??唳?' || product.includes('?唳?')) {
+     return txPrice;
+   }
+ 
+-  if (product === '敺桀?撖' || product.includes('撖')) {
+-    return prices.stwnDeal;
++  return null;
++}
++
++/**
++ * 撠?????銵????蔥??∠雯??????嚗撩瞍?雿??冽?鈭斗?鋆???+ */
++export function mergeMarketPrices(
++  live: WantgooMarketPrices | null | undefined,
++  fallback?: Pick<WantgooMarketPrices, 'dayDeal' | 'nightDeal' | 'stwnDeal'> | null,
++  updatedAt?: string,
++): WantgooMarketPrices | null {
++  const dayDeal = live?.dayDeal ?? fallback?.dayDeal ?? null;
++  const nightDeal = live?.nightDeal ?? fallback?.nightDeal ?? null;
++  const stwnDeal = live?.stwnDeal ?? fallback?.stwnDeal ?? null;
++
++  if (dayDeal === null && nightDeal === null && stwnDeal === null) {
++    return null;
+   }
+ 
+-  return null;
++  return {
++    dayDeal,
++    nightDeal,
++    stwnDeal,
++    updatedAt:
++      live?.updatedAt ||
++      updatedAt ||
++      new Date().toLocaleString('zh-TW', { hour12: false, timeZone: 'Asia/Taipei' }),
++  };
+ }
+ 

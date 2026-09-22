@@ -1,0 +1,32 @@
+﻿
+Path                                                           LineNumber
+----                                                           ----------
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     17
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     20
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     21
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     22
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     23
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     25
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                     26
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    133
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    139
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    147
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    148
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    149
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    151
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    154
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    178
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    221
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    224
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    238
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    240
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    246
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    249
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    250
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    257
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    260
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    296
+D:\Downloads\Antigravity\IndexWebsite\app\page.tsx                    345
+D:\Downloads\Antigravity\IndexWebsite\app\alphafalcon\page.tsx        626
+
+

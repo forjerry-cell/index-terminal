@@ -1,0 +1,9 @@
+﻿   ??Next.js 15.1.11
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ??Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/18) ...
