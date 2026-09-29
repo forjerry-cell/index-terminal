@@ -1,5 +1,5 @@
 {
-  "scan_date": "2026-09-28",
+  "scan_date": "2026-09-29",
   "results": [
     {
       "symbol": "3016",
@@ -15781,7 +15781,7 @@
     }
   ],
   "meta": {
-    "scanTime": "2026-09-28 16:51",
+    "scanTime": "2026-09-29 14:55",
     "totalScanned": 46,
     "totalResults": 46,
     "modelType": "Heuristics (VCP + SITCA + Revenue)",
