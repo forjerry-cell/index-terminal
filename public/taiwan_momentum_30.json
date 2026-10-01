@@ -17213,6 +17213,15 @@
       "benchmark_value": 6.2736,
       "tw50_value": 7.7033,
       "change_percent": 1.11
+    },
+    {
+      "date": "2026-10-01",
+      "value": 13.6607,
+      "value_post": 13.4848,
+      "original_value": 10.2732,
+      "benchmark_value": 6.3277,
+      "tw50_value": 7.814,
+      "change_percent": 1.37
     }
   ],
   "last_rebalance_term": "2026-06",
