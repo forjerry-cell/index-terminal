@@ -212,6 +212,7 @@ export default function TaiwanMomentumPage() {
               </div>
               <MomentumPerformanceChart data={performance} />
               <div className="text-center mt-4" style={{ color: 'var(--accent-secondary)', fontWeight: 600, fontSize: '0.875rem', borderTop: '1px solid var(--panel-border)', paddingTop: '1rem' }}>
+                <div style={{ marginBottom: '0.5rem', color: '#32cd32' }}>📅 台股強勢動能指數上線日期：2026-09-05</div>
                 📡 歷史回測驗證區間已同步至最新數據：{stats.latestDate}
               </div>
             </div>

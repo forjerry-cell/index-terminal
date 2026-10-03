@@ -276,9 +276,9 @@ function DashboardContent() {
               />
               {performanceData.length > 0 && (
               <div className="text-center mt-4" style={{ color: 'var(--accent-secondary)', fontWeight: 600, fontSize: '0.875rem', borderTop: '1px solid var(--panel-border)', paddingTop: '1rem' }}>
-                <div style={{ marginBottom: '0.5rem', color: '#ff7f50' }}>📅 台股領航強勢指數 (AlphaFalcon) 上線：2026-05-18</div>
-                <div style={{ marginBottom: '0.5rem', color: '#1e90ff' }}>📅 那指領航強勢指數 (AlphaFalcon US) 上線：2026-05-19</div>
-                <div style={{ marginBottom: '0.5rem', color: '#32cd32' }}>📅 台股強勢動能指數 (Taiwan Momentum 30) 上線：2026-09-05</div>
+                <div style={{ marginBottom: '0.5rem', color: isNasdaq ? '#1e90ff' : '#ff7f50' }}>
+                  📅 {isNasdaq ? '那指領航強勢指數' : '台股領航強勢指數'}上線日期：{isNasdaq ? '2026-05-19' : '2026-05-18'}
+                </div>
                 📡 數據已同步更新至：{performanceData[performanceData.length - 1].date}
               </div>
             )}
