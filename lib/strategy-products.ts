@@ -10,7 +10,7 @@ export const STRATEGY_PRODUCT_MAP: Record<string, string> = {
   'B05': '微型台指',
   'C02': '小型台指',
   'D01': '微型台指',
-  'D06': '微型台指',
+  'D06': '小型台指',
   'E041': '微型台指',
   'G01': '小型台指',
   'G02': '微型台指',
