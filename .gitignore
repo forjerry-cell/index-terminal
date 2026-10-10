@@ -53,3 +53,11 @@ scripts/scan_*.py
 scripts/final_check.py
 scripts/regen_*.py
 scripts/extend_*.py
+
+scripts/diag_*.py
+scripts/cleanup_*.py
+scripts/final_*.py
+
+# temp diagnostic outputs
+*_out.txt
+*_err.txt
