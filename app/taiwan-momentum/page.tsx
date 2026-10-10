@@ -77,7 +77,7 @@ export default function TaiwanMomentumPage() {
                 rebalance_history: history,
                 index_info: jsonData?.index_info || {
                   name: '台股強勢動能指數',
-                  description: '以台灣高波動指數 (FTHB003V02) 官方 50 檔成分股為母體，每半年定審回算過去 126 個交易日動能，剔除落後 20 檔，將資金等比例重配置給前 30 檔強勢股滿倉持有。'
+                  description: '以台灣高波動指數 (FTHB003V02) 概念之歷史入選池為母體，經流動性排序、126 日 Beta 緩衝保留（前 100 名）篩出 50 檔核心池，再依 126 日動能精選前 30 檔；採 80% Beta + 20% 成交額混合加權，並執行單一 30%、前五大 65%、半導體 60% 風控上限。'
                 },
               });
               setLoading(false);
@@ -265,7 +265,7 @@ export default function TaiwanMomentumPage() {
                   動能汰弱與精選機制 (Top 30 Selection)
                 </h4>
                 <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                  於每期 (6月、12月) 官方 50 檔成分股中，回算過去 126 個交易日動能，剔除落後 20 檔，將資金等比例重配置給前 30 檔強勢股滿倉持有。
+                  於每期 (6月、12月) 自歷史入選池經流動性排序與 126 日 Beta 緩衝保留篩出 50 檔核心池，再依 126 日動能精選前 30 檔；採 80% Beta + 20% 成交額混合加權，並執行單一 30%、前五大 65%、半導體 60% 風控上限。
                 </p>
               </div>
             </div>
