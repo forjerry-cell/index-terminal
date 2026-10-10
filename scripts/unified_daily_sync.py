@@ -126,11 +126,11 @@ def calculate_tw_high_beta_rebalance(cutoff_date):
                             progress=False, auto_adjust=False)
     if full_data.empty:
         return None, None
-    adj_close = full_data['Adj Close'].ffill()
-    if bm_ticker not in adj_close.columns:
+    price_close = full_data['Close'].ffill() if 'Close' in full_data else full_data.ffill()
+    if bm_ticker not in price_close.columns:
         return None, None
-    bm_p = adj_close[bm_ticker]
-    stock_rets = adj_close[tickers].pct_change()
+    bm_p = price_close[bm_ticker]
+    stock_rets = price_close[tickers].pct_change()
     betas = {}
     for t in tickers:
         if t in stock_rets.columns:
@@ -200,11 +200,11 @@ def update_taiwan_high_beta(today_dt):
     end_fetch = (today_dt + timedelta(days=2)).strftime("%Y-%m-%d")
     print(f"  下載行情 ({start_fetch} ~ {end_fetch})...")
     df = yf.download(all_tickers, start=start_fetch, end=end_fetch, auto_adjust=False, progress=False)
-    if df.empty or "Adj Close" not in df:
+    if df.empty or "Close" not in df:
         print("  未下載到數據")
         return
-    adj_close = df["Adj Close"].ffill()
-    new_dates = adj_close.index[adj_close.index > last_dt]
+    price_close = df["Close"].ffill()
+    new_dates = price_close.index[price_close.index > last_dt]
     if len(new_dates) == 0:
         print("  行情已是最新")
     else:
@@ -213,11 +213,11 @@ def update_taiwan_high_beta(today_dt):
         cur_bm = latest.get("benchmark_value", 1.0)
         perf_data = []
         for d in new_dates:
-            loc = adj_close.index.get_loc(d)
-            prev_d = adj_close.index[loc - 1]
-            day_rets = (adj_close.loc[d, tickers] / adj_close.loc[prev_d, tickers] - 1).fillna(0)
+            loc = price_close.index.get_loc(d)
+            prev_d = price_close.index[loc - 1]
+            day_rets = (price_close.loc[d, tickers] / price_close.loc[prev_d, tickers] - 1).fillna(0)
             port_ret = sum(day_rets[s] * weights.get(s, 0) for s in tickers if s in day_rets)
-            bm_ret = (adj_close.loc[d, bm_ticker] / adj_close.loc[prev_d, bm_ticker] - 1) if bm_ticker in adj_close else 0.0
+            bm_ret = (price_close.loc[d, bm_ticker] / price_close.loc[prev_d, bm_ticker] - 1) if bm_ticker in price_close else 0.0
             if pd.isna(bm_ret): bm_ret = 0.0
             cur_val *= (1.0 + port_ret)
             cur_bm *= (1.0 + bm_ret)
@@ -280,11 +280,11 @@ def calculate_nq_high_beta_rebalance(cutoff_date):
                             progress=False, auto_adjust=False)
     if full_data.empty:
         return None, None
-    adj_close = full_data['Adj Close'].ffill()
-    if bm_ticker not in adj_close.columns:
+    price_close = full_data['Close'].ffill() if 'Close' in full_data else full_data.ffill()
+    if bm_ticker not in price_close.columns:
         return None, None
-    bm_p = adj_close[bm_ticker]
-    stock_rets = adj_close[NQ_UNIVERSE].pct_change()
+    bm_p = price_close[bm_ticker]
+    stock_rets = price_close[NQ_UNIVERSE].pct_change()
     betas = {}
     for t in NQ_UNIVERSE:
         if t in stock_rets.columns:
@@ -332,11 +332,11 @@ def update_nasdaq_high_beta(today_dt):
     end_fetch = (today_dt + timedelta(days=2)).strftime("%Y-%m-%d")
     print(f"  下載行情 ({start_fetch} ~ {end_fetch})...")
     df = yf.download(all_tickers, start=start_fetch, end=end_fetch, auto_adjust=False, progress=False)
-    if df.empty or "Adj Close" not in df:
+    if df.empty or "Close" not in df:
         print("  未下載到數據")
         return
-    adj_close = df["Adj Close"].ffill()
-    new_dates = adj_close.index[adj_close.index > last_dt]
+    price_close = df["Close"].ffill()
+    new_dates = price_close.index[price_close.index > last_dt]
     if len(new_dates) == 0:
         print("  行情已是最新")
     else:
@@ -345,11 +345,11 @@ def update_nasdaq_high_beta(today_dt):
         cur_bm = latest.get("benchmark_value", 1.0)
         perf_data = []
         for d in new_dates:
-            loc = adj_close.index.get_loc(d)
-            prev_d = adj_close.index[loc - 1]
-            day_rets = (adj_close.loc[d, tickers] / adj_close.loc[prev_d, tickers] - 1).fillna(0)
+            loc = price_close.index.get_loc(d)
+            prev_d = price_close.index[loc - 1]
+            day_rets = (price_close.loc[d, tickers] / price_close.loc[prev_d, tickers] - 1).fillna(0)
             port_ret = sum(day_rets[s] * weights.get(s, 0) for s in tickers if s in day_rets)
-            bm_ret = (adj_close.loc[d, bm_ticker] / adj_close.loc[prev_d, bm_ticker] - 1) if bm_ticker in adj_close else 0.0
+            bm_ret = (price_close.loc[d, bm_ticker] / price_close.loc[prev_d, bm_ticker] - 1) if bm_ticker in price_close else 0.0
             if pd.isna(bm_ret): bm_ret = 0.0
             cur_val *= (1.0 + port_ret)
             cur_bm *= (1.0 + bm_ret)
@@ -424,11 +424,11 @@ def update_taiwan_momentum(today_dt):
     end_fetch = (today_dt + timedelta(days=2)).strftime("%Y-%m-%d")
     print(f"  Fetching quotes ({start_fetch} ~ {end_fetch})...")
     df = yf.download(all_tickers, start=start_fetch, end=end_fetch, auto_adjust=False, progress=False)
-    if df.empty or "Adj Close" not in df:
+    if df.empty or "Close" not in df:
         print("  No data downloaded")
         return
-    adj_close = df["Adj Close"].ffill()
-    new_dates = adj_close.index[adj_close.index > last_dt]
+    price_close = df["Close"].ffill()
+    new_dates = price_close.index[price_close.index > last_dt]
     if len(new_dates) == 0:
         print("  Quotes already up to date")
     else:
@@ -437,11 +437,11 @@ def update_taiwan_momentum(today_dt):
         cur_bm = latest.get("benchmark_value", 1.0)
         perf_data = []
         for d in new_dates:
-            loc = adj_close.index.get_loc(d)
-            prev_d = adj_close.index[loc - 1]
-            day_rets = (adj_close.loc[d, tickers] / adj_close.loc[prev_d, tickers] - 1).fillna(0)
+            loc = price_close.index.get_loc(d)
+            prev_d = price_close.index[loc - 1]
+            day_rets = (price_close.loc[d, tickers] / price_close.loc[prev_d, tickers] - 1).fillna(0)
             port_ret = sum(day_rets[s] * weights.get(s, 0) for s in tickers if s in day_rets)
-            bm_ret = (adj_close.loc[d, bm_ticker] / adj_close.loc[prev_d, bm_ticker] - 1) if bm_ticker in adj_close else 0.0
+            bm_ret = (price_close.loc[d, bm_ticker] / price_close.loc[prev_d, bm_ticker] - 1) if bm_ticker in price_close else 0.0
             if pd.isna(bm_ret): bm_ret = 0.0
             cur_val *= (1.0 + port_ret)
             cur_bm *= (1.0 + bm_ret)

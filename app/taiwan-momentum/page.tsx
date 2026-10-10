@@ -54,8 +54,25 @@ export default function TaiwanMomentumPage() {
                 history = await histRes.json();
               }
 
+              // 將 JSON 中的 tw50_value / original_value / value_post 合併進 Supabase 數據
+              const jsonPerfMap: Record<string, any> = {};
+              if (jsonData?.performance) {
+                for (const jp of jsonData.performance) {
+                  jsonPerfMap[jp.date] = jp;
+                }
+              }
+              const mergedPerf = [...perf].reverse().map((sb: any) => {
+                const jp = jsonPerfMap[sb.date];
+                return {
+                  ...sb,
+                  tw50_value: jp?.tw50_value ?? null,
+                  original_value: jp?.original_value ?? null,
+                  value_post: jp?.value_post ?? null,
+                };
+              });
+
               setIndexData({
-                performance: [...perf].reverse(),
+                performance: mergedPerf,
                 constituents: constituents.length > 0 ? constituents : (jsonData?.constituents || []),
                 rebalance_history: history,
                 index_info: jsonData?.index_info || {

@@ -136,16 +136,16 @@ def perform_rebalance(cutoff_date_str, existing_codes=None):
     print(f"正在自 Yahoo Finance 下載 {len(all_tickers)} 檔標的行情 ({start_dt} ~ {end_dt})...")
     df = yf.download(all_tickers, start=start_dt, end=end_dt, auto_adjust=False, progress=False)
     
-    if df.empty or "Adj Close" not in df:
+    if df.empty or "Close" not in df:
         raise RuntimeError("無法下載定審行情資料")
         
-    adj_close = df["Adj Close"].loc[:cutoff_date_str].ffill()
+    price_close = df["Close"].loc[:cutoff_date_str].ffill()
     close = df["Close"].loc[:cutoff_date_str].ffill()
     volume = df["Volume"].loc[:cutoff_date_str].fillna(0)
     
-    # 取近 127 個交易日 (計算 126 日報酬率)
-    tail_adj = adj_close.tail(127)
-    tail_rets = tail_adj.pct_change(fill_method=None).iloc[1:]
+    # 取近 127 個交易日 (計算 126 日報酬率) - 使用 Close (PR)
+    tail_close = price_close.tail(127)
+    tail_rets = tail_close.pct_change(fill_method=None).iloc[1:]
     bm_rets = tail_rets["^TWII"].dropna()
     
     # 20 日日均成交額
