@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
 import MomentumPerformanceChart from '@/components/MomentumPerformanceChart';
+import { supabase } from '@/lib/supabase';
 import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck, Flame, Layers, Award } from 'lucide-react';
 
 export default function TaiwanMomentumPage() {
@@ -12,11 +13,54 @@ export default function TaiwanMomentumPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await fetch('/taiwan_momentum_30.json');
-        const json = await res.json();
-        setIndexData(json);
+        // 從 Supabase 讀取績效數據
+        const { data: perf } = await supabase
+          .from('index_performance')
+          .select('*')
+          .eq('index_id', 'taiwan_momentum_30')
+          .order('date', { ascending: false })
+          .limit(3000)
+          .neq('date', '1900-01-01');
+
+        // 從 Supabase 讀取成分股
+        const { data: constRows } = await supabase
+          .from('index_constituents')
+          .select('*')
+          .eq('index_id', 'taiwan_momentum_30')
+          .order('date', { ascending: false })
+          .limit(100);
+
+        // 從 Supabase 讀取換股歷史
+        const { data: history } = await supabase
+          .from('rebalance_history')
+          .select('*')
+          .eq('index_id', 'taiwan_momentum_30')
+          .order('term', { ascending: false })
+          .limit(50);
+
+        if (perf && perf.length > 0) {
+          const ascendingData = [...perf].reverse();
+          let constituents = [];
+          if (constRows && constRows.length > 0) {
+            const latestDate = constRows[0].date;
+            constituents = constRows.filter(r => r.date === latestDate);
+          }
+          setIndexData({
+            performance: ascendingData,
+            constituents: constituents,
+            rebalance_history: history || [],
+          });
+        }
       } catch (err) {
-        console.error('Failed to load taiwan_momentum_30.json', err);
+        console.error('Failed to load taiwan_momentum_30 from Supabase', err);
+        // Fallback to static JSON
+        try {
+          const res = await fetch('/taiwan_momentum_30.json');
+          const json = await res.json();
+          setIndexData(json);
+        } catch (fallbackErr) {
+          console.error('Fallback also failed', fallbackErr);
+        }
       } finally {
         setLoading(false);
       }

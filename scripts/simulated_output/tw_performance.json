@@ -1,0 +1,919 @@
+[
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-01",
+    "value": 12.530432,
+    "change_percent": 0.2435,
+    "benchmark_value": 8.67008
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-02",
+    "value": 12.414922,
+    "change_percent": -0.9218,
+    "benchmark_value": 8.70535
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-03",
+    "value": 12.197453,
+    "change_percent": -1.7517,
+    "benchmark_value": 8.565628
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-06",
+    "value": 12.207961,
+    "change_percent": 0.0861,
+    "benchmark_value": 8.701457
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-07",
+    "value": 12.465544,
+    "change_percent": 2.11,
+    "benchmark_value": 8.71095
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-08",
+    "value": 12.541165,
+    "change_percent": 0.6066,
+    "benchmark_value": 8.630976
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-09",
+    "value": 12.704653,
+    "change_percent": 1.3036,
+    "benchmark_value": 8.783675
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-10",
+    "value": 12.725017,
+    "change_percent": 0.1603,
+    "benchmark_value": 8.673059
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-13",
+    "value": 12.381273,
+    "change_percent": -2.7013,
+    "benchmark_value": 8.627393
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-14",
+    "value": 12.185774,
+    "change_percent": -1.579,
+    "benchmark_value": 8.646585
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-15",
+    "value": 12.221087,
+    "change_percent": 0.2898,
+    "benchmark_value": 8.478977
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-16",
+    "value": 12.632949,
+    "change_percent": 3.3701,
+    "benchmark_value": 8.510408
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-17",
+    "value": 12.802518,
+    "change_percent": 1.3423,
+    "benchmark_value": 8.464764
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-20",
+    "value": 12.919923,
+    "change_percent": 0.917,
+    "benchmark_value": 8.46937
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-21",
+    "value": 12.825539,
+    "change_percent": -0.7305,
+    "benchmark_value": 8.424049
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-22",
+    "value": 13.013551,
+    "change_percent": 1.4659,
+    "benchmark_value": 8.475526
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-23",
+    "value": 13.058407,
+    "change_percent": 0.3447,
+    "benchmark_value": 8.369164
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-24",
+    "value": 13.383576,
+    "change_percent": 2.4901,
+    "benchmark_value": 8.399532
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-27",
+    "value": 13.502037,
+    "change_percent": 0.8851,
+    "benchmark_value": 8.410313
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-28",
+    "value": 13.285982,
+    "change_percent": -1.6002,
+    "benchmark_value": 8.403407
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-29",
+    "value": 13.091766,
+    "change_percent": -1.4618,
+    "benchmark_value": 8.255186
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-04-30",
+    "value": 13.107337,
+    "change_percent": 0.1189,
+    "benchmark_value": 8.251287
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-01",
+    "value": 13.34972,
+    "change_percent": 1.8492,
+    "benchmark_value": 8.122205
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-04",
+    "value": 13.238362,
+    "change_percent": -0.8342,
+    "benchmark_value": 8.165428
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-05",
+    "value": 12.754612,
+    "change_percent": -3.6542,
+    "benchmark_value": 8.154301
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-06",
+    "value": 13.06872,
+    "change_percent": 2.4627,
+    "benchmark_value": 8.332091
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-07",
+    "value": 13.071471,
+    "change_percent": 0.0211,
+    "benchmark_value": 8.327559
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-08",
+    "value": 13.159262,
+    "change_percent": 0.6716,
+    "benchmark_value": 8.288523
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-11",
+    "value": 13.322668,
+    "change_percent": 1.2418,
+    "benchmark_value": 8.275993
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-12",
+    "value": 13.704259,
+    "change_percent": 2.8642,
+    "benchmark_value": 8.106522
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-13",
+    "value": 14.043444,
+    "change_percent": 2.475,
+    "benchmark_value": 8.210918
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-14",
+    "value": 13.801025,
+    "change_percent": -1.7262,
+    "benchmark_value": 8.343197
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-15",
+    "value": 13.951994,
+    "change_percent": 1.0939,
+    "benchmark_value": 8.276631
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-18",
+    "value": 13.977515,
+    "change_percent": 0.1829,
+    "benchmark_value": 8.184629
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-19",
+    "value": 13.853028,
+    "change_percent": -0.8906,
+    "benchmark_value": 8.189667
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-20",
+    "value": 13.848652,
+    "change_percent": -0.0316,
+    "benchmark_value": 8.268794
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-21",
+    "value": 14.11026,
+    "change_percent": 1.8891,
+    "benchmark_value": 8.306515
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-22",
+    "value": 14.290862,
+    "change_percent": 1.2799,
+    "benchmark_value": 8.178623
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-25",
+    "value": 13.980256,
+    "change_percent": -2.1735,
+    "benchmark_value": 8.222935
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-26",
+    "value": 13.813537,
+    "change_percent": -1.1925,
+    "benchmark_value": 8.153918
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-27",
+    "value": 13.721963,
+    "change_percent": -0.6629,
+    "benchmark_value": 8.202411
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-28",
+    "value": 13.825837,
+    "change_percent": 0.757,
+    "benchmark_value": 8.217859
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-05-29",
+    "value": 13.844731,
+    "change_percent": 0.1367,
+    "benchmark_value": 8.176762
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-01",
+    "value": 14.311024,
+    "change_percent": 3.368,
+    "benchmark_value": 8.281819
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-02",
+    "value": 14.422077,
+    "change_percent": 0.776,
+    "benchmark_value": 8.121834
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-03",
+    "value": 14.364814,
+    "change_percent": -0.3971,
+    "benchmark_value": 8.138955
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-04",
+    "value": 14.795963,
+    "change_percent": 3.0014,
+    "benchmark_value": 8.170616
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-05",
+    "value": 15.233801,
+    "change_percent": 2.9592,
+    "benchmark_value": 8.17077
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-08",
+    "value": 15.185216,
+    "change_percent": -0.3189,
+    "benchmark_value": 8.222487
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-09",
+    "value": 15.346733,
+    "change_percent": 1.0636,
+    "benchmark_value": 8.098458
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-10",
+    "value": 15.455526,
+    "change_percent": 0.7089,
+    "benchmark_value": 8.118524
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-11",
+    "value": 15.666927,
+    "change_percent": 1.3678,
+    "benchmark_value": 8.137131
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-12",
+    "value": 15.791784,
+    "change_percent": 0.7969,
+    "benchmark_value": 8.071246
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-15",
+    "value": 15.889844,
+    "change_percent": 0.621,
+    "benchmark_value": 8.057656
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-16",
+    "value": 16.16995,
+    "change_percent": 1.7628,
+    "benchmark_value": 8.181332
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-17",
+    "value": 16.15605,
+    "change_percent": -0.086,
+    "benchmark_value": 8.242262
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-18",
+    "value": 16.421863,
+    "change_percent": 1.6453,
+    "benchmark_value": 8.181603
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-19",
+    "value": 16.040952,
+    "change_percent": -2.3195,
+    "benchmark_value": 8.414008
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-22",
+    "value": 16.222441,
+    "change_percent": 1.1314,
+    "benchmark_value": 8.33157
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-23",
+    "value": 16.420805,
+    "change_percent": 1.2228,
+    "benchmark_value": 8.438461
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-24",
+    "value": 16.516828,
+    "change_percent": 0.5848,
+    "benchmark_value": 8.687396
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-25",
+    "value": 16.66953,
+    "change_percent": 0.9245,
+    "benchmark_value": 8.510442
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-26",
+    "value": 16.925265,
+    "change_percent": 1.5341,
+    "benchmark_value": 8.533333
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-29",
+    "value": 17.33348,
+    "change_percent": 2.4119,
+    "benchmark_value": 8.66544
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-06-30",
+    "value": 17.18954,
+    "change_percent": -0.8304,
+    "benchmark_value": 8.776846
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-01",
+    "value": 17.542085,
+    "change_percent": 2.0509,
+    "benchmark_value": 8.720555
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-02",
+    "value": 17.170278,
+    "change_percent": -2.1195,
+    "benchmark_value": 8.720702
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-03",
+    "value": 17.508531,
+    "change_percent": 1.97,
+    "benchmark_value": 8.643301
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-06",
+    "value": 17.38322,
+    "change_percent": -0.7157,
+    "benchmark_value": 8.481735
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-07",
+    "value": 17.580527,
+    "change_percent": 1.135,
+    "benchmark_value": 8.5368
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-08",
+    "value": 17.411793,
+    "change_percent": -0.9598,
+    "benchmark_value": 8.522094
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-09",
+    "value": 17.493399,
+    "change_percent": 0.4687,
+    "benchmark_value": 8.35464
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-10",
+    "value": 17.402909,
+    "change_percent": -0.5173,
+    "benchmark_value": 8.535878
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-13",
+    "value": 17.528905,
+    "change_percent": 0.724,
+    "benchmark_value": 8.443105
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-14",
+    "value": 17.738531,
+    "change_percent": 1.1959,
+    "benchmark_value": 8.548405
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-15",
+    "value": 17.509977,
+    "change_percent": -1.2885,
+    "benchmark_value": 8.635015
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-16",
+    "value": 17.288128,
+    "change_percent": -1.267,
+    "benchmark_value": 8.679068
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-17",
+    "value": 17.155777,
+    "change_percent": -0.7656,
+    "benchmark_value": 8.762301
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-20",
+    "value": 16.99606,
+    "change_percent": -0.931,
+    "benchmark_value": 8.751493
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-21",
+    "value": 16.932303,
+    "change_percent": -0.3751,
+    "benchmark_value": 8.841941
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-22",
+    "value": 17.139151,
+    "change_percent": 1.2216,
+    "benchmark_value": 8.929686
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-23",
+    "value": 17.400771,
+    "change_percent": 1.5264,
+    "benchmark_value": 9.06153
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-24",
+    "value": 17.605225,
+    "change_percent": 1.175,
+    "benchmark_value": 9.249005
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-27",
+    "value": 17.962617,
+    "change_percent": 2.03,
+    "benchmark_value": 9.353084
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-28",
+    "value": 17.930042,
+    "change_percent": -0.1813,
+    "benchmark_value": 9.529534
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-29",
+    "value": 18.182107,
+    "change_percent": 1.4058,
+    "benchmark_value": 9.494746
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-30",
+    "value": 18.273367,
+    "change_percent": 0.5019,
+    "benchmark_value": 9.419232
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-07-31",
+    "value": 18.337335,
+    "change_percent": 0.3501,
+    "benchmark_value": 9.225225
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-03",
+    "value": 18.767613,
+    "change_percent": 2.3465,
+    "benchmark_value": 9.209255
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-04",
+    "value": 18.639644,
+    "change_percent": -0.6819,
+    "benchmark_value": 9.243287
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-05",
+    "value": 18.721067,
+    "change_percent": 0.4368,
+    "benchmark_value": 9.21194
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-06",
+    "value": 18.105248,
+    "change_percent": -3.2894,
+    "benchmark_value": 9.168685
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-07",
+    "value": 18.52099,
+    "change_percent": 2.2962,
+    "benchmark_value": 9.266988
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-10",
+    "value": 18.470735,
+    "change_percent": -0.2713,
+    "benchmark_value": 9.415498
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-11",
+    "value": 18.494097,
+    "change_percent": 0.1265,
+    "benchmark_value": 9.554756
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-12",
+    "value": 18.511004,
+    "change_percent": 0.0914,
+    "benchmark_value": 9.71741
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-13",
+    "value": 18.986627,
+    "change_percent": 2.5694,
+    "benchmark_value": 9.927681
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-14",
+    "value": 19.37794,
+    "change_percent": 2.061,
+    "benchmark_value": 9.813941
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-17",
+    "value": 19.898579,
+    "change_percent": 2.6868,
+    "benchmark_value": 9.854883
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-18",
+    "value": 19.72419,
+    "change_percent": -0.8764,
+    "benchmark_value": 9.936139
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-19",
+    "value": 19.341963,
+    "change_percent": -1.9379,
+    "benchmark_value": 10.078313
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-20",
+    "value": 19.547148,
+    "change_percent": 1.0608,
+    "benchmark_value": 10.159456
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-21",
+    "value": 20.488609,
+    "change_percent": 4.8164,
+    "benchmark_value": 10.374294
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-24",
+    "value": 19.649872,
+    "change_percent": -4.0937,
+    "benchmark_value": 10.341121
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-25",
+    "value": 19.774854,
+    "change_percent": 0.636,
+    "benchmark_value": 10.550389
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-26",
+    "value": 19.844669,
+    "change_percent": 0.353,
+    "benchmark_value": 10.53526
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-27",
+    "value": 19.860716,
+    "change_percent": 0.0809,
+    "benchmark_value": 10.482565
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-28",
+    "value": 19.849937,
+    "change_percent": -0.0543,
+    "benchmark_value": 10.634653
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-08-31",
+    "value": 20.019342,
+    "change_percent": 0.8534,
+    "benchmark_value": 10.582821
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-01",
+    "value": 19.396983,
+    "change_percent": -3.1088,
+    "benchmark_value": 10.719781
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-02",
+    "value": 19.263209,
+    "change_percent": -0.6897,
+    "benchmark_value": 10.804517
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-03",
+    "value": 19.28751,
+    "change_percent": 0.1262,
+    "benchmark_value": 10.924843
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-04",
+    "value": 19.098976,
+    "change_percent": -0.9775,
+    "benchmark_value": 11.27023
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-07",
+    "value": 19.771365,
+    "change_percent": 3.5205,
+    "benchmark_value": 11.401916
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-08",
+    "value": 19.870181,
+    "change_percent": 0.4998,
+    "benchmark_value": 11.517557
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-09",
+    "value": 19.984586,
+    "change_percent": 0.5758,
+    "benchmark_value": 11.548894
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-10",
+    "value": 20.204267,
+    "change_percent": 1.0992,
+    "benchmark_value": 11.692052
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-11",
+    "value": 20.570219,
+    "change_percent": 1.8113,
+    "benchmark_value": 11.535647
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-14",
+    "value": 20.626849,
+    "change_percent": 0.2753,
+    "benchmark_value": 11.776918
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-15",
+    "value": 20.883891,
+    "change_percent": 1.2462,
+    "benchmark_value": 11.900004
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-16",
+    "value": 21.063105,
+    "change_percent": 0.8581,
+    "benchmark_value": 11.7741
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-17",
+    "value": 20.525616,
+    "change_percent": -2.5518,
+    "benchmark_value": 11.838219
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-18",
+    "value": 20.651979,
+    "change_percent": 0.6156,
+    "benchmark_value": 12.000546
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-21",
+    "value": 21.06699,
+    "change_percent": 2.0095,
+    "benchmark_value": 12.194562
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-22",
+    "value": 21.58349,
+    "change_percent": 2.4517,
+    "benchmark_value": 11.894098
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-23",
+    "value": 22.528842,
+    "change_percent": 4.38,
+    "benchmark_value": 11.943126
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-24",
+    "value": 22.662773,
+    "change_percent": 0.5945,
+    "benchmark_value": 12.15042
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-25",
+    "value": 23.115103,
+    "change_percent": 1.9959,
+    "benchmark_value": 12.008606
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-28",
+    "value": 23.360175,
+    "change_percent": 1.0602,
+    "benchmark_value": 11.97221
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-29",
+    "value": 23.453187,
+    "change_percent": 0.3982,
+    "benchmark_value": 11.918003
+  },
+  {
+    "index_id": "taiwan_high_beta",
+    "date": "2026-09-30",
+    "value": 24.150584,
+    "change_percent": 2.9736,
+    "benchmark_value": 11.838957
+  }
+]

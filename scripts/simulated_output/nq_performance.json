@@ -1,0 +1,919 @@
+[
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-01",
+    "value": 8.11256,
+    "change_percent": -1.0663,
+    "benchmark_value": 11.933007
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-02",
+    "value": 8.14804,
+    "change_percent": 0.4373,
+    "benchmark_value": 11.939815
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-03",
+    "value": 8.271183,
+    "change_percent": 1.5113,
+    "benchmark_value": 12.011014
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-06",
+    "value": 8.280839,
+    "change_percent": 0.1167,
+    "benchmark_value": 12.213905
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-07",
+    "value": 8.287784,
+    "change_percent": 0.0839,
+    "benchmark_value": 12.092058
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-08",
+    "value": 8.487588,
+    "change_percent": 2.4108,
+    "benchmark_value": 11.964432
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-09",
+    "value": 8.657291,
+    "change_percent": 1.9994,
+    "benchmark_value": 11.670749
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-10",
+    "value": 8.95378,
+    "change_percent": 3.4247,
+    "benchmark_value": 11.781152
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-13",
+    "value": 8.896803,
+    "change_percent": -0.6363,
+    "benchmark_value": 11.889321
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-14",
+    "value": 9.128694,
+    "change_percent": 2.6065,
+    "benchmark_value": 12.105878
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-15",
+    "value": 8.916435,
+    "change_percent": -2.3252,
+    "benchmark_value": 12.334369
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-16",
+    "value": 8.828703,
+    "change_percent": -0.9839,
+    "benchmark_value": 11.985363
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-17",
+    "value": 8.969044,
+    "change_percent": 1.5896,
+    "benchmark_value": 12.113016
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-20",
+    "value": 8.696273,
+    "change_percent": -3.0412,
+    "benchmark_value": 12.323312
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-21",
+    "value": 8.634843,
+    "change_percent": -0.7064,
+    "benchmark_value": 12.162676
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-22",
+    "value": 8.527681,
+    "change_percent": -1.241,
+    "benchmark_value": 12.194195
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-23",
+    "value": 8.720286,
+    "change_percent": 2.2586,
+    "benchmark_value": 12.044118
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-24",
+    "value": 8.787735,
+    "change_percent": 0.7735,
+    "benchmark_value": 12.102731
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-27",
+    "value": 8.840766,
+    "change_percent": 0.6035,
+    "benchmark_value": 11.990565
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-28",
+    "value": 8.806825,
+    "change_percent": -0.3839,
+    "benchmark_value": 11.745763
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-29",
+    "value": 8.812334,
+    "change_percent": 0.0626,
+    "benchmark_value": 11.827568
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-04-30",
+    "value": 9.085375,
+    "change_percent": 3.0984,
+    "benchmark_value": 11.857137
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-01",
+    "value": 9.255991,
+    "change_percent": 1.8779,
+    "benchmark_value": 11.950936
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-04",
+    "value": 9.324365,
+    "change_percent": 0.7387,
+    "benchmark_value": 12.029476
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-05",
+    "value": 9.362566,
+    "change_percent": 0.4097,
+    "benchmark_value": 12.164165
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-06",
+    "value": 9.315056,
+    "change_percent": -0.5075,
+    "benchmark_value": 12.385061
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-07",
+    "value": 9.307361,
+    "change_percent": -0.0826,
+    "benchmark_value": 12.491437
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-08",
+    "value": 9.1815,
+    "change_percent": -1.3523,
+    "benchmark_value": 12.555717
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-11",
+    "value": 9.260652,
+    "change_percent": 0.8621,
+    "benchmark_value": 12.823689
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-12",
+    "value": 9.363689,
+    "change_percent": 1.1126,
+    "benchmark_value": 12.708234
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-13",
+    "value": 9.353663,
+    "change_percent": -0.1071,
+    "benchmark_value": 12.916439
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-14",
+    "value": 9.294863,
+    "change_percent": -0.6286,
+    "benchmark_value": 12.970067
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-15",
+    "value": 9.530889,
+    "change_percent": 2.5393,
+    "benchmark_value": 13.030526
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-18",
+    "value": 9.624676,
+    "change_percent": 0.984,
+    "benchmark_value": 13.299918
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-19",
+    "value": 9.468234,
+    "change_percent": -1.6254,
+    "benchmark_value": 13.376272
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-20",
+    "value": 9.448589,
+    "change_percent": -0.2075,
+    "benchmark_value": 13.594504
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-21",
+    "value": 9.353503,
+    "change_percent": -1.0063,
+    "benchmark_value": 13.303935
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-22",
+    "value": 9.280062,
+    "change_percent": -0.7852,
+    "benchmark_value": 13.310254
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-25",
+    "value": 9.549685,
+    "change_percent": 2.9054,
+    "benchmark_value": 13.47383
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-26",
+    "value": 9.501077,
+    "change_percent": -0.509,
+    "benchmark_value": 13.661295
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-27",
+    "value": 9.561429,
+    "change_percent": 0.6352,
+    "benchmark_value": 13.32745
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-28",
+    "value": 9.818782,
+    "change_percent": 2.6916,
+    "benchmark_value": 13.387826
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-05-29",
+    "value": 9.827988,
+    "change_percent": 0.0938,
+    "benchmark_value": 13.68331
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-01",
+    "value": 9.700739,
+    "change_percent": -1.2948,
+    "benchmark_value": 13.766276
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-02",
+    "value": 9.834022,
+    "change_percent": 1.3739,
+    "benchmark_value": 13.485388
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-03",
+    "value": 9.822086,
+    "change_percent": -0.1214,
+    "benchmark_value": 13.591473
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-04",
+    "value": 9.997555,
+    "change_percent": 1.7865,
+    "benchmark_value": 13.474091
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-05",
+    "value": 10.52747,
+    "change_percent": 5.3004,
+    "benchmark_value": 13.175852
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-08",
+    "value": 10.779589,
+    "change_percent": 2.3949,
+    "benchmark_value": 13.279788
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-09",
+    "value": 10.667753,
+    "change_percent": -1.0375,
+    "benchmark_value": 13.663915
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-10",
+    "value": 10.691009,
+    "change_percent": 0.218,
+    "benchmark_value": 13.665722
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-11",
+    "value": 11.03763,
+    "change_percent": 3.2422,
+    "benchmark_value": 13.553048
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-12",
+    "value": 10.917413,
+    "change_percent": -1.0892,
+    "benchmark_value": 13.512425
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-15",
+    "value": 10.825056,
+    "change_percent": -0.846,
+    "benchmark_value": 13.569472
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-16",
+    "value": 10.712281,
+    "change_percent": -1.0418,
+    "benchmark_value": 13.567756
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-17",
+    "value": 10.835493,
+    "change_percent": 1.1502,
+    "benchmark_value": 13.603926
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-18",
+    "value": 10.982142,
+    "change_percent": 1.3534,
+    "benchmark_value": 13.485576
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-19",
+    "value": 10.976375,
+    "change_percent": -0.0525,
+    "benchmark_value": 13.507793
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-22",
+    "value": 10.958862,
+    "change_percent": -0.1595,
+    "benchmark_value": 13.440824
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-23",
+    "value": 11.07934,
+    "change_percent": 1.0994,
+    "benchmark_value": 13.624339
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-24",
+    "value": 11.157282,
+    "change_percent": 0.7035,
+    "benchmark_value": 13.644811
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-25",
+    "value": 11.439165,
+    "change_percent": 2.5264,
+    "benchmark_value": 13.672659
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-26",
+    "value": 11.644407,
+    "change_percent": 1.7942,
+    "benchmark_value": 14.0513
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-29",
+    "value": 11.940793,
+    "change_percent": 2.5453,
+    "benchmark_value": 13.927953
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-06-30",
+    "value": 11.977476,
+    "change_percent": 0.3072,
+    "benchmark_value": 13.672481
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-01",
+    "value": 11.951256,
+    "change_percent": -0.2189,
+    "benchmark_value": 13.555781
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-02",
+    "value": 12.001202,
+    "change_percent": 0.4179,
+    "benchmark_value": 13.466731
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-03",
+    "value": 12.106542,
+    "change_percent": 0.8777,
+    "benchmark_value": 13.62013
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-06",
+    "value": 11.873172,
+    "change_percent": -1.9276,
+    "benchmark_value": 13.723689
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-07",
+    "value": 11.801488,
+    "change_percent": -0.6037,
+    "benchmark_value": 13.358301
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-08",
+    "value": 11.83912,
+    "change_percent": 0.3189,
+    "benchmark_value": 13.254916
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-09",
+    "value": 11.848379,
+    "change_percent": 0.0782,
+    "benchmark_value": 13.386411
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-10",
+    "value": 11.608587,
+    "change_percent": -2.0238,
+    "benchmark_value": 13.395315
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-13",
+    "value": 11.426858,
+    "change_percent": -1.5655,
+    "benchmark_value": 13.455223
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-14",
+    "value": 11.666069,
+    "change_percent": 2.0934,
+    "benchmark_value": 13.19409
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-15",
+    "value": 12.146067,
+    "change_percent": 4.1145,
+    "benchmark_value": 12.910188
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-16",
+    "value": 11.934363,
+    "change_percent": -1.743,
+    "benchmark_value": 12.918045
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-17",
+    "value": 12.229517,
+    "change_percent": 2.4731,
+    "benchmark_value": 13.139019
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-20",
+    "value": 12.391914,
+    "change_percent": 1.3279,
+    "benchmark_value": 13.282202
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-21",
+    "value": 12.31332,
+    "change_percent": -0.6342,
+    "benchmark_value": 13.503865
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-22",
+    "value": 12.812185,
+    "change_percent": 4.0514,
+    "benchmark_value": 13.447748
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-23",
+    "value": 12.887363,
+    "change_percent": 0.5868,
+    "benchmark_value": 13.507768
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-24",
+    "value": 13.279798,
+    "change_percent": 3.0451,
+    "benchmark_value": 13.623602
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-27",
+    "value": 13.13196,
+    "change_percent": -1.1133,
+    "benchmark_value": 14.04647
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-28",
+    "value": 13.167313,
+    "change_percent": 0.2692,
+    "benchmark_value": 14.155719
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-29",
+    "value": 13.28858,
+    "change_percent": 0.921,
+    "benchmark_value": 14.266048
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-30",
+    "value": 13.711355,
+    "change_percent": 3.1815,
+    "benchmark_value": 14.371119
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-07-31",
+    "value": 13.646538,
+    "change_percent": -0.4727,
+    "benchmark_value": 14.480422
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-03",
+    "value": 13.774152,
+    "change_percent": 0.9351,
+    "benchmark_value": 14.673074
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-04",
+    "value": 13.719509,
+    "change_percent": -0.3967,
+    "benchmark_value": 14.952237
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-05",
+    "value": 13.689188,
+    "change_percent": -0.221,
+    "benchmark_value": 14.706902
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-06",
+    "value": 13.363119,
+    "change_percent": -2.3819,
+    "benchmark_value": 14.80004
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-07",
+    "value": 13.586801,
+    "change_percent": 1.6739,
+    "benchmark_value": 14.652705
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-10",
+    "value": 13.74423,
+    "change_percent": 1.1587,
+    "benchmark_value": 14.884249
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-11",
+    "value": 13.939205,
+    "change_percent": 1.4186,
+    "benchmark_value": 14.802107
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-12",
+    "value": 13.657325,
+    "change_percent": -2.0222,
+    "benchmark_value": 14.901103
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-13",
+    "value": 13.819112,
+    "change_percent": 1.1846,
+    "benchmark_value": 14.968953
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-14",
+    "value": 14.222651,
+    "change_percent": 2.9202,
+    "benchmark_value": 15.369702
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-17",
+    "value": 14.138318,
+    "change_percent": -0.5929,
+    "benchmark_value": 15.60709
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-18",
+    "value": 14.667699,
+    "change_percent": 3.7443,
+    "benchmark_value": 15.963462
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-19",
+    "value": 14.871066,
+    "change_percent": 1.3865,
+    "benchmark_value": 15.768105
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-20",
+    "value": 15.129505,
+    "change_percent": 1.7379,
+    "benchmark_value": 15.551291
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-21",
+    "value": 15.064093,
+    "change_percent": -0.4323,
+    "benchmark_value": 15.568122
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-24",
+    "value": 14.885691,
+    "change_percent": -1.1843,
+    "benchmark_value": 15.612755
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-25",
+    "value": 14.579706,
+    "change_percent": -2.0556,
+    "benchmark_value": 15.699455
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-26",
+    "value": 14.402828,
+    "change_percent": -1.2132,
+    "benchmark_value": 15.671374
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-27",
+    "value": 14.143494,
+    "change_percent": -1.8006,
+    "benchmark_value": 15.952749
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-28",
+    "value": 14.000965,
+    "change_percent": -1.0077,
+    "benchmark_value": 15.726232
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-08-31",
+    "value": 14.497313,
+    "change_percent": 3.5451,
+    "benchmark_value": 15.871289
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-01",
+    "value": 14.880607,
+    "change_percent": 2.6439,
+    "benchmark_value": 16.09029
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-02",
+    "value": 15.011182,
+    "change_percent": 0.8775,
+    "benchmark_value": 16.218374
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-03",
+    "value": 15.278588,
+    "change_percent": 1.7814,
+    "benchmark_value": 16.190111
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-04",
+    "value": 16.272885,
+    "change_percent": 6.5078,
+    "benchmark_value": 16.339447
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-07",
+    "value": 16.52106,
+    "change_percent": 1.5251,
+    "benchmark_value": 16.605402
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-08",
+    "value": 16.922402,
+    "change_percent": 2.4293,
+    "benchmark_value": 16.925731
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-09",
+    "value": 16.718875,
+    "change_percent": -1.2027,
+    "benchmark_value": 16.809962
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-10",
+    "value": 16.464364,
+    "change_percent": -1.5223,
+    "benchmark_value": 17.132459
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-11",
+    "value": 17.193067,
+    "change_percent": 4.4259,
+    "benchmark_value": 17.8699
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-14",
+    "value": 17.553625,
+    "change_percent": 2.0971,
+    "benchmark_value": 18.079568
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-15",
+    "value": 17.59871,
+    "change_percent": 0.2568,
+    "benchmark_value": 17.723115
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-16",
+    "value": 18.261446,
+    "change_percent": 3.7658,
+    "benchmark_value": 17.752971
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-17",
+    "value": 18.012139,
+    "change_percent": -1.3652,
+    "benchmark_value": 18.222055
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-18",
+    "value": 18.637279,
+    "change_percent": 3.4707,
+    "benchmark_value": 18.330723
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-21",
+    "value": 18.75547,
+    "change_percent": 0.6342,
+    "benchmark_value": 18.504214
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-22",
+    "value": 18.436811,
+    "change_percent": -1.699,
+    "benchmark_value": 18.705918
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-23",
+    "value": 19.053216,
+    "change_percent": 3.3433,
+    "benchmark_value": 18.402624
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-24",
+    "value": 18.976036,
+    "change_percent": -0.4051,
+    "benchmark_value": 18.510789
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-25",
+    "value": 19.0547,
+    "change_percent": 0.4145,
+    "benchmark_value": 18.512968
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-28",
+    "value": 19.812918,
+    "change_percent": 3.9792,
+    "benchmark_value": 18.546787
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-29",
+    "value": 19.824363,
+    "change_percent": 0.0578,
+    "benchmark_value": 19.162796
+  },
+  {
+    "index_id": "nasdaq_high_beta",
+    "date": "2026-09-30",
+    "value": 20.471648,
+    "change_percent": 3.2651,
+    "benchmark_value": 19.979332
+  }
+]
