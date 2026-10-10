@@ -73,15 +73,16 @@ export default function TaiwanMomentumPage() {
     const perf = indexData.performance;
     const latest = perf[perf.length - 1];
 
+    // Supabase 僅有 value 與 benchmark_value，其他欄位設為 null
     const tr = latest.value - 1;
-    const trPost = latest.value_post - 1;
-    const trOrig = latest.original_value - 1;
-    const trBM = latest.benchmark_value - 1;
-    const trTW50 = latest.tw50_value - 1;
+    const trPost = null;
+    const trOrig = null;
+    const trBM = latest.benchmark_value ? latest.benchmark_value - 1 : null;
+    const trTW50 = null;
 
     const days = perf.length;
     const cagr = Math.pow(latest.value, 252 / days) - 1;
-    const cagrPost = Math.pow(latest.value_post, 252 / days) - 1;
+    const cagrPost = null;
 
     let peak = -Infinity;
     let mdd = 0;
@@ -135,7 +136,7 @@ export default function TaiwanMomentumPage() {
   if (loading) return <div className="auth-container"><Loader2 className="animate-spin" /></div>;
   if (!indexData || !stats) return <div className="auth-container">數據載入失敗</div>;
 
-  const { index_info, constituents, performance } = indexData;
+  const { constituents, performance } = indexData;
 
   return (
     <main>
@@ -184,7 +185,7 @@ export default function TaiwanMomentumPage() {
               +{(stats.totalReturn * 100).toFixed(1)}%
             </div>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-              原版 FTHB (50檔)：+{(stats.totalReturnOrig * 100).toFixed(1)}%
+              動能精選前 30 檔組合
             </p>
           </div>
 
@@ -314,10 +315,10 @@ export default function TaiwanMomentumPage() {
                         </div>
                       </td>
                       <td style={{ textAlign: 'right', fontSize: '0.875rem', color: '#10b981', fontWeight: 600 }}>
-                        {item.momentum_126d}
+                        {item.momentum_126d || '—'}
                       </td>
                       <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#f43f5e', fontSize: '1.0625rem' }}>
-                        {item.weight.toFixed(2)}%
+                        {(item.weight ?? 0).toFixed(2)}%
                       </td>
                     </tr>
                   ))}

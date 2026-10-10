@@ -35,18 +35,19 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
     if (subset.length === 0) return data;
 
     const baseVal = subset[0].value;
-    const baseValPost = subset[0].value_post;
-    const baseOrig = subset[0].original_value;
-    const baseBM = subset[0].benchmark_value;
-    const baseTW50 = subset[0].tw50_value;
+    // Supabase 可能沒有這些欄位，做安全防護
+    const baseValPost = subset[0].value_post ?? subset[0].value;
+    const baseOrig = subset[0].original_value ?? subset[0].value;
+    const baseBM = subset[0].benchmark_value ?? 1;
+    const baseTW50 = subset[0].tw50_value ?? subset[0].value;
 
     return subset.map((d: any) => ({
       ...d,
       norm_value: Number((d.value / baseVal).toFixed(4)),
-      norm_value_post: Number((d.value_post / baseValPost).toFixed(4)),
-      norm_orig: Number((d.original_value / baseOrig).toFixed(4)),
-      norm_bm: Number((d.benchmark_value / baseBM).toFixed(4)),
-      norm_tw50: Number((d.tw50_value / baseTW50).toFixed(4)),
+      norm_value_post: Number(((d.value_post ?? d.value) / baseValPost).toFixed(4)),
+      norm_orig: Number(((d.original_value ?? d.value) / baseOrig).toFixed(4)),
+      norm_bm: Number(((d.benchmark_value ?? 1) / baseBM).toFixed(4)),
+      norm_tw50: Number(((d.tw50_value ?? d.value) / baseTW50).toFixed(4)),
     }));
   }, [data, timeRange]);
 
@@ -135,7 +136,7 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               activeDot={{ r: 6, fill: '#e11d48' }}
             />
 
-            {showOriginal && (
+            {showOriginal && data.some(d => d.original_value != null) && (
               <Line
                 type="monotone"
                 dataKey={timeRange === 'MAX' ? 'original_value' : 'norm_orig'}
@@ -147,7 +148,7 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               />
             )}
 
-            {showTW50 && (
+            {showTW50 && data.some(d => d.tw50_value != null) && (
               <Line
                 type="monotone"
                 dataKey={timeRange === 'MAX' ? 'tw50_value' : 'norm_tw50'}
@@ -159,7 +160,7 @@ export default function MomentumPerformanceChart({ data }: MomentumChartProps) {
               />
             )}
 
-            {showTAIEX && (
+            {showTAIEX && data.some(d => d.benchmark_value != null) && (
               <Line
                 type="monotone"
                 dataKey={timeRange === 'MAX' ? 'benchmark_value' : 'norm_bm'}
