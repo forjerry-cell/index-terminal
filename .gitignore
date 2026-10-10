@@ -41,3 +41,15 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# dev logs
+dev_server.log
+
+# one-off diagnostic/fix scripts (see AUTOMATION_DOCUMENTATION.md)
+scripts/check_*.py
+scripts/fix_*.py
+scripts/verify_*.py
+scripts/scan_*.py
+scripts/final_check.py
+scripts/regen_*.py
+scripts/extend_*.py
