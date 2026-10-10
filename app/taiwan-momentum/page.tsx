@@ -58,7 +58,10 @@ export default function TaiwanMomentumPage() {
                 performance: [...perf].reverse(),
                 constituents: constituents.length > 0 ? constituents : (jsonData?.constituents || []),
                 rebalance_history: history,
-                index_info: jsonData?.index_info,
+                index_info: jsonData?.index_info || {
+                  name: '台股強勢動能指數',
+                  description: '以台灣高波動指數 (FTHB003V02) 官方 50 檔成分股為母體，每半年定審回算過去 126 個交易日動能，剔除落後 20 檔，將資金等比例重配置給前 30 檔強勢股滿倉持有。'
+                },
               });
               setLoading(false);
               return;
@@ -146,7 +149,7 @@ export default function TaiwanMomentumPage() {
   if (loading) return <div className="auth-container"><Loader2 className="animate-spin" /></div>;
   if (!indexData || !stats) return <div className="auth-container">數據載入失敗</div>;
 
-  const { constituents, performance } = indexData;
+  const { constituents, performance, index_info } = indexData;
 
   return (
     <main>
