@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
 import MomentumPerformanceChart from '@/components/MomentumPerformanceChart';
-import { supabase } from '@/lib/supabase';
 import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck, Flame, Layers, Award } from 'lucide-react';
 
 export default function TaiwanMomentumPage() {
@@ -12,58 +11,69 @@ export default function TaiwanMomentumPage() {
 
   useEffect(() => {
     async function loadData() {
+      // 先嘗試從靜態 JSON 載入（最可靠，JSON 中有完整歷史數據）
+      let jsonData = null;
       try {
-        // 從 Supabase 讀取績效數據
-        const { data: perf } = await supabase
-          .from('index_performance')
-          .select('*')
-          .eq('index_id', 'taiwan_momentum_30')
-          .order('date', { ascending: false })
-          .limit(3000)
-          .neq('date', '1900-01-01');
+        const res = await fetch('/taiwan_momentum_30.json');
+        jsonData = await res.json();
+      } catch (e) {
+        console.error('JSON load failed', e);
+      }
 
-        // 從 Supabase 讀取成分股
-        const { data: constRows } = await supabase
-          .from('index_constituents')
-          .select('*')
-          .eq('index_id', 'taiwan_momentum_30')
-          .order('date', { ascending: false })
-          .limit(100);
+      // 嘗試從 Supabase 讀取即時數據（如果有權限）
+      try {
+        const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const sbKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+        if (sbUrl && sbKey) {
+          const perfRes = await fetch(
+            `${sbUrl}/rest/v1/index_performance?index_id=eq.taiwan_momentum_30&date=neq.1900-01-01&order=date.desc&limit=3000&select=date,value,change_percent,benchmark_value`,
+            { headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } }
+          );
+          if (perfRes.ok) {
+            const perf = await perfRes.json();
+            if (Array.isArray(perf) && perf.length > 0) {
+              const constRes = await fetch(
+                `${sbUrl}/rest/v1/index_constituents?index_id=eq.taiwan_momentum_30&order=date.desc&limit=100&select=symbol,name,weight,date`,
+                { headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } }
+              );
+              let constituents = [];
+              if (constRes.ok) {
+                const constRows = await constRes.json();
+                if (Array.isArray(constRows) && constRows.length > 0) {
+                  const latestDate = constRows[0].date;
+                  constituents = constRows.filter((r: any) => r.date === latestDate);
+                }
+              }
 
-        // 從 Supabase 讀取換股歷史
-        const { data: history } = await supabase
-          .from('rebalance_history')
-          .select('*')
-          .eq('index_id', 'taiwan_momentum_30')
-          .order('term', { ascending: false })
-          .limit(50);
+              const histRes = await fetch(
+                `${sbUrl}/rest/v1/rebalance_history?index_id=eq.taiwan_momentum_30&order=term.desc&limit=50&select=term,effective_date,retained_count,added_stocks,removed_stocks`,
+                { headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } }
+              );
+              let history = [];
+              if (histRes.ok) {
+                history = await histRes.json();
+              }
 
-        if (perf && perf.length > 0) {
-          const ascendingData = [...perf].reverse();
-          let constituents = [];
-          if (constRows && constRows.length > 0) {
-            const latestDate = constRows[0].date;
-            constituents = constRows.filter(r => r.date === latestDate);
+              setIndexData({
+                performance: [...perf].reverse(),
+                constituents: constituents.length > 0 ? constituents : (jsonData?.constituents || []),
+                rebalance_history: history,
+                index_info: jsonData?.index_info,
+              });
+              setLoading(false);
+              return;
+            }
           }
-          setIndexData({
-            performance: ascendingData,
-            constituents: constituents,
-            rebalance_history: history || [],
-          });
         }
       } catch (err) {
-        console.error('Failed to load taiwan_momentum_30 from Supabase', err);
-        // Fallback to static JSON
-        try {
-          const res = await fetch('/taiwan_momentum_30.json');
-          const json = await res.json();
-          setIndexData(json);
-        } catch (fallbackErr) {
-          console.error('Fallback also failed', fallbackErr);
-        }
-      } finally {
-        setLoading(false);
+        console.error('Supabase load failed, using JSON fallback', err);
       }
+
+      // Fallback：使用靜態 JSON
+      if (jsonData) {
+        setIndexData(jsonData);
+      }
+      setLoading(false);
     }
     loadData();
   }, []);
@@ -73,16 +83,16 @@ export default function TaiwanMomentumPage() {
     const perf = indexData.performance;
     const latest = perf[perf.length - 1];
 
-    // Supabase 僅有 value 與 benchmark_value，其他欄位設為 null
+    // 同時支援 Supabase 與 JSON 兩種數據格式
     const tr = latest.value - 1;
-    const trPost = null;
-    const trOrig = null;
-    const trBM = latest.benchmark_value ? latest.benchmark_value - 1 : null;
-    const trTW50 = null;
+    const trPost = latest.value_post != null ? latest.value_post - 1 : null;
+    const trOrig = latest.original_value != null ? latest.original_value - 1 : null;
+    const trBM = latest.benchmark_value != null ? latest.benchmark_value - 1 : null;
+    const trTW50 = latest.tw50_value != null ? latest.tw50_value - 1 : null;
 
     const days = perf.length;
     const cagr = Math.pow(latest.value, 252 / days) - 1;
-    const cagrPost = null;
+    const cagrPost = latest.value_post != null ? Math.pow(latest.value_post, 252 / days) - 1 : null;
 
     let peak = -Infinity;
     let mdd = 0;
@@ -185,7 +195,10 @@ export default function TaiwanMomentumPage() {
               +{(stats.totalReturn * 100).toFixed(1)}%
             </div>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-              動能精選前 30 檔組合
+              {stats.totalReturnOrig != null
+                ? `原版 FTHB (50檔)：+${(stats.totalReturnOrig * 100).toFixed(1)}%`
+                : '動能精選前 30 檔組合 · 滿倉持有'
+              }
             </p>
           </div>
 
