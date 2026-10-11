@@ -20,7 +20,10 @@ CREATE TABLE IF NOT EXISTS alphafalcon_predictions (
 );
 ALTER TABLE alphafalcon_predictions ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Predictions viewable by authenticated users." ON alphafalcon_predictions;
+DROP POLICY IF EXISTS "Predictions viewable by anon." ON alphafalcon_predictions;
 CREATE POLICY "Predictions viewable by authenticated users."
   ON alphafalcon_predictions FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Predictions viewable by anon."
+  ON alphafalcon_predictions FOR SELECT TO anon USING (true);
 -- 寫入僅允許 service_role（掃描器/結算腳本使用 service key，繞過 RLS）;
 -- 匿名 key 僅可讀，供前端展示。

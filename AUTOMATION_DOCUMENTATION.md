@@ -787,8 +787,10 @@ curl "https://nnoazshcucwjlccjqtkl.supabase.co/rest/v1/index_performance?index_i
 | 檔案 | 變更 |
 |------|------|
 | `app/alphafalcon/page.tsx` | ① tab 從 4 個減為 3 個：`radar`（飆股預測雷達）、`insights`（個股 AI 診斷室）、`tracking`（預測追蹤紀錄）；② 舊 Backtest Audit 區塊以 `{false && ...}` 封存不渲染，原始碼保留；③ 新增 `TrackingPanel` 元件 |
-| `Index/AlphaFalcon/alphafalcon_cloud_scanner.py` | 停用 `calculate_backtest_metrics` 呼叫；改為寫入 `alphafalcon_predictions` 表當日分數前 5 檔（service role key，upsert，`on_conflict=market,scan_date,symbol`） |
+| `Index/AlphaFalcon/alphafalcon_cloud_scanner.py` | 停用 `calculate_backtest_metrics` 呼叫；**不直接寫入 Supabase**。預測日誌由 Vercel relay 專責寫入（見下），避免 GitHub secret 的 service key 失效問題 |
 | `Index/AlphaFalcon/alphafalcon_us_cloud_scanner.py` | 同上（market='US'） |
+| `app/api/alphafalcon/route.ts`（TW relay） | 每日結果 upsert 後，**額外取分數前 5 檔 upsert 至 `alphafalcon_predictions`**（market='TW'，`on_conflict=market,scan_date,symbol`，使用 Vercel 端有效的 service key；失敗僅記 log，不影響主回應） |
+| `app/api/alphafalcon-us/route.ts`（US relay） | 同上（market='US'，寫入 `alphafalcon_us_daily_results` + `alphafalcon_predictions`） |
 | `app/api/alphafalcon-tracking/route.ts` | 新增 GET API：讀取 `alphafalcon_predictions`（anon key，前端唯讀） |
 | `sql/add_alphafalcon_predictions.sql` | 新增 `alphafalcon_predictions` 資料表：market/scan_date/symbol/score/trigger_type/entry_price/settle_date/exit_price/return_60d/settled，UNIQUE(market,scan_date,symbol)，RLS 僅 authenticated 唯讀 |
 | `scripts/settle_predictions.py` | 60 個交易日後結算報酬：`(exit/entry − 1) × 100`，命中定義 ≥ +15% |
@@ -803,8 +805,8 @@ curl "https://nnoazshcucwjlccjqtkl.supabase.co/rest/v1/index_performance?index_i
 
 ### 待辦（需人工於 Supabase 操作一次）
 
-- [ ] 在 Supabase SQL Editor 執行 `sql/add_alphafalcon_predictions.sql` 建表
-- [ ] 於 GitHub repo Settings → Secrets 新增 `SUPABASE_SERVICE_ROLE_KEY`（若尚未設定）
+- [ ] 在 Supabase SQL Editor 執行 `sql/add_alphafalcon_predictions.sql` 建表 ✅（已於 2026-10-11 由用戶執行，表已存在）
+- [ ] 於 GitHub repo Settings → Secrets 確認 `SUPABASE_SERVICE_ROLE_KEY` ⚠️ **發現該 secret 的 key 已失效**：2026-10-11 手動觸發的掃描日誌顯示 scanner 端直寫回 `401 Invalid API key`；`.env` 內同值 key 經 REST 驗證同樣 401。**已繞過**：預測日誌改由 Vercel relay（service key 有效）專責寫入，scanner 不再直寫。若日後要恢復 scanner 直寫，需先在 Supabase 重新產生 service key 並更新 GitHub Secrets + 本地 `.env`
 - [ ] （可選）建立每月排程執行 `scripts/settle_predictions.py` 結算到期預測
 
 ---
