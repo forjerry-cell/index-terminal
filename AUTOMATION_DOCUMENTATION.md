@@ -811,5 +811,58 @@ curl "https://nnoazshcucwjlccjqtkl.supabase.co/rest/v1/index_performance?index_i
 
 ---
 
-*本文件記錄 2026-10-10 完成的自動化建置作業，含 PR vs TR 變更、歷史數據品質驗證、成分股權重驗證、AlphaFalcon Backtest Audit 下架與預測追蹤系統等完整文件。*
+## 19. Storage Janitor — Supabase Storage 舊檔清理工具
+
+> **變更日期**：2026-10-11
+> **相關 commit**：`e9bfbdd`
+
+### 背景
+
+站點在 Supabase Storage 上會隨時間累積舊檔案（報表快照、暫存上傳等），但專案從未有自動清理機制。本工具補上「依保留期限刪除舊檔」的能力，作為 storage 維護腳本。
+
+### 變更內容
+
+| 檔案 | 變更 |
+|------|------|
+| `scripts/storage_janitor.py` | 新增（263 行）：遞迴列出指定 bucket（可限定 prefix）內所有檔案，依 `created_at`／`updated_at`／`last_accessed_at` 判斷年齡，刪除超過保留期限的舊檔 |
+
+### 設計與安全原則
+
+1. **預設 dry-run**：不加 `--apply` 時只預覽「將會刪除」的檔案清單，**絕不刪除**；要真正刪除必須明確加上 `--apply`。
+2. **全部可配置**：因目前尚無任何 bucket 的使用紀錄，bucket／天數／prefix／時間基準皆**不硬編碼**，可由 CLI 參數或環境變數指定（見下）。
+3. **對齊官方 API**：list 用 `POST /storage/v1/object/list/{bucket}`、資料夾以 `id=null` 辨識後遞迴、刪除用 `DELETE /storage/v1/object/{bucket}`（body `{prefixes:[...]}`），單批上限 1000。
+4. **穩健處理**：ISO 8601 含 `Z` 的時間可解析、缺時間欄位的檔案**略過不刪**、分頁抓取、批次刪除回報成功／失敗數。
+
+### 環境變數（亦可由 `../.env` 載入，CLI 優先）
+
+| 變數 | 用途 | 對應參數 |
+|------|------|---------|
+| `SUPABASE_SERVICE_ROLE_KEY` | 必填，Storage 刪除需要 service role 權限 | —（或從 `../.env` 讀取） |
+| `NEXT_PUBLIC_SUPABASE_URL` / `SUPABASE_URL` | 專案位址 | —（預設為專案 URL） |
+| `STORAGE_BUCKET` | 目標 bucket | `--bucket` |
+| `STORAGE_RETENTION_DAYS` | 保留天數（預設 30） | `--days` |
+| `STORAGE_PREFIX` | 限定子資料夾前綴（預設根目錄） | `--prefix` |
+
+### 用法範例
+
+```powershell
+# 預覽（dry-run，預設行為，不會刪除）
+python scripts/storage_janitor.py --bucket avatars --days 30
+
+# 實際刪除 30 天前的檔案
+python scripts/storage_janitor.py --bucket avatars --days 30 --apply
+
+# 只清理某子資料夾、以更新時間為準、保留 90 天
+python scripts/storage_janitor.py --bucket charts --prefix reports/2025 --days 90 --by updated_at --apply
+```
+
+### 注意事項（執行前務必確認）
+
+- ⚠️ **service key 失效問題**：目前 `.env` 內的 `SUPABASE_SERVICE_ROLE_KEY` 為無效值（與 §18 記錄同一問題），dry-run 會收到 `403 signature verification failed`。**實際刪除前，須先在 Supabase 重新產生有效 service role key 並更新 `.env`**。
+- 強烈建議**先跑一次 dry-run 確認清單無誤**，再加 `--apply`。
+- 本腳本**未排入任何 GitHub Actions 排程**，屬手動維運工具。
+
+---
+
+*本文件記錄 2026-10-10 完成的自動化建置作業，含 PR vs TR 變更、歷史數據品質驗證、成分股權重驗證、AlphaFalcon Backtest Audit 下架與預測追蹤系統，以及 2026-10-11 新增的 Storage Janitor 舊檔清理工具等完整文件。*
 
