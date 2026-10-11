@@ -61,3 +61,7 @@ scripts/final_*.py
 # temp diagnostic outputs
 *_out.txt
 *_err.txt
+
+# Python cache
+__pycache__/
+*.pyc

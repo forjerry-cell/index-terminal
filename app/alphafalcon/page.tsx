@@ -367,8 +367,114 @@ const BACKTEST_EQUITY_CURVE = [
   { date: '2026-05', value: 11.12, benchmark_value: 2.08 }
 ];
 
+// --- 預測追蹤面板：讀取 Supabase alphafalcon_predictions 日誌並結算 ---
+// 設計原則：只呈現「當天喊過」的預測與事後結算（含命中與落空），
+// 不預支任何歷史績效數字。資料為空時顯示累積中說明。
+// 下架註記：原 Backtest Audit 板塊（固定 20 檔抱牢曲線、寫死績效常數、
+// 後見明星牆）因與每日預測無程式連結且具誤導性，已於 2026-10-10 下架，
+// 原始碼保留於 git 歷史。本面板為其誠實替代方案。
+function TrackingPanel({ marketType }: { marketType: 'TW' | 'US' }) {
+  const [rows, setRows] = useState<any[]>([]);
+  const [summary, setSummary] = useState<any>(null);
+  const [loadingT, setLoadingT] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      setLoadingT(true);
+      try {
+        const res = await fetch(`/api/alphafalcon-tracking?market=${marketType}`);
+        if (res.ok) {
+          const j = await res.json();
+          setRows(j.predictions || []);
+          setSummary(j.summary || null);
+        }
+      } catch (e) {
+        console.log('[Tracking] load failed', e);
+      } finally {
+        setLoadingT(false);
+      }
+    }
+    load();
+  }, [marketType]);
+
+  const settled = rows.filter((r: any) => r.settled);
+  const wins = settled.filter((r: any) => Number(r.return_60d) >= 15);
+  const hitRate = settled.length > 0 ? (wins.length / settled.length * 100) : null;
+
+  return (
+    <section className="animate-fade flex flex-col gap-8">
+      <div className="glass-card" style={{ padding: '1.75rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>預測追蹤紀錄（Prediction Log）</h3>
+        <p style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+          每次掃描取分數前 5 檔記入不可竄改日誌；60 個交易日後自動結算報酬。命中定義：60 日累積報酬 ≥ +15%。
+          在累積足夠樣本前，本頁不展示任何歷史績效主張——命中與落空一律公開。
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <div style={{ padding: '6px 14px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', fontSize: '0.8125rem' }}>
+            已記錄預測: <strong>{rows.length}</strong>
+          </div>
+          <div style={{ padding: '6px 14px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', fontSize: '0.8125rem' }}>
+            已結算: <strong>{settled.length}</strong>
+          </div>
+          <div style={{ padding: '6px 14px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', fontSize: '0.8125rem' }}>
+            命中率: <strong>{hitRate === null ? '累積中' : `${hitRate.toFixed(1)}%`}</strong>
+          </div>
+        </div>
+      </div>
+      <div className="glass-card" style={{ padding: '1.75rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>逐筆預測與結算</h3>
+        <div className="table-container" style={{ marginTop: 0 }}>
+          {loadingT ? (
+            <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>載入中…</p>
+          ) : rows.length === 0 ? (
+            <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+              尚無預測記錄。掃描器下次執行時會自動寫入首批記錄，60 個交易日後開始結算。
+            </p>
+          ) : (
+            <table className="backtest-table">
+              <thead>
+                <tr>
+                  <th>預測日</th>
+                  <th>代號/名稱</th>
+                  <th style={{ textAlign: 'center' }}>當時分數</th>
+                  <th style={{ textAlign: 'right' }}>進場價</th>
+                  <th style={{ textAlign: 'right' }}>60日報酬</th>
+                  <th style={{ textAlign: 'center' }}>狀態</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r: any, idx: number) => (
+                  <tr key={idx}>
+                    <td>{r.scan_date}</td>
+                    <td><span className="stock-symbol-tag">{r.symbol}</span> {r.name}</td>
+                    <td style={{ textAlign: 'center', fontWeight: 'bold', color: '#00F2FE' }}>{r.score}</td>
+                    <td style={{ textAlign: 'right' }}>{r.entry_price}</td>
+                    <td style={{ textAlign: 'right', color: r.settled ? (Number(r.return_60d) >= 15 ? '#10b981' : '#ef4444') : '#9ca3af', fontWeight: 'bold' }}>
+                      {r.settled ? `${Number(r.return_60d) >= 0 ? '+' : ''}${Number(r.return_60d).toFixed(1)}%` : '結算中'}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      {!r.settled ? '結算中' : (Number(r.return_60d) >= 15
+                        ? <span className="success-tag">命中</span>
+                        : <span style={{ color: '#ef4444' }}>未命中</span>)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        {summary && (
+          <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '1rem' }}>
+            統計口徑：{summary.note || '60 交易日結算 · 命中定義 ≥+15% · 含全部喊過標的（命中與落空）'}
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function AlphaFalconPage() {
-  const [activeTab, setActiveTab] = useState<'radar' | 'insights' | 'backtest'>('radar');
+  const [activeTab, setActiveTab] = useState<'radar' | 'insights' | 'tracking'>('radar');
   const [marketType, setMarketType] = useState<'TW' | 'US'>('TW');
 
   
@@ -645,11 +751,11 @@ export default function AlphaFalconPage() {
             <span>個股 AI 診斷室 (Stock AI Insights)</span>
           </button>
           <button 
-            className={`tab-btn ${activeTab === 'backtest' ? 'active' : ''}`}
-            onClick={() => setActiveTab('backtest')}
+            className={`tab-btn ${activeTab === 'tracking' ? 'active' : ''}`}
+            onClick={() => setActiveTab('tracking')}
           >
             <Award size={18} />
-            <span>歷史回測驗證牆 (Backtest Audit)</span>
+            <span>預測追蹤紀錄 (Prediction Tracking)</span>
           </button>
         </div>
 
@@ -1378,7 +1484,14 @@ export default function AlphaFalconPage() {
         )}
 
         {/* -------------------- TAB 4: 歷史回測驗證牆 -------------------- */}
-        {activeTab === 'backtest' && (
+        {activeTab === 'tracking' && (
+          <TrackingPanel marketType={marketType} />
+        )}
+        {/* 已下架：歷史回測驗證牆 (2026-10-10)。原因見 AUTOMATION_DOCUMENTATION.md。
+            原始程式碼保留於 git 歷史。下行 {false && ...} 封存舊板塊避免渲染。 */}
+        {false && (
+        <>
+        {(activeTab as string) === '__archived_backtest__' && (
           <section className="animate-fade flex flex-col gap-8">
             
             {/* 第一排：回測績效大指標 */}
@@ -1605,6 +1718,8 @@ export default function AlphaFalconPage() {
               </div>
             </div>
           </section>
+        )}
+        </>
         )}
 
       </div>

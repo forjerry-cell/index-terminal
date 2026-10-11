@@ -11,6 +11,8 @@ AlphaFalcon Cloud Scanner - GitHub Actions 雲端版
 
 import os
 import sys
+import requests
+
 import json
 import time
 import warnings
@@ -19,6 +21,8 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
+import os
+import os
 
 warnings.filterwarnings('ignore')
 
@@ -503,19 +507,45 @@ def main():
         "meta": meta,
     }
 
-    # ── 計算每日回測績效並加入 payload ──────────────────────────────────────
-    print("\n[INFO] 開始計算每日回測績效...")
-    backtest = calculate_backtest_metrics(UNIVERSE_NAME_MAP)
-    if backtest:
-        payload["backtest"] = backtest
-    else:
-        print("[WARN] 回測計算失敗，JSON 中不含 backtest 欄位")
+    # ── 預測追蹤日誌：寫入當日分數前 5 檔（不可竄改、不可回填） ──────────
+    # 設計原則：只記錄「今天模型真的喊過」的標的；結算由 settle_predictions.py
+    # 於 60 個交易日後執行。命中定義：60 日累積報酬 >= +15%。
+    print("\n[INFO] 寫入預測追蹤日誌（前 5 名）...")
+    try:
+        from supabase import create_client as _sb_create
+        _sb_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "")
+        _sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+        if _sb_url and _sb_key:
+            _sb = _sb_create(_sb_url, _sb_key)
+            _log_rows = []
+            for r in results[:5]:
+                _log_rows.append({
+                    "market": "TW",
+                    "scan_date": latest_date_str,
+                    "symbol": str(r.get("symbol", "")).strip(),
+                    "name": r.get("name", ""),
+                    "score": round(float(r.get("probability", 0)), 2),
+                    "trigger_type": r.get("triggerType", ""),
+                    "entry_price": round(float(r.get("currentPrice", 0)), 2),
+                })
+            if _log_rows:
+                _sb.table("alphafalcon_predictions").upsert(
+                    _log_rows, on_conflict="market,scan_date,symbol").execute()
+                print(f"[OK] 預測日誌寫入 {len(_log_rows)} 筆")
+        else:
+            print("[WARN] 缺少 SUPABASE_SERVICE_ROLE_KEY，跳過預測日誌寫入")
+    except Exception as log_err:
+        print(f"[WARNING] 預測日誌寫入失敗（不影響主流程）: {log_err}")
+        # 即使日誌寫入失敗也不中斷主流程，保持掃描器健壯性
+        pass
+
+    print("\n[INFO] 回測欄位已停用（改用預測追蹤日誌），跳過 calculate_backtest_metrics")
 
 
     # ── 新增：本地保存為靜態 JSON 檔案 (供 Jamstack 高可用性架構優先讀取) ──
+    # 下方區塊為歷史留存，僅用於靜態JSON輸出，請勿刪除
+    os.makedirs("public/data", exist_ok=True)
     try:
-        import json
-        os.makedirs("public/data", exist_ok=True)
         json_path = "public/data/alphafalcon_results.json"
         print(f"[INFO] 正在寫入靜態 JSON 檔案至 {json_path}...")
         with open(json_path, "w", encoding="utf-8") as f:

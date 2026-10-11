@@ -25,6 +25,7 @@
 15. [數據驗證腳本清單](#數據驗證腳本清單)
 16. [前端快取注意事項](#前端快取注意事項)
 17. [常見問題排除](#常見問題排除)
+18. [AlphaFalcon Backtest Audit 下架與預測追蹤系統](#alphafalcon-backtest-audit-下架與預測追蹤系統)
 
 ---
 
@@ -768,5 +769,45 @@ curl "https://nnoazshcucwjlccjqtkl.supabase.co/rest/v1/index_performance?index_i
 
 ---
 
-*本文件記錄 2026-10-10 完成的自動化建置作業，含 PR vs TR 變更、歷史數據品質驗證、成分股權重驗證等完整文件。*
+## 18. AlphaFalcon Backtest Audit 下架與預測追蹤系統
+
+> **變更日期**：2026-10-10
+
+### 背景：為何下架「歷史回測驗證牆（Backtest Audit）」
+
+原 AlphaFalcon 頁面第四個 tab 展示「策略長期權益增長曲線」「四張績效大卡（總收益 +1012%、CAGR +57.4%、超越大盤 9.1 倍、預測成功率 74.2%）」「年度收益率表」「明星戰績牆」。經逐行程式碼追溯，發現四項誠實性問題：
+
+1. **曲線與每日預測零關聯**：`calculate_backtest_metrics()` 取母體字典**前 20 檔固定持有**（非模型選股）、等權重月再平衡、零換股、零交易成本，與頁面每日飆股預測分數無任何程式連結。
+2. **存活者偏差**：母體是「今天」定義的 AI 贏家名單（緯穎、奇鋐、世芯、創意等），回測假設 2021 年即持有，非 point-in-time。
+3. **明星戰績牆是保證贏的後見挖掘**：掃描過去 500 天、每 10 天取一進場點、只留 120 天內漲 ≥50% 的案例；`probability: 70 + gain × 10` 為湊數。
+4. **Fallback 寫死常數**：Supabase/JSON 讀取失敗時顯示更漂亮的靜態數字（+1012%、74.2%），而非「資料暫缺」。
+
+### 變更內容
+
+| 檔案 | 變更 |
+|------|------|
+| `app/alphafalcon/page.tsx` | ① tab 從 4 個減為 3 個：`radar`（飆股預測雷達）、`insights`（個股 AI 診斷室）、`tracking`（預測追蹤紀錄）；② 舊 Backtest Audit 區塊以 `{false && ...}` 封存不渲染，原始碼保留；③ 新增 `TrackingPanel` 元件 |
+| `Index/AlphaFalcon/alphafalcon_cloud_scanner.py` | 停用 `calculate_backtest_metrics` 呼叫；改為寫入 `alphafalcon_predictions` 表當日分數前 5 檔（service role key，upsert，`on_conflict=market,scan_date,symbol`） |
+| `Index/AlphaFalcon/alphafalcon_us_cloud_scanner.py` | 同上（market='US'） |
+| `app/api/alphafalcon-tracking/route.ts` | 新增 GET API：讀取 `alphafalcon_predictions`（anon key，前端唯讀） |
+| `sql/add_alphafalcon_predictions.sql` | 新增 `alphafalcon_predictions` 資料表：market/scan_date/symbol/score/trigger_type/entry_price/settle_date/exit_price/return_60d/settled，UNIQUE(market,scan_date,symbol)，RLS 僅 authenticated 唯讀 |
+| `scripts/settle_predictions.py` | 60 個交易日後結算報酬：`(exit/entry − 1) × 100`，命中定義 ≥ +15% |
+| `.github/workflows/alphafalcon_daily.yml` | 掃描器步驟補上 `NEXT_PUBLIC_SUPABASE_URL` 與 `SUPABASE_SERVICE_ROLE_KEY` 環境變數 |
+
+### 預測追蹤系統設計原則
+
+1. **只記錄「當天真的喊過」的**：掃描器每日取分數前 5 檔寫入不可竄改日誌，不可回填歷史。
+2. **命中與落空一律公開**：結算後統計命中率，分母包含全部喊過標的。
+3. **樣本不足不展示績效主張**：`TrackingPanel` 在已結算樣本為空時顯示「累積中」，不出現任何歷史戰績數字。
+4. **前端 fallback 為空態而非誇大常數**：API 失敗時顯示載入說明。
+
+### 待辦（需人工於 Supabase 操作一次）
+
+- [ ] 在 Supabase SQL Editor 執行 `sql/add_alphafalcon_predictions.sql` 建表
+- [ ] 於 GitHub repo Settings → Secrets 新增 `SUPABASE_SERVICE_ROLE_KEY`（若尚未設定）
+- [ ] （可選）建立每月排程執行 `scripts/settle_predictions.py` 結算到期預測
+
+---
+
+*本文件記錄 2026-10-10 完成的自動化建置作業，含 PR vs TR 變更、歷史數據品質驗證、成分股權重驗證、AlphaFalcon Backtest Audit 下架與預測追蹤系統等完整文件。*
 
