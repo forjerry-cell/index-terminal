@@ -166,7 +166,14 @@ export default function TaiwanMomentumPage() {
   if (loading) return <div className="auth-container"><Loader2 className="animate-spin" /></div>;
   if (!indexData || !stats) return <div className="auth-container">數據載入失敗</div>;
 
-  const { constituents, performance, index_info } = indexData;
+  const { performance, index_info } = indexData;
+
+  // 成分股依權重由大到小排序（數據可能來自 Supabase 或靜態 JSON fallback，
+  // 兩者皆不保證權重順序，故於前端統一排序以符合「依動能強化權重排序」之標示）。
+  // 使用展開拷貝排序，避免直接變動 React state 中的原陣列。
+  const constituents = [...(indexData.constituents || [])].sort(
+    (a: any, b: any) => (Number(b.weight) || 0) - (Number(a.weight) || 0)
+  );
 
   return (
     <main>
