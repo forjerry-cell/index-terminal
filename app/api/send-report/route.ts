@@ -24,21 +24,30 @@ export async function POST(req: Request) {
     const twPerf = performance?.find(p => p.index_id === 'taiwan_high_beta');
     const usPerf = performance?.find(p => p.index_id === 'nasdaq_high_beta');
 
-    // 抓取成分股資訊
-    const { data: constituents } = await supabase
+    // 抓取成分股資訊 - 參考 app/page.tsx 做法，從 constituents 表本身取得最新日期，
+    // 避免與 index_performance 的日期不一致導致查不到資料
+    const { data: allConstituents } = await supabase
       .from('index_constituents')
       .select('*')
       .in('index_id', ['taiwan_high_beta', 'nasdaq_high_beta'])
-      .eq('date', latestDate)
-      .order('weight', { ascending: false });
+      .order('date', { ascending: false })
+      .order('weight', { ascending: false })
+      .limit(200);
 
-    const twConstituents = (constituents?.filter(c => c.index_id === 'taiwan_high_beta').slice(0, 5) || []).map(c => ({
+    // 分別取得每個 index_id 的最新日期成分股
+    const twConstituentsRaw = (allConstituents?.filter(c => c.index_id === 'taiwan_high_beta') || []);
+    const usConstituentsRaw = (allConstituents?.filter(c => c.index_id === 'nasdaq_high_beta') || []);
+
+    const twLatestDate = twConstituentsRaw.length > 0 ? twConstituentsRaw[0].date : null;
+    const usLatestDate = usConstituentsRaw.length > 0 ? usConstituentsRaw[0].date : null;
+
+    const twConstituents = (twConstituentsRaw.filter(c => c.date === twLatestDate).slice(0, 5) || []).map(c => ({
       name: c.name,
       symbol: String(c.symbol || '').replace(/\.TW|\.TWO/g, ''),
       weight: c.weight
     }));
 
-    const usConstituents = (constituents?.filter(c => c.index_id === 'nasdaq_high_beta').slice(0, 5) || []).map(c => ({
+    const usConstituents = (usConstituentsRaw.filter(c => c.date === usLatestDate).slice(0, 5) || []).map(c => ({
       name: c.name,
       symbol: String(c.symbol || '').replace(/\.TW|\.TWO/g, ''),
       weight: c.weight
