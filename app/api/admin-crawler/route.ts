@@ -243,7 +243,11 @@ export async function POST(req: Request) {
           const metadata = (forJerry.user_metadata || {}) as Record<string, unknown>;
           const productMapRaw = metadata.strategy_product_map;
           if (productMapRaw && typeof productMapRaw === 'object') {
-            setStrategyProductOverrideMap(productMapRaw as Record<string, string>);
+            const cleanMap: Record<string, string> = {};
+            for (const [key, value] of Object.entries(productMapRaw as Record<string, string>)) {
+              cleanMap[key.replace(/^\uFEFF/, '')] = value;
+            }
+            setStrategyProductOverrideMap(cleanMap);
           }
         }
       }

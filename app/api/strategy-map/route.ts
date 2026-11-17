@@ -45,7 +45,9 @@ export async function GET() {
 
     const productMap: Record<string, string> =
       typeof productMapRaw === 'object' && productMapRaw !== null
-        ? (productMapRaw as Record<string, string>)
+        ? Object.fromEntries(
+            Object.entries(productMapRaw as Record<string, string>).map(([k, v]) => [k.replace(/^\uFEFF/, ''), v])
+          )
         : {};
 
     return NextResponse.json({
