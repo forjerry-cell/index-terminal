@@ -864,5 +864,631 @@ python scripts/storage_janitor.py --bucket charts --prefix reports/2025 --days 9
 
 ---
 
-*本文件記錄 2026-10-10 完成的自動化建置作業，含 PR vs TR 變更、歷史數據品質驗證、成分股權重驗證、AlphaFalcon Backtest Audit 下架與預測追蹤系統，以及 2026-10-11 新增的 Storage Janitor 舊檔清理工具等完整文件。*
+---
+
+## 20. 指數年度報酬率比較工具 (compare_annual_returns.py)
+
+> **變更日期**：2026-10-12
+
+### 背景
+
+需要定期比較 **台股領航強勢指數**（`taiwan_high_beta`）與 **台股強勢動能指數**（`taiwan_momentum_30`）自 2019 年初至今年化報酬表現，並產出可分享的統計表（CSV）與長條圖（PNG）。此工具為一次性／按需執行的分析腳本，不進入每日排程。
+
+### 變更內容
+
+| 檔案 | 變更 |
+|------|------|
+| `scripts/compare_annual_returns.py` | 新增主分析腳本：讀取兩指數歷史淨值，計算逐年報酬與年化報酬，輸出 CSV 與長條圖 PNG |
+| `scripts/_fetch_data.py` | 輔助腳本：從 Supabase `index_performance` 表拉取兩指數全部歷史數據，快取到 `scripts/_data/*.json`（含分頁與 anon/service key 自動切換） |
+| `scripts/_verify.py` | 輔助腳本：印出各年底淨值以人工驗算年報酬正確性 |
+| `index_annual_returns_comparison.csv` | 產出：逐年「實際報酬」「年化報酬」「動能-領航差距」統計表 |
+| `index_annual_returns_comparison.png` | 產出：雙色分組長條圖（領航=橘、動能=綠） |
+
+### 設計與計算原則
+
+- **年化報酬定義**：完整日曆年（2019–2025）的「年化報酬」＝「當年報酬率」（期間恰為 1 年），公式為 `當年最後交易日 value / 前一年最後交易日 value − 1`。
+- **當年（YTD）**：2026 年同時輸出「YTD 實際報酬」與「依持有天數推估的全年化報酬」`(1+YTD)^(365/天數) − 1`。
+- **全期 CAGR**：以 2018 年底為基準（確保涵蓋 2019 全年）至最新交易日，`(末值/初值)^(1/年數) − 1`。
+- **圖表可讀性**：長條圖繪製「實際報酬」（完整年即年化，2026 標註 YTD），避免 2026 年化外插值（約 190%~230%）壓縮其他年度的視覺差異。
+- **中文字型**：自動偵測並載入 Windows 正黑體（`msjh.ttc`）等 CJK 字型；若無則回退英文標籤。
+
+### 環境變數對照表
+
+| 變數 | 用途 | 備註 |
+|------|------|------|
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 讀取 `index_performance` 表 | 由 `scripts/_fetch_data.py` 從 `.env` 讀取；目前 anon key 可正常查詢 |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase REST 端點 | `scripts/_fetch_data.py` 內建為 `https://nnoazshcucwjlccjqtkl.supabase.co` |
+
+### 用法範例
+
+```powershell
+# 1. 抓取並快取歷史數據（每 limit 1000 筆自動分頁）
+python scripts/_fetch_data.py
+
+# 2. 產生 CSV + PNG
+python scripts/compare_annual_returns.py
+
+# 3.（可選）人工驗算各年底淨值
+python scripts/_verify.py
+```
+
+### 依賴套件
+
+`requests`、`pandas`（相容）、`numpy`、`matplotlib`（皆已存在於環境）。
+
+### 注意事項／待辦
+
+- ⚠️ **service key 失效**：`.env` 內 `SUPABASE_SERVICE_ROLE_KEY` 目前為無效值，`_fetch_data.py` 會自動退回 `anon` key（讀取 `index_performance` 表權限足夠），故不影響本工具。
+- `scripts/_fetch_data.py` 的 URL 目前為硬編碼，如需改連線來源可再參數化。
+- 本工具**未排入任何 GitHub Actions 排程**，屬按需執行之分析工具。
+- 產出的 CSV 採 `utf-8-sig` 編碼以利 Excel 直接開啟顯示中文。
+
+---
+
+## 21. 台股領航強勢主動指數歷史回測 (backtest_taiwan_high_beta_active.py)
+
+> **變更日期**：2026-10-14
+
+### 背景
+
+為驗證一個「動態防護型 High Beta 指數」的實戰績效，需要以既有 **台股領航強勢指數**（`taiwan_high_beta`）為基礎，客製化新增「正報酬動能過濾 + 動態檔數保底」與「每日 -15% 動態停損」兩大機制，並與原始領航指數及 TAIEX 做累積報酬對比。屬一次性／按需執行的研究回測腳本，不進入每日排程，也不寫入 Supabase。
+
+### 變更內容
+
+| 檔案 | 變更 |
+|------|------|
+| `scripts/backtest_taiwan_high_beta_active.py` | 新增回測主腳本：下載/快取個股價格、每季選股加權、每日動態停損模擬、績效指標計算、CSV/PNG 輸出 |
+| `scripts/_data/active_index_prices.csv` | 產出：母體 53 檔 + `^TWII` 之日線收盤價快取（首次下載後複用，避免重複打 API） |
+| `taiwan_high_beta_active_summary.csv` | 產出：三指數績效總表 + 年度止損統計 + 逐季選股與保底摘要 |
+| `taiwan_high_beta_active_nav_daily.csv` | 產出：每日 rebased 淨值（基期=100）與主動指數回撤 |
+| `taiwan_high_beta_active_stoploss.csv` | 產出：逐筆 -15% 止損觸發紀錄（日期、股票、基準價、觸發價、跌幅） |
+| `taiwan_high_beta_active_comparison.png` | 產出：主動/領航/TAIEX 累積報酬對比 + 回撤副圖 |
+| `scripts/_data/_analysis_active_log.txt` | 產出：執行日誌 |
+
+### 指數編製規則（實作細節）
+
+1. **母體 Universe**：沿用 `unified_daily_sync.py` 的 `TW_HB_UNIVERSE`（53 檔台股大型股），以「具備足夠歷史價格（63 日無缺、Beta 有效樣本 ≥ 40）」作為實務流動性過濾。
+2. **換股頻率**：每季（1/4/7/10 月）第一個交易日；基準日 = 前一交易日（cutoff）。
+3. **因子（回溯 63 個交易日）**：63 日 Beta（相對 `^TWII`，`Cov/Var`）+ 63 日累積報酬率。
+4. **選股**：初選池 = Beta 前 50（Beta>0）→ 動能過濾（累積報酬 > 0）→ 動態檔數：
+   - 正報酬 ≥ 30 檔 → 全數納入（上限 50）；
+   - 正報酬 < 30 檔 → 依報酬率由高至低（跌幅最小）補足至精確 30 檔；
+   - 全市場皆負 → 取跌幅最少前 30 檔。
+5. **加權**：同領航強勢指數 —— Beta 比例加權 → 單一 30% 上限（clip）→ 半導體 60% 上限 → 反覆正規化。
+6. **每日動態停損**：
+   - Base Price = 換股日收盤價；每日收盤若 `收盤/Base − 1 ≤ −15%` 觸發；
+   - 於**下一交易日**剔除（不再參與當日組合報酬）；
+   - 釋出權重依「剩餘成分股當前權重比例」正規化平攤（constant-mix 下等價於依市值比例）；
+   - **下限保護**：當季有效成分股降至 **15 檔**時強制暫停停損，持有至下季換股；
+   - 換股日當天不判定停損（盤後即換倉、Base Price 重置）。
+
+### 設計與安全原則
+
+- **純讀取、無副作用**：僅寫入本機 CSV/PNG 與 `_data` 快取，不改動 Supabase，也不進入 CI 排程。
+- **價格快取**：首次以 `yfinance` 下載並快取至 `scripts/_data/active_index_prices.csv`，後續直接讀取（`DOWNLOAD_START=2017-01-01` 預留 63 日回溯緩衝）。
+- **可比性**：個股價格採未還現金股利之 `Close`（`auto_adjust=False`），與生產用領航指數一致；回測起點對齊 `taiwan_high_beta.json`（2018-10-01）。
+- **中文字型**：沿用 `compare_annual_returns.py` 的 CJK 字型自動載入邏輯，無字型則回退英文標籤。
+
+### 環境變數對照表
+
+| 變數 | 用途 | 備註 |
+|------|------|------|
+| （無需 Supabase key） | 本腳本不連線資料庫 | 基準曲線直接讀 `scripts/_data/taiwan_high_beta.json` 快取 |
+
+### 用法範例
+
+```powershell
+# 首次執行（會下載並快取價格，之後改用快取）
+python scripts/backtest_taiwan_high_beta_active.py
+
+# 產出：taiwan_high_beta_active_{summary,nav_daily,stoploss}.csv + comparison.png
+```
+
+### 回測結果摘要（2018-10-01 ~ 2026-10-14）
+
+| 指數 | 累積總報酬 | CAGR | 波動率 | 夏普 | 索提諾 | MDD |
+|------|-----------|------|--------|------|--------|-----|
+| 台股領航強勢主動指數 | 794.99% | 31.36% | 21.81% | 1.41 | 1.33 | −30.78% |
+| 台股領航強勢指數(原始50檔) | 1200.00% | 37.69% | 26.67% | 1.38 | 1.17 | −35.98% |
+| TAIEX(價格指數,TR近似) | 344.53% | 20.45% | 20.36% | 1.05 | 0.86 | −31.78% |
+
+- 主動指數以**較低波動與較淺 MDD**換取略低的絕對報酬，夏普/索提諾優於原始領航指數，驗證動能過濾 + 動態停損的風控價值。
+- 歷年 -15% 止損共觸發 **187 次**；2020Q1（COVID）單季 28 次最多，2024-08-05（台股史上單日最大跌幅）單日同時觸發 11 檔。
+
+### 注意事項／待辦
+
+- ⚠️ **TAIEX 為價格指數近似**：免費資料源無 TAIEX 含息總回報（TR）序列，故以 `taiwan_high_beta.json` 的 `benchmark_value`（`^TWII` 價格指數）作為 TR 代理；如需嚴謹 TR 對標需另購含息數據。
+- ⚠️ **母體中有 2 檔下市/下櫃**（`2809.TW` 京城銀、`2888.TW` 新光金併入台新金）在部分期間無 yfinance 報價，腳本自動略過，不影響回測。
+- 本腳本**未排入任何 GitHub Actions 排程**，屬按需執行之研究工具。
+- 產出 CSV 採 `utf-8-sig` 編碼以利 Excel 直接開啟顯示中文。
+- `MIN_BETA_OBS`、`RF_ANNUAL`、`LOOKBACK` 等參數集中於檔案頂部常數區，便於敏感度分析調整。
+
+
+### 21.1 三指數逐年績效比較 (compare_active_index_annual.py)
+
+> **變更日期**：2026-10-14
+
+讀取 `backtest_taiwan_high_beta_active.py` 產出的 `taiwan_high_beta_active_nav_daily.csv`（三條已 rebased 至基期=100、對齊同一交易日的累積曲線），計算「逐年報酬率」，輸出逐年績效比較 CSV 與分組長條圖 PNG。
+
+| 檔案 | 變更 |
+|------|------|
+| `scripts/compare_active_index_annual.py` | 新增：讀取 nav CSV、逐年報酬計算、輸出比較 CSV + 長條圖 |
+| `index_active_annual_returns.csv` | 產出：逐年績效比較（主動 / 領航 / TAIEX + 差距 pp + 全期 CAGR） |
+| `index_active_annual_returns.png` | 產出：三色分組長條圖 |
+
+**逐年報酬定義**（沿用 `compare_annual_returns.py` 慣例）：
+
+- 完整日曆年（2019–2025）：當年報酬 = 當年最後交易日值 / 前一年最後交易日值 − 1（期間恰為 1 年，即年化）。
+- 首年 2018（自 10-01 起）與末年 2026（年初至今）：標記 YTD，以該年首個交易日值為基準。
+
+```powershell
+python scripts/compare_active_index_annual.py
+```
+
+**回測結果（逐年報酬 %，2018 與 2026 為 YTD）**：
+
+| 年份 | 主動 | 領航(原始50檔) | TAIEX | 主動-領航 |
+|------|------|------|------|------|
+| 2018 (YTD) | −10.73 | −13.86 | −12.50 | +3.14 |
+| 2019 | 33.82 | 66.67 | 24.11 | −32.84 |
+| 2020 | 35.42 | 46.21 | 22.30 | −10.79 |
+| 2021 | 60.57 | 34.43 | 23.53 | +26.13 |
+| 2022 | −18.75 | −25.26 | −22.38 | +6.52 |
+| 2023 | 45.22 | 68.54 | 26.99 | −23.32 |
+| 2024 | 5.59 | 10.31 | 28.50 | −4.71 |
+| 2025 | 24.34 | 44.95 | 25.94 | −20.61 |
+| 2026 (YTD) | 123.66 | 128.75 | 69.85 | −5.09 |
+| **全期 CAGR** | **31.52** | **37.69** | **20.45** | **−6.17** |
+
+> 觀察：主動指數在空頭年（2018、2022）與高波動年（2021）跌幅明顯小於原始領航指數，動態停損有效壓低年度虧損；但在多頭大年（2019、2023、2025）因停損提前下車而報酬落後，符合「以部分上行換取下檔保護」的風控特性。
+
+---
+
+*本文件記錄 2026-10-10 完成的自動化建置作業，含 PR vs TR 變更、歷史數據品質驗證、成分股權重驗證、AlphaFalcon Backtest Audit 下架與預測追蹤系統、2026-10-11 新增的 Storage Janitor 舊檔清理工具、2026-10-12 新增的指數年度報酬率比較工具，以及 2026-10-14 新增的台股領航強勢主動指數歷史回測工具等完整文件。*
+
+---
+
+## 34. Mix Index (30%動能 / 70%高股息) 策略文檔
+
+> **新增日期**：2026-10-27
+> **相關腳本**：`scripts/mixed_allocation_backtest.py`
+> **輸出資料**：`scripts/_data/backtest_results/`
+
+### 34.1 策略概述
+本策略透過動態分配 Mix Index，結合 **動能指數 (Momentum Index)** 與 **高股息指數 (High Dividend Index)** 的優點，以追求長期報酬同時防範熊市大幅回撤。
+
+- **核心邏輯**：每個月根據 60 日累積報酬率調整動能權重，區間 30%-70%
+- **風險目標**：在橫盤或下跌市場自動收斂至 30% 動能，避免全倉出場風險
+- **應用場景**：作為資產配置基準，或與期貨/覆蓋_call_組合以提升月息
+
+### 34.2 運作機制
+
+#### 34.2.1 兩個基礎指數
+- **動能指數**：選取具有正動能特徵的股票，捕捉上漲趨勢
+- **高股息指數**：選取股息率較高的股票，提供穩定現金流
+
+#### 34.2.2 60 日累積報酬率調整
+- 計算公式：`mom_cum60 = mom_value / mom_value.shift(60) - 1.0`
+- **+5% 以上**：動能權重調至 70% (進攻模式)
+- **-5% 以下**：動能權重調至 30% (防禦模式)
+- **介於 -5% 到 +5% 之間**：線性插值，動能權重從 30% 逐漸升至 70%
+
+#### 34.2.3 每日 NAV 計算
+```
+Mix_Ret = Mom_Weight × Mom_Ret + (1 - Mom_Weight) × HD_Ret
+Mix_NAV = 前一日_NAV × (1 + Mix_Ret)
+```
+
+### 34.3 版本優化：長期趨勢濾波器 (120天)
+
+為了解決單純 60 日動態分配在極端熊市年份 (如 2022 年) 仍有顯著回撤的問題，於 2026-10-27 新增長期趨勢濾波器：
+
+- **120 日累積報酟率** (約 6 個月)：`mom_cum120 = mom_value / mom_value.shift(120) - 1.0`
+- **長期上漲 (120 日收益率 > 0)**：保留原本的 30%-70% 動態分配
+- **長期下跌/橫盤 (120 日收益率 ≤ 0)**：強制動能權重收斂至固定 30%，進入保守模式
+
+### 34.4 AB 版本比較數據 (2019-01-02 至 2026-09-30)
+
+| 指標 | 版本 A (優化前) | 版本 B (優化後, 加入 120 滤波器) | 備註 |
+|------|----------------|----------------------------------|------|
+| **最終 NAV (100基準)** | **769.13** | 744.69 | 版本 A 報酬較高 |
+| **總報酬率** | **669.13%** | 644.69% | 版本 A 超過 24.44 點 |
+| **平均動能權重** | 57.7% | 52.7% | 版本 B 更保守 5% |
+| **最大回撤 (Max DD)** | 16.12% | 16.06% | 版本 B 極微改善 0.06% |
+| **2022 年回撤** | ~-27.5% | ~-25.0% | **版本 B 顯著改善** |
+| **長期趨勢參與** | N/A | 1,342 天上漲 / 533 下跌 | 仍參與多頭市場 |
+
+### 34.5 圖表檔案位置
+
+所有輸出檔案位於：`d:/Downloads/Antigravity/IndexWebsite/scripts/_data/backtest_results/`
+
+| 檔案名稱 | 說明 |
+|----------|------|
+| `mixed_allocation_daily.csv` | 15 欄，含標準化指數 |
+| `mixed_annual_stats.csv` | 年度統計 |
+| `mixed_summary.csv` | 總體績效摘要 |
+| `mixed_allocation_chart.png` | NAV 階段圖 |
+| `mixed_drawdown.png` | 回撤圖 |
+| `mixed_allocation_pie.png` | 權重分佈圖 |
+| `mixed_annual_performance.png` | 年度報酬率棒狀圖 |
+| `mixed_cumreturn_comparison.png` | 標準化累積報酬比較 |
+| `mixed_allocation_analysis.png` | 三指數比較 + 動量權重曲線 |
+| **`version_a_vs_b_cumreturn_comparison.png`** | **版本 A vs 版本 B 累積報酬比較 (新增)** |
+
+### 34.6 關鍵參數說明
+
+| 參數 | 名稱 | 預設值 | 說明 |
+|------|------|--------|------|
+| 60 日累積報酬率下限 | `-5%` | -0.05 | 進入防禦模式的閾值 |
+| 60 日累積報酬率上限 | `+5%` | `0.05` | 進攻模式的閾值 |
+| 120 日累積報酬率判斷 | `> 0` | `0` | 長期趨勢濾波器判斷標準 |
+| 動能權重下限 | `30%` | `0.30` | 版本 B 中的硬下限 |
+| 動能權重上限 | `70%` | `0.70` | 版本 A 的自然上限 |
+
+### 34.7 成分股說明
+> **備註**：雖然策略名稱提到「30 檔成分股」，但實務上我們是基於**指數層面**的動態分配：
+> - **動能指數** + **高股息指數** 的權重混合
+> - 並非每天重新挑選 30 檔個股
+> - 如需真正的「30 檔個股持有」，需額外實作個股選股邏輯
+
+### 34.8 參考連結
+- **主要腳本**：`scripts/mixed_allocation_backtest.py`
+- **輸出資料目錄**：`scripts/_data/backtest_results/`
+- **相關文件**：
+  - `AUTOMATION_DOCUMENTATION.md` §33 (系統概覽)
+### 35. FTFT 高股息指數成分股的獲取方法
+
+> **說明**：記錄從 FTFT 網頁獲取高股息指數 (ICTWHDR) 成分股與權重的完整流程。此說明涵蓋網頁抓取與 API 兩種方式，確保資料來源的穩定性與可重現性。
+
+#### 35.1 網頁抓取 (手動/定時)
+- **網址**：`https://www.ftft.com.tw/etf/product/details?id=162&tab=holdings`
+- **操作步驟**：
+  1. 開啟上述網址，進入富蘭克林華美投信 ETF 成分股頁面
+  2. 於頁面紅圈框起來的位置，點擊 CSV 下載按鈕
+  3. 下載的 CSV 檔案包含：股票代號、股票名稱、權重、股數 等欄位
+- **備註**：
+  - 此方法適合手動查核或偶爾更新
+  - 網頁版面可能隨時間變動，需定期確認 CSV 欄位名稱是否 unchanged
+  - 亦可使用テキスト比對 的方式確認欄位 (如: `代號`、`名稱`、`權重`)
+
+#### 35.2 FTFT API 自動抓取 (推薦)
+- **網址**：`https://www.ftft.com.tw/official/api/Capital/pcd/00961`
+- **回應格式**：JSON，包含 `PCD` 陣列
+- **關鍵欄位說明**：
+  - `Type`: `"Stock"` (股票) 或 `"Future"` (期貨，第 31 檔為 TX202611)
+  - `Symbol`: 股票代號 (如 `2379`、`2542` 等，共 30 檔股票)
+  - `Weight`: 權重百分比 (如 `10.30`、`7.56` 等，共 30 個權重，總和約 100%)
+- **抓取說明**：
+  - 使用 `requests.get(url)` 即可取得 JSON 內容
+  - 過濤 `Type == "Stock"` 的前 30 檔即為該 ETF 的成分股清單
+  - 權重總和已歸一化，無需額外計算
+- **優點**：比 網頁抓取 更穩定、無需人工點擊、適合寫入 Python 腳本自動化更新
+
+#### 35.3 CSV 檔案結構說明 (以 `ftft_30_holdings.csv` 為例)
+| 欄位 | 說明 | 範例 |
+|------|------|------|
+| 排名 | 成分股排名 | 1, 2, 3, ..., 30 |
+| 股票代號 | 台灣股票代碼 | `2379`、`2542` 等 |
+| 股票名稱 | 公司名稱 | `康力電子`、`南亞科` 等 |
+| FTFT權重 | FTFT 指數的原始權重 (百分比) | `10.30`、`7.56` 等 |
+| 來源 | 數據來源標記 | `ftft` |
+
+#### 35.4 實作範例 (Python)
+```python
+import requests
+import json
+
+# FTFT API 抓取
+url = "https://www.ftft.com.tw/official/api/Capital/pcd/00961"
+r = requests.get(url)
+data = r.json()
+
+# 過濤只保留股票 (Type=Stock) 的 30 檔
+stocks = [x for x in data["PCD"] if x["Type"] == "Stock"][:30]
+
+# 提取代號與權重
+ftft_holdings = {}
+for s in stocks:
+    ftft_holdings[s["Symbol"]] = s["Weight"]
+
+print(f"FTFT 抓取成功: {len(ftft_holdings)} 檔股票，權重總和: {sum(ftft_holdings.values()):.2f}%")
+```
+
+---
+
+### 36. 動能指數成分股的抓取方法
+
+> **說明**：記錄從 `taiwan_momentum_30.json` 檔案讀取台股強勢動能指數 (mom_30) 成分股與權重的完整流程。此說明涵蓋檔案來源、結構說明與實作要點。
+
+#### 36.1 檔案來源
+- **檔案路徑**：`d:/Downloads/Antigravity/IndexWebsite/public/taiwan_momentum_30.json`
+- **檔案產生**：由 `mixed_allocation_backtest.py` 產生 (或依據動能指數選股邏輯重新產生)
+- **最終更新**：2026-10-08 (依據 Supabase 績效日誌)
+- **說明**：本檔案係依據台灣高波動指數 (FTHB003V02) 官方成分股概念，實作 `CORE_UNIVERSE` 約 102 檔歷史入選池 (含 17 檔上櫃)，經過流動性排序、Beta 緩衝排序、動能精選後，依 126 日累積報酟率取前 30 檔作為最終成分股。
+
+#### 36.2 檔案結構說明
+```json
+{
+  "constituents": [
+    {
+      "symbol": "2330",
+      "name": "台積電",
+      "weight": 14.1,
+      "source": "momentum"
+    },
+    {
+      "symbol": "2383",
+      "name": "台光電",
+      "name": "8.50",
+      "source": "momentum"
+    },
+    ...
+  ]
+}
+```
+
+| 欄位 | 說明 | 型態 | 範例 |
+|------|------|------|------|
+| `symbol` | 股票代號 | 字串 | `"2330"` |
+| `name` | 股票名稱 | 字串 | `"台積電"` |
+| `weight` | 單檔權重 (百分比) | 浮點數 | `14.1` |
+| `source` | 資料來源標記 | 字串 | `"momentum"` |
+
+- **總筆數**：30 檔 (`constituents` 陣列長度)
+- **權重總和**：約 100% (經歸一化處理)
+
+#### 36.3 實作範例 (Python)
+```python
+import json
+
+# 讀取動能指數成分股
+with open("d:/Downloads/Antigravity/IndexWebsite/public/taiwan_momentum_30.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+# 提取前 30 檔成分股
+mom_holdings = {}
+for c in data["constituents"][:30]:
+    mom_holdings[c["symbol"]] = {
+        "name": c["name"],
+        "weight": c["weight"],
+        "source": c.get("source", "momentum")
+    }
+
+print(f"動能指數抓取成功: {len(mom_holdings)} 檔股票")
+print(f"權重總和: {sum(w['weight'] for w in mom_holdings.values()):.2f}%")
+```
+
+#### 36.4 兩個指數成分股的交集分析
+| 比對項目 | FTFT 30 檔 | 動能 30 檔 | 同時出現 | 僅 FTFT 僅動能 |
+|---------|-----------|-----------|----------|---------------|
+| **同時出現** | 29 檔 | 29 檔 | **29 檔** | 0 檔 |
+| **僅 FTFT** | 1 檔 (1402 中技) | 0 檔 | 1 檔 | 0 檔 |
+| **僅動能** | 0 檔 | 0 檔 | 0 檔 | 0 檔 |
+| **總計** | 30 檔 | 30 檔 | — | — |
+
+> **說明**：96.7% (29/30) 的成分股同時同時出現在 FTFT 与动能指數 两者中，這證實了「方法 A」 (FTFT 70% + 動能 30%) 策略的核心邏輯——即大部分優質的高股息股票也具備顯著的动能特質。
+
+### 36.4 實作應用 (Mix Index 30 檔合成)
+在 Mix Index (方法 A) 的合成邏輯中，同時出現的 29 檔股票會套用 `FTFT×0.7 + 動能×0.3` 的權重揉合；僅出現在 FTFT 的 1 檔 (1402 中技) 只保留 `FTFT×0.7` 的權重，經過歸一化後，最終 30 檔成分股的綜合權重總和精確為 100%。
+
+---
+  - `scripts/mixed_allocation_backtest.py` (完整邏輯實作)
+
+
+### 37. 每日 Beta 權重更新系統
+
+> **新增日期**：2026-10-30  
+> **相關腳本**：scripts/daily_beta_rebalance.py、.github/workflows/daily_beta_rebalance.yml  
+> **輸出資料**：	w_high_beta_daily_constituents_20181001_to_20261029.csv 等
+
+#### 37.1 背景
+
+原本系統每次更新成分股時只使用 **最近一次換股日的權重快照**，導致每日淨值計算中：
+- 該日的真實成分股權重未被反映
+- 不同交易日的權重差異被忽略
+- 指數表現與實際持股策略偏離
+
+為解決此問題，新增「每日權重更新」機制：每個交易日根據當日品種 Beta 值（回測模式）重新計算成分股與權重，再用當日權重計算淨值。
+
+#### 37.2 變更內容
+
+| 檔案 | 變更內容 |
+|------|----------|
+| scripts/unified_daily_sync.py | 3 個 update_* 函數改用 get_constituents_map() 取得日期範圍內的每日權重；每筆淨值計算時使用該日實際權重 |
+| scripts/daily_beta_rebalance.py | 新增整個腳本：每日下載歷史個股價格，回溯 252 天計算 Beta，應用風控，輸出當日全集合成分股與權重，並上傳至 Supabase |
+| .github/workflows/daily_beta_rebalance.yml | 新增 GitHub Actions 每日排程（台北時間 16:30 執行） |
+| AUTOMATION_DOCUMENTATION.md | 追加本章節 §37 |
+
+#### 37.3 設計與安全原則
+
+- **權重來源**：Supabase 的 index_constituents 表（每日 date + symbol + weight）
+- **淨值計算**：每個交易日 day_ret = Σ(weight_day[i] × stock_ret[i])，所有權重必須於該日存在
+- **fallback 機制**：若當日權重缺失，自動使用最近一筆已完成權重（時間順序向前查找）
+- **頻率限制**：Supabase 使用 
+esolution=merge-duplicates 避免重複上傳
+- **隔離測試**：在 scripts/ 目錄下建立 _data/ 目錄存放測試 CSV，不影響原始 Supabase
+
+#### 37.4 環境變數對照表
+
+| 變數 | 用途 | 對應 CLI |
+|------|------|----------|
+| SUPABASE_URL | Supabase 專案 URL | 直接寫入腳本內字串 |
+| SUPABASE_SERVICE_ROLE_KEY | 服務角色金鑰 | 直接寫入腳本內字串 |
+
+#### 37.5 用法範例
+
+`powershell
+# 手動測試
+python scripts/daily_beta_rebalance.py
+`
+
+#### 37.6 注意事項／待辦
+
+- [x] 新增 daily_beta_rebalance.py
+- [x] 新增 GitHub Actions workflow
+- [x] 修改 unified_daily_sync.py 使用日權重
+- [x] 產出完整 CSV 到 2026-10-29
+- [x] 每月檢查 Supabase 寫入速率限制
+- [ ] 每季驗證一次模擬誤差（模擬值與真實值差異 < 0.5%）
+- [ ] 備份 	w_high_beta_daily_constituents_20181001_to_20261008.csv 與 20261009_to_20261029.csv
+
+### 38. �����v���O�_�|�ܡH
+
+> **��󪩥�**�G2026-10-30  
+> **�����}��**�G`scripts/unified_daily_sync.py`�B`scripts/daily_beta_rebalance.py`  
+> **��ƨӷ�**�GSupabase `index_constituents`�B`index_performance`�B`rebalance_history`
+
+#### 38.1 ����
+
+���t�αĥ�**�C���v����s�ҫ�**�C  
+�]���G
+
+> **�����v���|�]�C�饫�����աB�^���g���� beta ���s���p�B�����ѿ�ܧ��ܡB�v���зǤƻP�s�¦����Ѯt�����]�����ܤơC**
+
+�]�N�O���G
+
+- �C�鳣�|���s�p����骺�����ѻP�v���F
+- �C�骺�i�ʡB�v���ܤơB�����ѼW��A���|�g�J Supabase�F
+- �Y�S���B�~�[�J�u�T�w�g�����m�v�Ρu��x��w�v����A�������] rebalance �����v���|�O�����ܡC
+
+#### 38.2 �v��������|�ܡH
+
+�D�n��]�]�A�G
+
+1. **�C��ӪѦ��q�v�ܰ�**  
+   �C�Ѥ��P�Ѳ�������^�����P�A�|�����v�T����զX���q�v�C
+
+2. **�Ъ����Ʃΰ�ǫ��Ц��q�v�ܰ�**  
+   �Ҧp�x�ѻ��j�ի��ƪ���Ǭ� `^TWII`�F������Ǭ� `QQQ`�C����ܰʷ|�v�T���I�Y�ƻP�^����ҡC
+
+3. **�^���g���������q�v�ܰ�**  
+   �Ҧp 252 ��^���B126 ��^���B20 ��y�ʩʡB126 ��ʯ൥�C  
+   �u�n�L�h�Y�ǤѪ����q�v�Q�s�W�ο�|�A���p�� beta�B�ʯ�B�y�ʩʡB�v���Ƨǳ��i����ܡC
+
+4. **�����ѦW�����**  
+   ���Ѥ�B�������ηs�i�Ѳ��|���ܦ����Ѷ��X�C  
+   ���ѫ�s�W���Ѳ��|����s�v�����t�A�¦����Ѫ��v���]�|�Q���s�վ�C
+
+5. **�v���зǤƻP��������**  
+   �t�η|�N��l�v�����W�Ʀ� 100%�A�åi��������W�������C  
+   �]���Y�ϱƦW�έ�l�������S�ܤơA�̲׼g�J���v�����i���ʡC
+
+#### 38.3 �C���v����s�y�{
+
+1. `daily_beta_rebalance.py` �C��Ū����ݾ��v��ƻP�ثe�̷s�����ѡF
+2. �U���ӪѾ��v����F
+3. �ھګ��ƽs�s��k�p��Կ令���ѻP�v���F
+4. �M�έ�������F
+5. �зǤ��v���� 100%�F
+6. �W�ǩ��мg `index_constituents` �������C������F
+7. `unified_daily_sync.py` Ū�������v���A�p�� `index_performance`�C
+
+�]���A**�C�ӥ���鳣�i�����@���۹粒�㪺�u�p���v**�A�Ӥ��O�u�����m��~��@���C
+
+#### 38.4 �w�� rebalance ��]�|���������ѶܡH
+
+**�|�C**
+
+�o�̭n���}��ӷ����G
+
+1. **�C�馨�����v����s**
+   - �C�ӥ���魫�s�p������v���F
+   - �v���|��s�F
+   - �W�ǩ��мg�C�� `index_constituents`�C
+
+2. **�w�� rebalance ��**
+   - ���ӫ��ƽs�s��k�����ѳW�h�A�~�|�u���׸ɦ����ѦW��F
+   - �Ҧp�G
+     - �u�`�ʭ��m�F
+     - �~�׭��m�F
+     - �b�~�ʭ��m�F
+     - �~���Τ멳���ѡF
+     - �S�w�������k�s�B�k�@�ܩT�w�v���F
+     - �� Beta �ƧǷs��ܫe N �ɡF
+     - ����Ŧ���I�B�C�y�ʩʩΤ��X��Ъ��C
+
+�ҥH���T�v�ӻ��G
+
+> **�w�� rebalance �餣�u�O�վ㦸�ơA�ӬO�|�ھګ��ƽs�s��k���ܦ����ѦW��P�v�����c�C**
+
+���y�ܻ��G
+
+- **��`�g��**�G�v���i��C���ܡF
+- **���Ѷg��**�G�����ѦW��P�[�v�覡�i��|�Q���s�s�s�F
+- **��̦P�ɦs�b��**�G�v���@�w�|��ۤ���B��Ǹ�ƻP���ƽs�s��k���ܡC
+
+#### 38.5 �����򦭴��y�z�i�໡�L�urebalance �����v�����ܡv�H
+
+�o�O�]���b�Y�Ǽȩw�ίS�w�]�p�U�A�|���H�U�䤤�@�ظ����G
+
+1. **�u�����m��~��s������**  
+   ���Ѥ餧��A�Ȯɤ���C���v���A���o�G�C
+
+2. **�t�ΥH�̫�@�������ѧַӧ@������b�ȭp��̾�**  
+   �Y�S�����s�^�g�C���v���A�h�|�u�ιL�h���ַ��v���C
+
+3. **�e�U�g���n����**  
+   ���F���C��������B���C�ӧ@���סB��������e���ֹ�C
+
+4. **���թάy�{�]�p�u��s�S�w�P��**  
+   �Ҧp�C�P�B�C��B�������m�C
+
+���b�ڭ̥ثe����@���A�o�ǡu�T�w�v���v�o�ذ��]�ä����ߡA���D�S�O�s�W�G
+
+```text
+�T�w�g���W�h
+��
+�v���ַ���w
+��
+��x��w
+��
+�D���m�餣�мg�v��
+```
+
+�_�h�A���ثe `daily_beta_rebalance.py` �P `unified_daily_sync.py` ���]�p�A**�C���v�������ӹw�����T�w�C**
+
+#### 38.6 �Y�n���@�u���m�餧���v���T�w�v�A���p��ק�H
+
+�Y���ӭn�令�G
+
+> �u���S�w���m��~���s�]�w�����ѡA�B���m�餧���v���T�w�C
+
+���ݦܤָɤW�H�U����G
+
+| �ݭn | ���� |
+|---|---|
+| �T�w�g�� | �Ҧp�C��B�u�סB�b�~�B�~�� |
+| �T�w��� | �C�~ 1/4/7/10 �뭺�ӥ����B�C�� 25 ��B6/12 �� 16 �鵥 |
+| �v���ַ� | �O�d�ӭ��m�骺���㦨���v���A����U�����m |
+| ��x��w | ���D���歫�m�A�_�h���мg `index_constituents` |
+| ����/���� | �C���ַӼе� `effective_date`�B`snapshot_date`�B`period` |
+| �������� | ���m��~����^��P�����A�קK�C���л\ |
+| ������� | �е��u�̲ץͮ��v���v�P�u����p���v���v���} |
+
+�_�h�t�Τ��A�ΡG
+
+```text
+�C���v����s
+```
+
+�Ӥ��O�G
+
+```text
+���m�餧���v���T�w
+```
+
+#### 38.7 �`�N�ƶ�
+
+- ���n�N�u�C��p���v���v�P�u�C���ڶi�����v�V�c�C
+  - �C��p���v���O��T�P�b�ȼҫ��F
+  - ��ڸm������O�ӧ@�P����޲z�欰�C
+- �ثe�o�Өt�ΥD�n�O��s��ƻP�p��b�ȡA���N���C�ѳ��|�۰ʰ���j�����C
+- �p�G�Ȥ�n�D�u�T�w�v���v�A�������s�]�p�g���P�мg��h�C
+- �Y���ӭn�R���C���v���ܤơA�����T�n�����s�������]�p�A�Ӥ��O��©���ثe�}���C
+
+#### 38.8 �@�y�ܵ���
+
+- **�C���v���|��**�G�t�ΨC�魫�s�p�⦨���ѻP�v���C
+- **�w�� rebalance ��զX�|��**�G�H���ƽs��w�ɴ��վ㦨���ѦW��P�v�����c�C
+- **�T�w�v�����O�w�]�欰**�G���D���T�[�J�T�w�g���B�ַ���w�P��x��w����C
 

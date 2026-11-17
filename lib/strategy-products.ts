@@ -1,5 +1,5 @@
 /**
- * 策略名稱與指定策略商品的對照表
+ * 策略名稱與指定策略商品的對照表（硬編碼預設值）
  * 依據管理員指定之商品對應規格
  */
 export const STRATEGY_PRODUCT_MAP: Record<string, string> = {
@@ -27,20 +27,46 @@ export const STRATEGY_PRODUCT_MAP: Record<string, string> = {
 };
 
 /**
+ * 運行時覆寫對照表（從系統管理頁面 CSV 上傳後載入，適用於所有帳號）
+ * 優先順序高於 STRATEGY_PRODUCT_MAP
+ */
+export let STRATEGY_PRODUCT_OVERRIDE_MAP: Record<string, string> = {};
+
+/**
+ * 設定運行時覆寫對照表
+ * @param map 策略名稱 → 策略商品 的對應表
+ */
+export function setStrategyProductOverrideMap(map: Record<string, string>) {
+  STRATEGY_PRODUCT_OVERRIDE_MAP = map;
+}
+
+/**
  * 根據策略名稱取得指定的策略商品
+ * 優先順序：運行時覆寫表 > 硬編碼對照表 > fallback
  * @param strategyName 策略名稱 (例如 A04, B01, TWN04 等)
  * @param fallback 若不在對照表中時使用的備援值
  */
 export function getStrategyProduct(strategyName: string, fallback: string = ''): string {
   if (!strategyName) return fallback;
   const key = strategyName.trim();
+
+  // 先檢查運行時覆寫表
+  if (STRATEGY_PRODUCT_OVERRIDE_MAP[key]) {
+    return STRATEGY_PRODUCT_OVERRIDE_MAP[key];
+  }
+  const upper = key.toUpperCase();
+  if (STRATEGY_PRODUCT_OVERRIDE_MAP[upper]) {
+    return STRATEGY_PRODUCT_OVERRIDE_MAP[upper];
+  }
+
+  // 再檢查硬編碼對照表
   if (STRATEGY_PRODUCT_MAP[key]) {
     return STRATEGY_PRODUCT_MAP[key];
   }
-  const upper = key.toUpperCase();
   if (STRATEGY_PRODUCT_MAP[upper]) {
     return STRATEGY_PRODUCT_MAP[upper];
   }
+
   return fallback || strategyName;
 }
 

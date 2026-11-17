@@ -5,7 +5,7 @@ import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer';
 import { createClient } from '@supabase/supabase-js';
-import { getStrategyProduct } from '@/lib/strategy-products';
+import { getStrategyProduct, setStrategyProductOverrideMap } from '@/lib/strategy-products';
 
 // Supabase Client（從 futures_prices 讀取 MC 推送的行情作為備援）
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -232,6 +232,23 @@ export async function POST(req: Request) {
 
     if (!displayNames || !Array.isArray(displayNames) || displayNames.length === 0) {
       return NextResponse.json({ success: false, error: '請提供有效的策略名稱清單' }, { status: 400 });
+    }
+
+    // 載入共用策略商品對照表（由系統管理員透過 CSV 上傳定義，適用於所有帳號）
+    try {
+      const { data: users, error: listError } = await supabase.auth.admin.listUsers();
+      if (!listError && users) {
+        const forJerry = users.find((u: { email?: string }) => u.email === 'forjerry@gmail.com');
+        if (forJerry) {
+          const metadata = (forJerry.user_metadata || {}) as Record<string, unknown>;
+          const productMapRaw = metadata.strategy_product_map;
+          if (productMapRaw && typeof productMapRaw === 'object') {
+            setStrategyProductOverrideMap(productMapRaw as Record<string, string>);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('[admin-crawler] 載入共用策略對照表失敗:', err);
     }
 
     browser = await launchBrowser();

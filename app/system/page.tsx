@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import { Upload, Loader2, AlertCircle, Shield } from 'lucide-react';
-import { getStrategyProduct, WantgooMarketPrices, getCurrentMarketPrice } from '@/lib/strategy-products';
+import { getStrategyProduct, setStrategyProductOverrideMap, WantgooMarketPrices, getCurrentMarketPrice } from '@/lib/strategy-products';
 
 interface ScrapedData {
   strategyName: string;
@@ -37,7 +37,7 @@ const LOCAL_STORAGE_KEYS = {
   marketPrices: 'system_market_prices',
 } as const;
 
-const ADMIN_EMAILS = ['forjerry@gmail.com', 'yichun0515@gmail.com'];
+const ADMIN_EMAILS = ['forjerry@gmail.com'];
 
 function parseNames(raw: string | null | undefined): string[] {
   if (!raw) return [];
@@ -138,6 +138,7 @@ export default function SystemManagementPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
+  const [strategyProductMap, setStrategyProductMap] = useState<Record<string, string>>({});
 
   const [strategyNames, setStrategyNames] = useState<string[]>([]);
   const [detailData, setDetailData] = useState<ScrapedData[]>([]);
@@ -302,6 +303,27 @@ export default function SystemManagementPage() {
       setStrategyNames(names);
       setLoading(false);
 
+      // 載入共用策略對照表（適用於所有帳號，由系統管理員透過 CSV 上傳定義）
+      try {
+        const sharedResp = await fetch('/api/strategy-map');
+        const sharedData = await sharedResp.json();
+        if (sharedData.success && sharedData.data) {
+          const { strategy_names: sharedNames, product_map: sharedProductMap } = sharedData.data;
+          if (sharedProductMap && typeof sharedProductMap === 'object') {
+            setStrategyProductMap(sharedProductMap);
+            setStrategyProductOverrideMap(sharedProductMap);
+          }
+          // 若共用策略名稱存在，優先使用共用名稱（取代個人雲端名單）
+          if (sharedNames && Array.isArray(sharedNames) && sharedNames.length > 0) {
+            names = sharedNames;
+            setStrategyNames(sharedNames);
+            localStorage.setItem(LOCAL_STORAGE_KEYS.names, JSON.stringify(sharedNames));
+          }
+        }
+      } catch (err) {
+        console.error('Load shared strategy map error:', err);
+      }
+
       if (names.length > 0) {
         fetchData(names, { silent: false });
       }
@@ -327,18 +349,47 @@ export default function SystemManagementPage() {
     const reader = new FileReader();
     reader.onload = async (event) => {
       const content = event.target?.result as string;
-      const displayNames = content
-        .split('\n')
-        .map((line) => line.trim())
-        .filter((line) => line && !line.startsWith('#'));
+      const lines = content.split('\\n').map((line) => line.trim()).filter((line) => line && !line.startsWith('#'));
+
+      const displayNames: string[] = [];
+      const productMap: Record<string, string> = {};
+
+      lines.forEach((line) => {
+        const [strategyName, product] = line.split(',').map((cell) => cell.trim());
+        if (strategyName) {
+          displayNames.push(strategyName);
+          if (product) {
+            productMap[strategyName] = product;
+          }
+        }
+      });
 
       if (displayNames.length === 0) return;
 
       setStrategyNames(displayNames);
       localStorage.setItem(LOCAL_STORAGE_KEYS.names, JSON.stringify(displayNames));
+      setStrategyProductMap(productMap);
+      setStrategyProductOverrideMap(productMap);
 
-      // 先保存名單到雲端，再開始爬蟲，確保跨裝置至少可看到設定名單。
+      // 先保存名單與共用對照表到雲端，確保跨裝置與所有帳號皆可看到
       await syncToCloud({ strategy_list: displayNames.join(',') });
+      try {
+        const { data: session } = await supabase.auth.getSession();
+        await fetch('/api/strategy-map', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session?.session?.access_token ?? ''}`,
+          },
+          body: JSON.stringify({
+            strategy_names: displayNames,
+            product_map: productMap,
+          }),
+        });
+      } catch (err) {
+        console.error('Save shared strategy map error:', err);
+      }
+
       await fetchData(displayNames);
     };
 
@@ -413,8 +464,8 @@ export default function SystemManagementPage() {
             )}
             <label className="btn flex items-center gap-2" style={{ cursor: 'pointer' }}>
               {uploading ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />}
-              {uploading ? '爬取中...' : '上傳名單 (.txt)'}
-              <input type="file" accept=".txt" onChange={handleFileUpload} style={{ display: 'none' }} disabled={uploading} />
+              {uploading ? '爬取中...' : '上傳名單 (.csv)'}
+              <input type="file" accept=".csv" onChange={handleFileUpload} style={{ display: 'none' }} disabled={uploading} />
             </label>
           </div>
         </header>
