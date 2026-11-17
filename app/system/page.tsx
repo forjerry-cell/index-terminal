@@ -349,7 +349,7 @@ export default function SystemManagementPage() {
     const reader = new FileReader();
     reader.onload = async (event) => {
       const content = (event.target?.result as string).replace(/^\uFEFF/, '');
-      const lines = content.split('\\n').map((line) => line.trim()).filter((line) => line && !line.startsWith('#'));
+      const lines = content.split('\n').map((line) => line.trim()).filter((line) => line && !line.startsWith('#'));
 
       const displayNames: string[] = [];
       const productMap: Record<string, string> = {};
