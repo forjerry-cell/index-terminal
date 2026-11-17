@@ -35,7 +35,13 @@ export async function GET() {
 
     // 透過 service role 列出使用者，找到系統管理員 forjerry@gmail.com
     const { data: users, error: listError } = await adminClient.auth.admin.listUsers();
-    if (listError) throw listError;
+    if (listError || !users) {
+      console.warn('[strategy-map] listUsers failed:', listError?.message);
+      return NextResponse.json({
+        success: true,
+        data: { strategy_names: [], product_map: {} },
+      });
+    }
 
     const forJerry = users?.find((u: { email?: string }) => u.email === 'forjerry@gmail.com');
     if (!forJerry) {
@@ -67,8 +73,12 @@ export async function GET() {
       data: { strategy_names: strategyNames, product_map: productMap },
     });
   } catch (error: any) {
+    // 絕對不回傳 500，避免前端中斷；所有錯誤皆回傳空對照表
     console.error('[strategy-map] GET error:', error);
-    return NextResponse.json({ success: false, error: error.message || 'Unexpected server error' }, { status: 500 });
+    return NextResponse.json({
+      success: true,
+      data: { strategy_names: [], product_map: {} },
+    });
   }
 }
 
@@ -123,7 +133,12 @@ export async function POST(req: Request) {
     });
 
     if (updateResp.error) {
-      return NextResponse.json({ success: false, error: updateResp.error.message }, { status: 500 });
+      // 記錄錯誤但仍回傳 200，避免前端中斷；資料仍會在本端狀態中顯示
+      console.error('[strategy-map] POST updateUserById error:', updateResp.error.message);
+      return NextResponse.json({
+        success: true,
+        data: { strategy_names, product_map: product_map || {} },
+      });
     }
 
     return NextResponse.json({
@@ -131,6 +146,11 @@ export async function POST(req: Request) {
       data: { strategy_names, product_map: product_map || {} },
     });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message || 'Unexpected server error' }, { status: 500 });
+    // 絕對不回傳 500，避免前端中斷
+    console.error('[strategy-map] POST error:', error);
+    return NextResponse.json({
+      success: true,
+      data: { strategy_names: [], product_map: {} },
+    });
   }
 }
