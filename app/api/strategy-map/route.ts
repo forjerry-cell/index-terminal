@@ -7,6 +7,9 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const ADMIN_EMAILS = ['forjerry@gmail.com'];
 
 function getServiceClient() {
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Missing Supabase environment variables');
+  }
   return createClient(supabaseUrl, supabaseServiceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -19,6 +22,15 @@ function getServiceClient() {
  */
 export async function GET() {
   try {
+    // 若缺少 Supabase 環境變數，優雅降級：回傳空對照表而非 500 錯誤
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.warn('[strategy-map] Missing Supabase environment variables, returning empty map');
+      return NextResponse.json({
+        success: true,
+        data: { strategy_names: [], product_map: {} },
+      });
+    }
+
     const adminClient = getServiceClient();
 
     // 透過 service role 列出使用者，找到系統管理員 forjerry@gmail.com
@@ -55,6 +67,7 @@ export async function GET() {
       data: { strategy_names: strategyNames, product_map: productMap },
     });
   } catch (error: any) {
+    console.error('[strategy-map] GET error:', error);
     return NextResponse.json({ success: false, error: error.message || 'Unexpected server error' }, { status: 500 });
   }
 }
