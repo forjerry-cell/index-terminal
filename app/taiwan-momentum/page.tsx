@@ -19,6 +19,8 @@ export default function TaiwanMomentumPage() {
       } catch (e) {
         console.error('JSON load failed', e);
       }
+      // 預設 perf 確保無論 Supabase 是否設定，變數永遠存在
+      let perf = [];
 
       // 嘗試從 Supabase 讀取即時數據（如果有權限）
       try {
@@ -61,15 +63,25 @@ export default function TaiwanMomentumPage() {
                   jsonPerfMap[jp.date] = jp;
                 }
               }
-              const mergedPerf = [...perf].reverse().map((sb: any) => {
-                const jp = jsonPerfMap[sb.date];
-                return {
-                  ...sb,
-                  tw50_value: jp?.tw50_value ?? null,
-                  original_value: jp?.original_value ?? null,
-                  value_post: jp?.value_post ?? null,
-                };
-              });
+              // 當 Supabase 資料為空（或未載入）時，直接使用 JSON 完整的歷史數據
+              const mergedPerf = perf.length > 0
+                ? [...perf].reverse().map((sb: any) => {
+                    const jp = jsonPerfMap[sb.date];
+                    return {
+                      ...sb,
+                      tw50_value: jp?.tw50_value ?? null,
+                      original_value: jp?.original_value ?? null,
+                      value_post: jp?.value_post ?? null,
+                    };
+                  })
+                // 若 perf 為空（Supabase 未設定或無新增資料），使用 JSON 中的完整 performance 資料
+                : (jsonData?.performance || []).map(jp => ({
+                    ...jp,
+                    // 確保所有必要欄位都有預設值，供圖表使用
+                    benchmark_value: jp.benchmark_value ?? 1,
+                    tw50_value: jp.tw50_value ?? jp.value,
+                    original_value: jp.original_value ?? jp.value,
+                  }));
 
               setIndexData({
                 performance: mergedPerf,
