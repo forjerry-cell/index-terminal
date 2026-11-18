@@ -19,9 +19,6 @@ export default function TaiwanMomentumPage() {
       } catch (e) {
         console.error('JSON load failed', e);
       }
-      // 預設 perf 確保無論 Supabase 是否設定，變數永遠存在
-      let perf = [];
-
       // 嘗試從 Supabase 讀取即時數據（如果有權限）
       try {
         const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -63,9 +60,10 @@ export default function TaiwanMomentumPage() {
                   jsonPerfMap[jp.date] = jp;
                 }
               }
-              // 當 Supabase 資料為空（或未載入）時，直接使用 JSON 完整的歷史數據
-              const mergedPerf = perf.length > 0
-                ? [...perf].reverse().map((sb: any) => {
+              // 處理 perf 可能未定義（Supabase 未設定）的情況
+              const safePerf = perf ?? [];
+              const mergedPerf = safePerf.length > 0
+                ? [...safePerf].reverse().map((sb: any) => {
                     const jp = jsonPerfMap[sb.date];
                     return {
                       ...sb,
@@ -74,14 +72,8 @@ export default function TaiwanMomentumPage() {
                       value_post: jp?.value_post ?? null,
                     };
                   })
-                // 若 perf 為空（Supabase 未設定或無新增資料），使用 JSON 中的完整 performance 資料
-                : (jsonData?.performance || []).map(jp => ({
-                    ...jp,
-                    // 確保所有必要欄位都有預設值，供圖表使用
-                    benchmark_value: jp.benchmark_value ?? 1,
-                    tw50_value: jp.tw50_value ?? jp.value,
-                    original_value: jp.original_value ?? jp.value,
-                  }));
+                // 若 perf 為空，使用 JSON 中的完整 performance 資料（不設 default 避免誤導）
+                : [];
 
               setIndexData({
                 performance: mergedPerf,
