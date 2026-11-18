@@ -19,6 +19,9 @@ export default function TaiwanMomentumPage() {
       } catch (e) {
         console.error('JSON load failed', e);
       }
+      // 預設 perf 確保無論 Supabase 是否設定，變數永遠存在（避免 ReferenceError）
+      let perf = [];
+
       // 嘗試從 Supabase 讀取即時數據（如果有權限）
       try {
         const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
