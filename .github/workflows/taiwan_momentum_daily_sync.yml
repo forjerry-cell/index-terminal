@@ -1,0 +1,72 @@
+name: Taiwan Momentum Daily Sync
+
+on:
+  schedule:
+    # 每天 UTC 時間上午 5:30 執行
+    # 換算為台灣時間 (UTC+8) = 下午 1:30，對應台灣股市收盤後
+    - cron: '30 5 * * *'
+  workflow_dispatch:
+    # 手動觸發 (可在 Actions 標籤頁手動執行)
+
+jobs:
+  daily-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: write  # 允許提交和推送
+      # exercises: read  # 如果需要存取其他資源可以取消註解
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install yfinance pandas numpy
+
+      - name: Run daily update
+        env:
+          # 如果腳本需要 Supabase，可以在此處設定
+          # SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python scripts/update_taiwan_momentum_daily.py
+
+      - name: Check if JSON was updated
+        id: check-updated
+        run: |
+          # 檢查 JSON 檔案是否有變化 (簡單檢查最後一筆日期)
+          LAST_DATE=$(python -c "import json; d=json.load(open('public/taiwan_momentum_30.json')); print(d[-1]['date'] if d else 'empty')")
+          echo "last_loaded_date=$LAST_DATE" >> $GITHUB_OUTPUT
+
+      - name: Commit and push JSON updates
+        if: steps.check-updated.outputs.last_loaded_date != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 檢查是否有變更
+          if git diff --quiet public/taiwan_momentum_30.json; then
+            echo "No changes to taiwan_momentum_30.json"
+            exit 0
+          fi
+
+          # 添加並提交變更
+          git add public/taiwan_momentum_30.json
+          git commit -m "feat: update taiwan momentum index data $(date +%Y-%m-%d)"
+
+          # 推送到分支
+          git push origin HEAD:${GITHUB_REF##refs/heads/}
+
+      - name: Success notification
+        if: always()
+        run: echo "Taiwan Momentum daily sync completed"
