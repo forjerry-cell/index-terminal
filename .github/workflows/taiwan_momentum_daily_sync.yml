@@ -45,7 +45,7 @@ jobs:
         id: check-updated
         run: |
           # 檢查 JSON 檔案是否有變化 (簡單檢查最後一筆日期)
-          LAST_DATE=$(python -c "import json; d=json.load(open('public/taiwan_momentum_30.json')); print(d[-1]['date'] if d else 'empty')")
+          LAST_DATE=$(python -c "import json; d=json.load(open('public/taiwan_momentum_30.json')); print(d['performance'][-1]['date'] if d.get('performance') else 'empty')")
           echo "last_loaded_date=$LAST_DATE" >> $GITHUB_OUTPUT
 
       - name: Commit and push JSON updates

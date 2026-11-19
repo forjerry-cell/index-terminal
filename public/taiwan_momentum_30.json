@@ -17267,6 +17267,258 @@
       "benchmark_value": 6.2803,
       "tw50_value": 7.9888,
       "change_percent": -0.73
+    },
+    {
+      "date": "2026-10-12",
+      "value": 13.658,
+      "value_post": 13.4821,
+      "original_value": 10.2714,
+      "benchmark_value": 6.2788,
+      "tw50_value": 7.9784,
+      "change_percent": -0.24
+    },
+    {
+      "date": "2026-10-13",
+      "value": 13.0285,
+      "value_post": 12.8607,
+      "original_value": 9.8216,
+      "benchmark_value": 6.1565,
+      "tw50_value": 7.8116,
+      "change_percent": -4.61
+    },
+    {
+      "date": "2026-10-14",
+      "value": 13.2241,
+      "value_post": 13.0537,
+      "original_value": 9.9617,
+      "benchmark_value": 6.1927,
+      "tw50_value": 7.8533,
+      "change_percent": 1.5
+    },
+    {
+      "date": "2026-10-15",
+      "value": 12.273,
+      "value_post": 12.1148,
+      "original_value": 9.281,
+      "benchmark_value": 5.9818,
+      "tw50_value": 7.5683,
+      "change_percent": -7.19
+    },
+    {
+      "date": "2026-10-16",
+      "value": 12.4303,
+      "value_post": 12.2702,
+      "original_value": 9.3941,
+      "benchmark_value": 5.9998,
+      "tw50_value": 7.5753,
+      "change_percent": 1.28
+    },
+    {
+      "date": "2026-10-19",
+      "value": 12.3439,
+      "value_post": 12.1849,
+      "original_value": 9.3321,
+      "benchmark_value": 5.963,
+      "tw50_value": 7.5162,
+      "change_percent": -0.7
+    },
+    {
+      "date": "2026-10-20",
+      "value": 12.0638,
+      "value_post": 11.9084,
+      "original_value": 9.1309,
+      "benchmark_value": 5.8956,
+      "tw50_value": 7.4537,
+      "change_percent": -2.27
+    },
+    {
+      "date": "2026-10-21",
+      "value": 12.2832,
+      "value_post": 12.1249,
+      "original_value": 9.2886,
+      "benchmark_value": 5.9714,
+      "tw50_value": 7.5162,
+      "change_percent": 1.82
+    },
+    {
+      "date": "2026-10-22",
+      "value": 11.8789,
+      "value_post": 11.7259,
+      "original_value": 8.9982,
+      "benchmark_value": 5.8636,
+      "tw50_value": 7.4293,
+      "change_percent": -3.29
+    },
+    {
+      "date": "2026-10-23",
+      "value": 11.8789,
+      "value_post": 11.7259,
+      "original_value": 8.9982,
+      "benchmark_value": 5.8636,
+      "tw50_value": 7.4293,
+      "change_percent": 0.0
+    },
+    {
+      "date": "2026-10-27",
+      "value": 11.7729,
+      "value_post": 11.6212,
+      "original_value": 8.9219,
+      "benchmark_value": 5.8706,
+      "tw50_value": 7.4085,
+      "change_percent": -0.89
+    },
+    {
+      "date": "2026-10-28",
+      "value": 12.4122,
+      "value_post": 12.2523,
+      "original_value": 9.3822,
+      "benchmark_value": 5.9902,
+      "tw50_value": 7.551,
+      "change_percent": 5.43
+    },
+    {
+      "date": "2026-10-29",
+      "value": 12.0516,
+      "value_post": 11.8964,
+      "original_value": 9.1232,
+      "benchmark_value": 5.9052,
+      "tw50_value": 7.4537,
+      "change_percent": -2.9
+    },
+    {
+      "date": "2026-10-30",
+      "value": 11.4209,
+      "value_post": 11.2737,
+      "original_value": 8.6696,
+      "benchmark_value": 5.7579,
+      "tw50_value": 7.2938,
+      "change_percent": -5.23
+    },
+    {
+      "date": "2026-11-02",
+      "value": 11.3452,
+      "value_post": 11.199,
+      "original_value": 8.615,
+      "benchmark_value": 5.7208,
+      "tw50_value": 7.2347,
+      "change_percent": -0.66
+    },
+    {
+      "date": "2026-11-03",
+      "value": 10.4557,
+      "value_post": 10.321,
+      "original_value": 7.9734,
+      "benchmark_value": 5.5154,
+      "tw50_value": 6.9915,
+      "change_percent": -7.84
+    },
+    {
+      "date": "2026-11-04",
+      "value": 10.355,
+      "value_post": 10.2216,
+      "original_value": 7.9004,
+      "benchmark_value": 5.4697,
+      "tw50_value": 6.9394,
+      "change_percent": -0.96
+    },
+    {
+      "date": "2026-11-05",
+      "value": 9.4583,
+      "value_post": 9.3364,
+      "original_value": 7.2505,
+      "benchmark_value": 5.2947,
+      "tw50_value": 6.7517,
+      "change_percent": -8.66
+    },
+    {
+      "date": "2026-11-06",
+      "value": 8.8094,
+      "value_post": 8.6959,
+      "original_value": 6.7779,
+      "benchmark_value": 5.0562,
+      "tw50_value": 6.4286,
+      "change_percent": -6.86
+    },
+    {
+      "date": "2026-11-09",
+      "value": 9.4706,
+      "value_post": 9.3486,
+      "original_value": 7.2612,
+      "benchmark_value": 5.3058,
+      "tw50_value": 6.7726,
+      "change_percent": 7.51
+    },
+    {
+      "date": "2026-11-10",
+      "value": 10.0126,
+      "value_post": 9.8836,
+      "original_value": 7.656,
+      "benchmark_value": 5.4396,
+      "tw50_value": 6.929,
+      "change_percent": 5.72
+    },
+    {
+      "date": "2026-11-11",
+      "value": 10.4344,
+      "value_post": 10.3,
+      "original_value": 7.9624,
+      "benchmark_value": 5.6364,
+      "tw50_value": 7.1722,
+      "change_percent": 4.21
+    },
+    {
+      "date": "2026-11-12",
+      "value": 9.9266,
+      "value_post": 9.7987,
+      "original_value": 7.5943,
+      "benchmark_value": 5.488,
+      "tw50_value": 7.0158,
+      "change_percent": -4.87
+    },
+    {
+      "date": "2026-11-13",
+      "value": 10.1129,
+      "value_post": 9.9826,
+      "original_value": 7.7297,
+      "benchmark_value": 5.5622,
+      "tw50_value": 7.1235,
+      "change_percent": 1.88
+    },
+    {
+      "date": "2026-11-16",
+      "value": 9.1842,
+      "value_post": 9.0659,
+      "original_value": 7.0554,
+      "benchmark_value": 5.2266,
+      "tw50_value": 6.7031,
+      "change_percent": -9.18
+    },
+    {
+      "date": "2026-11-17",
+      "value": 8.6613,
+      "value_post": 8.5497,
+      "original_value": 6.6737,
+      "benchmark_value": 5.1059,
+      "tw50_value": 6.5328,
+      "change_percent": -5.69
+    },
+    {
+      "date": "2026-11-18",
+      "value": 8.7738,
+      "value_post": 8.6608,
+      "original_value": 6.7561,
+      "benchmark_value": 5.119,
+      "tw50_value": 6.5398,
+      "change_percent": 1.3
+    },
+    {
+      "date": "2026-11-19",
+      "value": 8.0442,
+      "value_post": 7.9406,
+      "original_value": 6.2224,
+      "benchmark_value": 4.8938,
+      "tw50_value": 6.2687,
+      "change_percent": -8.32
     }
   ],
   "last_rebalance_term": "2026-06",
