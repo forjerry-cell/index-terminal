@@ -5,7 +5,8 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import PerformanceChart from '@/components/PerformanceChart';
 import { useSearchParams } from 'next/navigation';
-import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck, Flame, Layers } from 'lucide-react';
+import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck, Flame, Layers, Download } from 'lucide-react';
+import { downloadCsv } from '@/lib/download-csv';
 
 function DashboardContent() {
   const searchParams = useSearchParams();
@@ -279,7 +280,36 @@ function DashboardContent() {
                 <div style={{ marginBottom: '0.5rem', color: isNasdaq ? '#1e90ff' : '#ff7f50' }}>
                   📅 {isNasdaq ? '那指領航強勢指數' : '台股領航強勢指數'}上線日期：{isNasdaq ? '2026-05-19' : '2026-05-18'}
                 </div>
-                📡 數據已同步更新至：{performanceData[performanceData.length - 1].date}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                  <span>📡 數據已同步更新至：{performanceData[performanceData.length - 1].date}</span>
+                  <button
+                    type="button"
+                    disabled={performanceData.length === 0}
+                    onClick={() =>
+                      downloadCsv(
+                        performanceData,
+                        [
+                          { key: 'date', header: '日期' },
+                          { key: 'value', header: '指數值' },
+                          { key: 'change_percent', header: '日漲跌幅(%)' },
+                          { key: 'benchmark_value', header: '基準值' },
+                        ],
+                        `${isNasdaq ? 'nasdaq' : 'taiwan'}_leader_strength_index.csv`
+                      )
+                    }
+                    className="btn btn-secondary"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '0.75rem',
+                      padding: '4px 10px',
+                      color: 'var(--foreground)',
+                    }}
+                  >
+                    <Download size={14} /> 下載指數值 CSV
+                  </button>
+                </div>
               </div>
             )}
             </div>
@@ -311,10 +341,36 @@ function DashboardContent() {
                   依最新審核權重排序 · 滿倉 100.0%
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" style={{ flexWrap: 'wrap' }}>
                 <span className="tag" style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--foreground)' }}>
                   {constituents.length} 檔標的
                 </span>
+                <button
+                  type="button"
+                  disabled={constituents.length === 0}
+                  onClick={() =>
+                    downloadCsv(
+                      constituents,
+                      [
+                        { key: 'name', header: '名稱' },
+                        { key: 'symbol', header: '代號' },
+                        { key: 'weight', header: '權重(%)' },
+                      ],
+                      `${isNasdaq ? 'nasdaq' : 'taiwan'}_leader_strength_constituents.csv`
+                    )
+                  }
+                  className="btn btn-secondary"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    fontSize: '0.75rem',
+                    padding: '4px 10px',
+                    color: 'var(--foreground)',
+                  }}
+                >
+                  <Download size={14} /> 下載成分股 CSV
+                </button>
               </div>
             </div>
 

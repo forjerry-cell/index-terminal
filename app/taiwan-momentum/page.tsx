@@ -3,7 +3,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
 import MomentumPerformanceChart from '@/components/MomentumPerformanceChart';
-import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck, Flame, Layers, Award } from 'lucide-react';
+import { TrendingUp, ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck, Flame, Layers, Award, Download } from 'lucide-react';
+import { downloadCsv } from '@/lib/download-csv';
 
 export default function TaiwanMomentumPage() {
   const [loading, setLoading] = useState(true);
@@ -305,7 +306,36 @@ export default function TaiwanMomentumPage() {
               <MomentumPerformanceChart data={performance} />
               <div className="text-center mt-4" style={{ color: 'var(--accent-secondary)', fontWeight: 600, fontSize: '0.875rem', borderTop: '1px solid var(--panel-border)', paddingTop: '1rem' }}>
                 <div style={{ marginBottom: '0.5rem', color: '#32cd32' }}>📅 台股強勢動能指數上線日期：2026-09-05</div>
-                📡 歷史回測驗證區間已同步至最新數據：{stats.latestDate}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                  <span>📡 歷史回測驗證區間已同步至最新數據：{stats.latestDate}</span>
+                  <button
+                    type="button"
+                    disabled={performance.length === 0}
+                    onClick={() =>
+                      downloadCsv(
+                        performance,
+                        [
+                          { key: 'date', header: '日期' },
+                          { key: 'value', header: '指數值' },
+                          { key: 'change_percent', header: '日漲跌幅(%)' },
+                          { key: 'benchmark_value', header: '基準值' },
+                        ],
+                        'taiwan_momentum_30_index.csv'
+                      )
+                    }
+                    className="btn btn-secondary"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '0.75rem',
+                      padding: '4px 10px',
+                      color: 'var(--foreground)',
+                    }}
+                  >
+                    <Download size={14} /> 下載指數值 CSV
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -327,16 +357,44 @@ export default function TaiwanMomentumPage() {
 
           {/* 最新 30 檔成分股表 */}
           <section className="card">
-            <div className="flex justify-between items-center" style={{ marginBottom: '0.5rem' }}>
+            <div className="flex justify-between items-center" style={{ marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
               <div>
                 <h3 style={{ margin: 0 }}>即時成分股明細 (Top 30 精選)</h3>
                 <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                   依動能強化權重排序 · 滿倉 100.0%
                 </p>
               </div>
-              <span className="tag" style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--foreground)' }}>
-                30 檔標的
-              </span>
+              <div className="flex items-center gap-2" style={{ flexWrap: 'wrap' }}>
+                <span className="tag" style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--foreground)' }}>
+                  {constituents.length} 檔標的
+                </span>
+                <button
+                  type="button"
+                  disabled={constituents.length === 0}
+                  onClick={() =>
+                    downloadCsv(
+                      constituents,
+                      [
+                        { key: 'name', header: '名稱' },
+                        { key: 'symbol', header: '代號' },
+                        { key: 'weight', header: '權重(%)' },
+                      ],
+                      'taiwan_momentum_30_constituents.csv'
+                    )
+                  }
+                  className="btn btn-secondary"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    fontSize: '0.75rem',
+                    padding: '4px 10px',
+                    color: 'var(--foreground)',
+                  }}
+                >
+                  <Download size={14} /> 下載成分股 CSV
+                </button>
+              </div>
             </div>
 
             <div className="table-container">
