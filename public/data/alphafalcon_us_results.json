@@ -1,5 +1,5 @@
 {
-  "scan_date": "2026-11-26",
+  "scan_date": "2026-11-27",
   "results": [
     {
       "symbol": "CRWD",
@@ -13380,7 +13380,7 @@
     }
   ],
   "meta": {
-    "scanTime": "2026-11-27 04:27",
+    "scanTime": "2026-11-28 04:09",
     "totalScanned": 40,
     "totalResults": 39,
     "modelType": "Heuristics-US (VCP + ShortInterest + RevenueGrowth)",
